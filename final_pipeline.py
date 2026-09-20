@@ -87,7 +87,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
-from scipy.signal import butter, filtfilt, find_peaks, medfilt, welch, resample_poly
+from scipy.signal import butter, filtfilt, find_peaks, lfilter, medfilt, welch, resample_poly
 from scipy.ndimage import gaussian_filter1d
 try:
     import wfdb
@@ -116,6 +116,10 @@ class PipelineConfig:
     pt_searchback_seconds: float = 1.66
     pt_initial_seconds: float = 2.0
     pt_twave_window_seconds: float = 0.36
+    pt_rr_average_beats: int = 8       # RR_AVERAGE1/2 window (paper Eqs. 24-25)
+    pt_rr_low_factor: float = 0.92     # RR LOW LIMIT  (Eq. 26)
+    pt_rr_high_factor: float = 1.16    # RR HIGH LIMIT (Eq. 27)
+    # pt_searchback_seconds is the RR MISSED LIMIT factor (1.66, Eq. 28)
 
     # RR cleaning
     rr_min_seconds: float = 0.25
@@ -290,73 +294,270 @@ def preprocess_ecg(x, fs, config=CFG):
 # Pan-Tompkins-style adaptive QRS detector
 # =============================================================================
 
-def _pan_tompkins_filter_chain_200hz(x):
-    """Pan--Tompkins 200-Hz filter chain.
+# Pan & Tompkins (1985) filters, realised as exact FIR equivalents of the
+# published recursive integer filters (all gains normalised to 1 at the
+# filter output, never inside the recursion).
+#
+#   Low-pass  Eq.1/3 : H(z) = (1 - z^-6)^2 / (1 - z^-1)^2 / 36
+#                      = [ (1+z^-1+...+z^-5) ]^2 / 36        (11-tap triangle)
+#   High-pass Eq.4-6 : intended H(z) = z^-16 - (1/32)(1 - z^-32)/(1 - z^-1)
+#                      = z^-16 - (1/32) * sum_{k=0}^{31} z^-k  (32-tap FIR)
+#       (The printed Eq.4/6 place the pole of the first-order low-pass at
+#       z = -1, i.e. y[n] = 32x[n-16] - [y[n-1] + x[n] - x[n-32]], which has
+#       a (1+z^-1) denominator and does not cancel the (1 - z^-32) zeros at
+#       z = 1; that is inconsistent with the stated 5 Hz cutoff / gain 32 /
+#       delay 16.  The intended filter has a (1 - z^-1) denominator.)
+#   Derivative Eq.7/9: (1/8)(-z^-2 - 2z^-1 + 2z + z^2), realised causally
+#                      with the paper's two-sample delay:
+#                      d[n] = (1/8)(x[n] + 2x[n-1] - 2x[n-3] - x[n-4]).
+#                      (T=1 sample; the paper's 1/T scale factor only rescales
+#                      the slope and every threshold is data-adaptive.)
+_PT_LP_TAPS = np.convolve(np.ones(6), np.ones(6)) / 36.0
+_PT_HP_TAPS = np.full(32, -1.0 / 32.0)
+_PT_HP_TAPS[16] += 1.0
+_PT_DERIV_TAPS = np.array([1.0, 2.0, 0.0, -2.0, -1.0]) / 8.0
+# Startup handling (implementation choice; NOT specified by Pan & Tompkins):
+# the record is extended on the left by 128 samples of edge replication of
+# x[0], filtered from zero state, and the padded outputs are discarded.  This
+# does not change any filter transfer function.  It changes the assumed
+# pre-record signal (x[0] held constant, instead of the zero-state
+# initialisation's implicit x = 0), which affects only the first ~40 (band-pass),
+# ~44 (derivative) and ~73 (integrated) output samples; beyond that the output
+# equals plain zero-state filtering.  Longest filter memory is 10 (LP) + 31 (HP)
+# + 4 (D) + 29 (MWI) = 74 samples, so 128 samples of padding lets the padding's
+# own zero-state transient decay before the record begins.
+_PT_PAD_SAMPLES = 128
 
-    The original algorithm uses causal integer low/high-pass sections,
-    differentiation, squaring, and a 30-sample (150 ms) moving-window
-    integrator.  Detection is performed sequentially in ``detect_r_peaks``;
-    this helper only constructs the three signals needed by that detector.
+
+def _pan_tompkins_filter_chain_200hz(x, integration_samples=30):
+    """Pan--Tompkins 200-Hz filter chain (causal, deterministic startup).
+
+    Returns (hp, d, integ): band-passed signal, derivative, and the
+    moving-window integral of the squared derivative, all aligned with ``x``
+    (i.e. each retains its own causal group delay).
+
+    Startup: the input is extended on the left by edge replication of x[0]
+    and filtered from zero state; the padded outputs (which contain the
+    zero-state transient) are discarded.  This is an implementation choice, not
+    something Pan & Tompkins specify: it leaves the transfer functions
+    unchanged but replaces the zero-state assumption about the pre-record
+    signal with "x[0] held constant".  No sample is ever read at a negative
+    index, and no ECG sample is altered.
     """
     x = _as_1d(x)
-    # Published 200-Hz recursive integer filters.
-    lp = np.zeros_like(x, dtype=float)
-    for n in range(len(x)):
-        v = x[n]
-        if n >= 1: v += 2.0 * lp[n-1]
-        if n >= 2: v -= lp[n-2]
-        if n >= 6: v -= 2.0 * x[n-6]
-        if n >= 12: v += x[n-12]
-        lp[n] = v / 36.0
-
-    hp = np.zeros_like(lp)
-    for n in range(len(lp)):
-        v = lp[n]
-        if n >= 1: v += hp[n-1]
-        if n >= 16: v -= 32.0 * lp[n-16]
-        if n >= 17: v += lp[n-17]
-        if n >= 32: v -= lp[n-32]
-        hp[n] = v
-
-    d = np.zeros_like(hp)
-    for n in range(len(hp)):
-        # Five-point derivative, causal form of the published differentiator.
-        if n >= 2:
-            d[n] += 2.0 * hp[n] + hp[n-1] - hp[n-3]
-        if n >= 4:
-            d[n] -= 2.0 * hp[n-4]
-        d[n] /= 8.0
-
-    sq = d * d
-    integ = np.convolve(sq, np.ones(30, dtype=float) / 30.0, mode="full")[:len(sq)]
-    return hp, d, integ
+    n_int = max(1, int(integration_samples))
+    xp = np.concatenate([np.full(_PT_PAD_SAMPLES, x[0]), x])
+    lp = lfilter(_PT_LP_TAPS, [1.0], xp)
+    hp = lfilter(_PT_HP_TAPS, [1.0], lp)
+    d = lfilter(_PT_DERIV_TAPS, [1.0], hp)
+    integ = lfilter(np.full(n_int, 1.0 / n_int), [1.0], d * d)
+    p = _PT_PAD_SAMPLES
+    return hp[p:], d[p:], integ[p:]
 
 
-def _pan_tompkins_processing_delay_200hz():
-    """Measure the implemented causal chain's impulse-peak delays.
+def _pan_tompkins_processing_delay_200hz(integration_samples=30):
+    """Nominal (approximate) processing-delay compensation, in 200-Hz samples.
 
-    Returns (filtered_delay, integrated_delay) in 200-Hz samples.  Computing
-    this from the actual implementation is safer than hard-coding a delay if
-    the recursive sections are ever changed.
+    Returns (filtered_delay, integrated_delay).  ``filtered_delay`` is the
+    band-pass impulse-response peak delay (LP 5 + HP ~16 samples).
+    ``integrated_delay`` is derived from the linear filter chain plus the
+    moving-window integration: the centroid of the squared-derivative impulse
+    response (~23 samples: LP + HP + derivative) plus half the integration
+    window ((N-1)/2 = 14.5), rounded (37.486 -> 37 at N = 30).
+
+    This is NOT an exact fixed detector delay.  The integrator acts on the
+    squared signal, so the position of the integrated peak relative to the R
+    wave depends on QRS morphology; on synthetic beats it was measured at
+    roughly 30-45 samples.  The value is only a nominal centre for the
+    subsequent +-80 ms re-localization on the original ECG, which is what
+    determines the reported fiducial; very broad QRS complexes can fall
+    outside that window.
     """
+    n_int = max(1, int(integration_samples))
     impulse = np.zeros(256, dtype=float)
     origin = 64
     impulse[origin] = 1.0
-    hp, _, integ = _pan_tompkins_filter_chain_200hz(impulse)
+    hp, d, _ = _pan_tompkins_filter_chain_200hz(impulse, n_int)
     hp_delay = int(np.argmax(np.abs(hp)) - origin)
-    integ_delay = int(np.argmax(integ) - origin)
+    e = d * d
+    centroid = float(np.sum(np.arange(len(e)) * e) / np.sum(e))
+    integ_delay = int(round(centroid - origin + 0.5 * (n_int - 1)))
     return hp_delay, integ_delay
 
 
+class _RRTracker:
+    """RR_AVERAGE1 / RR_AVERAGE2 bookkeeping (Pan & Tompkins Eqs. 24-29)."""
+
+    def __init__(self, n_avg, low_factor, high_factor, missed_factor):
+        self.n = int(n_avg)
+        self.low_f, self.high_f, self.missed_f = low_factor, high_factor, missed_factor
+        self.recent = []      # RR_AVERAGE1 list: last n RRs regardless of value
+        self.selected = []    # RR_AVERAGE2 list: last n RRs within limits
+
+    @property
+    def avg1(self):
+        return float(np.mean(self.recent)) if self.recent else None
+
+    @property
+    def avg2(self):
+        return float(np.mean(self.selected)) if self.selected else None
+
+    def limits(self):
+        a2 = self.avg2
+        if a2 is None:
+            return None
+        return self.low_f * a2, self.high_f * a2, self.missed_f * a2
+
+    def add(self, rr):
+        rr = float(rr)
+        lim = self.limits()
+        self.recent = (self.recent + [rr])[-self.n:]
+        if lim is None or lim[0] <= rr <= lim[1]:
+            self.selected = (self.selected + [rr])[-self.n:]
+
+    def irregular(self):
+        """True when the last n RRs are not all inside [LOW, HIGH] (Eq. 29).
+
+        With fewer than n RRs the rhythm is not classified as irregular.
+        """
+        lim = self.limits()
+        if lim is None or len(self.recent) < self.n:
+            return False
+        return not all(lim[0] <= r <= lim[1] for r in self.recent)
+
+
+def _pan_tompkins_decide(integ, hp, deriv, config, fsd, integration_samples,
+                         trace=None):
+    """Chronological Pan--Tompkins decision process on the 200-Hz signals.
+
+    Returns accepted QRS indices (in the integrated-signal clock, i.e. still
+    carrying the filter delay).  If ``trace`` is a list, one dict per accepted
+    beat (index, searchback flag, SPKI before/after, peak height) is appended
+    for testing/diagnostics.
+    """
+    refractory = int(round(config.pt_refractory_seconds * fsd))
+    twave_window = int(round(config.pt_twave_window_seconds * fsd))
+    init_n = min(len(integ), int(round(config.pt_initial_seconds * fsd)))
+    n_int = int(integration_samples)
+
+    # Candidates are separated by the full refractory period.
+    candidates, _ = find_peaks(integ, distance=max(1, refractory))
+    if len(candidates) == 0:
+        return []
+
+    filt_abs = np.abs(hp)
+    abs_d = np.abs(deriv)
+
+    def peak_f(q):    # filtered-signal peak inside the integration window
+        return float(np.max(filt_abs[max(0, q - n_int + 1):q + 1]))
+
+    def slope_at(q):  # max |slope| inside the integration window ending at q
+        return float(np.max(abs_d[max(0, q - n_int + 1):q + 1]))
+
+    init_peaks, _ = find_peaks(integ[:init_n], distance=refractory)
+    init_heights = integ[init_peaks] if len(init_peaks) else integ[:init_n]
+    spki = 0.25 * float(np.max(init_heights))
+    npki = 0.50 * float(np.mean(init_heights))
+    f_init = [peak_f(int(q)) for q in init_peaks] or [float(np.max(filt_abs[:init_n]))]
+    spkf = 0.25 * float(np.max(f_init))
+    npkf = 0.50 * float(np.mean(f_init))
+
+    rr = _RRTracker(config.pt_rr_average_beats, config.pt_rr_low_factor,
+                    config.pt_rr_high_factor, float(config.pt_searchback_seconds))
+
+    accepted = []
+    accepted_slope = []
+    rejected = []        # (index, integ height) rejected as noise since last QRS
+                         # (refractory- and T-wave-rejected peaks are not eligible)
+
+    def th_i1():
+        return npki + 0.25 * (spki - npki)
+
+    def accept(q, h, fh, searchback):
+        nonlocal spki, spkf
+        if accepted:
+            rr.add(q - accepted[-1])
+        accepted.append(q)
+        accepted_slope.append(slope_at(q))
+        w = 0.25 if searchback else 0.125          # Eq. 16/21 vs Eq. 12/17
+        spki_before = spki
+        spki = w * h + (1.0 - w) * spki
+        if trace is not None:
+            trace.append(dict(index=q, searchback=searchback, height=h,
+                              spki_before=spki_before, spki_after=spki))
+        spkf = w * fh + (1.0 - w) * spkf
+        rejected.clear()
+
+    def searchback(q_now):
+        """Recover the maximal reserved peak once RR_MISSED has elapsed."""
+        while accepted:
+            lim = rr.limits()
+            if lim is None:
+                return
+            t_missed = accepted[-1] + int(math.ceil(lim[2]))
+            if q_now <= t_missed:
+                return
+            th2 = 0.5 * th_i1()
+            pool = [(c, h) for c, h in rejected
+                    if accepted[-1] + refractory <= c <= t_missed and h >= th2]
+            if not pool:
+                return
+            c, h = max(pool, key=lambda t: t[1])
+            accept(c, h, peak_f(c), searchback=True)
+
+    for q in candidates:
+        q = int(q)
+        h = float(integ[q])
+        fh = peak_f(q)
+
+        searchback(q)
+
+        thr = th_i1()
+        if rr.irregular():
+            thr *= 0.5                              # Eq. 22: only THRESHOLD I1 used
+        if accepted and q - accepted[-1] < refractory:
+            is_signal, keep = False, False
+        elif h >= thr:
+            twave = (accepted and q - accepted[-1] <= twave_window
+                     and slope_at(q) < 0.5 * accepted_slope[-1])
+            is_signal, keep = (not twave), False
+        else:
+            is_signal, keep = False, True
+
+        if is_signal:
+            accept(q, h, fh, searchback=False)
+        else:
+            npki = 0.125 * h + 0.875 * npki
+            npkf = 0.125 * fh + 0.875 * npkf
+            if keep:
+                rejected.append((q, h))
+
+    # Missed-beat check for the tail of the record.
+    searchback(len(integ) - 1)
+    return accepted
+
+
 def detect_r_peaks(x, fs, config=CFG):
-    """Faithful sequential Pan--Tompkins-style QRS detector.
+    """Sequential Pan--Tompkins-style QRS detector (not a literal reproduction).
 
     Detection is carried out at the paper's 200-Hz sampling rate.  Candidate
     peaks are local maxima of the integrated signal; adaptive SPKI/NPKI
     thresholds, the 200-ms refractory period, 1.66-RR search-back, and
     360-ms slope-based T-wave discrimination are applied chronologically.
-    The causal processing delay is measured from the implemented filter chain,
-    removed, and the final fiducial is re-localized on the original ECG.
+    The nominal processing delay is subtracted (see the timing note below) and
+    the final fiducial is re-localized on the original ECG.
+
+    Known source-level discrepancy (to be evaluated separately): the actual
+    accept/reject decision uses the INTEGRATED channel only.  The 1985 paper
+    describes a second set of thresholds (THRESHOLD F1/F2) on the band-pass
+    filtered channel and requires a peak to be recognised in BOTH the
+    integration and band-pass waveforms.  The filtered-channel running
+    estimates (SPKF/NPKF) are maintained here but are not used for any
+    decision, and Eq. 23 (halving THRESHOLD F1 in irregular rhythm) is not
+    implemented.  Other places where the paper is ambiguous (irregular-rhythm
+    threshold halving, search-back window, the 1985 high-pass equation) are
+    documented at the corresponding code.  This implementation must not be
+    described as reproducing every detail of the original algorithm.
     """
     x = _as_1d(x)
     target_fs = float(config.pt_original_fs)
@@ -365,113 +566,17 @@ def detect_r_peaks(x, fs, config=CFG):
     else:
         from fractions import Fraction
         frac = Fraction(target_fs / float(fs)).limit_denominator(1000)
-        xr = resample_poly(x, frac.numerator, frac.denominator)
+        # 'line' padding: the default zero padding would create a step
+        # (and a large startup transient) whenever the ECG has a DC offset.
+        xr = resample_poly(x, frac.numerator, frac.denominator, padtype="line")
         back = float(fs) / target_fs
 
-    hp, deriv, integ = _pan_tompkins_filter_chain_200hz(xr)
     fsd = target_fs
-    refractory = int(round(config.pt_refractory_seconds * fsd))
-    twave_window = int(round(config.pt_twave_window_seconds * fsd))
-    searchback_factor = float(config.pt_searchback_seconds)
-    init_n = min(len(integ), int(round(config.pt_initial_seconds * fsd)))
+    integration_samples = max(1, int(round(config.pt_integration_seconds * fsd)))
+    hp, deriv, integ = _pan_tompkins_filter_chain_200hz(xr, integration_samples)
     if len(integ) < 10:
         return np.array([], dtype=int)
-
-    # Local maxima of the integrated waveform are only candidates; the
-    # adaptive decision process below is the Pan--Tompkins part.
-    candidates, props = find_peaks(integ, distance=max(1, refractory // 2))
-    if len(candidates) == 0:
-        return np.array([], dtype=int)
-
-    # Initialize signal/noise peak estimates from the first 2 s.
-    init_peaks, _ = find_peaks(integ[:init_n], distance=refractory)
-    init_heights = integ[init_peaks] if len(init_peaks) else integ[:init_n]
-    # Original initialization is based on the first 2 s of the integrated
-    # signal: signal level starts at one quarter of the largest peak and noise
-    # level at one half of the mean peak level.
-    spki = 0.25 * float(np.max(init_heights))
-    npki = 0.50 * float(np.mean(init_heights))
-    th_i1 = npki + 0.25 * (spki - npki)
-    th_i2 = 0.5 * th_i1
-
-    # Filtered-signal threshold is maintained as the secondary Pan--Tompkins
-    # decision channel used for T-wave discrimination and peak confirmation.
-    filt_abs = np.abs(hp)
-    f_init = []
-    for q in init_peaks:
-        lo, hi = max(0, q-2), min(len(hp), q+3)
-        if hi > lo: f_init.append(float(np.max(filt_abs[lo:hi])))
-    f_init = np.asarray(f_init if f_init else filt_abs[:init_n])
-    spkf = 0.25 * float(np.max(f_init))
-    npkf = 0.50 * float(np.mean(f_init))
-    th_f1 = npkf + 0.25 * (spkf - npkf)
-    th_f2 = 0.5 * th_f1
-
-    def slope_at(p):
-        lo, hi = max(0, int(p)-4), min(len(deriv), int(p)+5)
-        return float(np.max(np.abs(deriv[lo:hi]))) if hi > lo else 0.0
-
-    accepted = []
-    noise = []
-    last_candidate_index = -1
-
-    def accept(q):
-        nonlocal spki, th_i1, th_i2, spkf, th_f1, th_f2
-        q = int(q)
-        if accepted and q - accepted[-1] < refractory:
-            return False
-        accepted.append(q)
-        h = float(integ[q])
-        fh = float(np.max(filt_abs[max(0,q-2):min(len(hp),q+3)]))
-        spki = 0.125*h + 0.875*spki
-        spkf = 0.125*fh + 0.875*spkf
-        th_i1 = npki + 0.25*(spki-npki); th_i2 = 0.5*th_i1
-        th_f1 = npkf + 0.25*(spkf-npkf); th_f2 = 0.5*th_f1
-        return True
-
-    # Chronological adaptive decision. Search-back is performed whenever the
-    # current RR interval exceeds 1.66 times the previous accepted RR.
-    for q in candidates:
-        q = int(q)
-        h = float(integ[q])
-        fh = float(np.max(filt_abs[max(0,q-2):min(len(hp),q+3)]))
-
-        if accepted and len(accepted) >= 2:
-            rr_prev = accepted[-1] - accepted[-2]
-            if q - accepted[-1] > searchback_factor * rr_prev:
-                sb_lo = accepted[-1] + refractory
-                sb_hi = q - refractory
-                eligible = [c for c in candidates if sb_lo <= c <= sb_hi and c > last_candidate_index]
-                eligible = [c for c in eligible if integ[c] >= th_i2]
-                if eligible:
-                    sb = max(eligible, key=lambda c: integ[c])
-                    accept(sb)
-
-        last_candidate_index = q
-        if accepted and q - accepted[-1] < refractory:
-            noise.append(q)
-            npki = 0.125*h + 0.875*npki
-            npkf = 0.125*fh + 0.875*npkf
-        elif h >= th_i1:
-            # Primary threshold is applied to the integrated QRS energy.
-            # The filtered channel is retained for the original slope-based
-            # T-wave test rather than becoming a second hard threshold.
-            twave = False
-            if accepted and 0 < q - accepted[-1] <= twave_window:
-                twave = slope_at(q) < 0.5 * slope_at(accepted[-1])
-            if not twave:
-                accept(q)
-            else:
-                noise.append(q)
-                npki = 0.125*h + 0.875*npki
-                npkf = 0.125*fh + 0.875*npkf
-        else:
-            noise.append(q)
-            npki = 0.125*h + 0.875*npki
-            npkf = 0.125*fh + 0.875*npkf
-
-        th_i1 = npki + 0.25*(spki-npki); th_i2 = 0.5*th_i1
-        th_f1 = npkf + 0.25*(spkf-npkf); th_f2 = 0.5*th_f1
+    accepted = _pan_tompkins_decide(integ, hp, deriv, config, fsd, integration_samples)
 
     if not accepted:
         return np.array([], dtype=int)
@@ -479,14 +584,15 @@ def detect_r_peaks(x, fs, config=CFG):
     # ------------------------------------------------------------------
     # Timing correction and physiological fiducial localization.
     #
-    # The published Pan--Tompkins chain is causal.  The integrated candidate
-    # therefore carries the filter + derivative + integration delay.  Measure
-    # that delay from this implementation's impulse response, subtract it,
-    # map to the original sampling clock, then refine on the ORIGINAL ECG.
-    # This keeps Pan--Tompkins causal and faithful while preventing the
-    # processing delay from being reported as the R-wave time.
+    # The published Pan--Tompkins chain is causal, so an integrated-signal
+    # candidate lags the R wave.  Subtract a NOMINAL delay (linear filter-chain
+    # delay plus the moving-window delay; approximate, because the integrated
+    # peak shifts with QRS morphology -- see
+    # _pan_tompkins_processing_delay_200hz), map to the original sampling
+    # clock, then refine on the ORIGINAL ECG within +-80 ms.  The refined
+    # ECG location, not the nominal delay, is the reported fiducial.
     # ------------------------------------------------------------------
-    _, integrated_delay = _pan_tompkins_processing_delay_200hz()
+    _, integrated_delay = _pan_tompkins_processing_delay_200hz(integration_samples)
     corrected_200 = np.asarray(accepted, dtype=int) - integrated_delay
     corrected_200 = np.clip(corrected_200, 0, len(xr)-1)
     mapped = np.rint(corrected_200.astype(float) * back).astype(int)
