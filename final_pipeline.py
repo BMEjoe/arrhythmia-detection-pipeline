@@ -34,38 +34,33 @@ Implements:
          scaling-region diagnostics (R^2-weighted search) rather than an
          arbitrary "flattest" fit
 
-  4) UPO detection:
-       - So, Ott, Sauer, Gluckman, Grebogi & Schiff (1996), Phys. Rev. Lett.
-         76, 4705; and (1997), Phys. Rev. E 55, 5398-5417.
-       - First-order fixed-point transform G(z,R)
-       - Local Jacobian estimated using the exact companion-matrix structure
-         of the tau-step delay map (only the first row is fitted; the remaining
-         rows are the deterministic delay-coordinate shift)
-       - R-perturbation term implemented as S(z,R) = J + kappa*R*||F(z)-z||_1,
-         a d x d random matrix R times the scalar L1 norm of the state
-         difference -- this is the formula verified directly against So et
-         al. (1996), PRL 76, 4705, Eq. (4). (An earlier draft of this file
-         used a d x d x d random tensor contracted against the raw
-         difference vector; that formula could not be verified against the
-         primary source text and has been replaced with this one.)
-       - Peak-finding runs on the RAW transformed-value histogram, not a
-         Gaussian-smoothed version. A fixed smoothing bandwidth was found
-         (via direct testing against the logistic map's two known analytic
-         fixed points) to merge distinct peaks that land only a couple of
-         histogram bins apart into a single spurious peak between them --
-         confirmed by the earlier version detecting only 1 of the logistic
-         map's known 2 fixed points despite the raw histogram clearly
-         showing both. A light smoothing pass is still used only to
-         estimate the background/significance threshold, not to locate
-         peaks themselves.
-       - Period-p "short" grouping scheme using every iterate
-       - p-dimensional reduction using the cyclic delay-coordinate symmetry
-       - optional AAFT surrogate significance with fixed real-data tau and m
+  4) UPO detection (Phase 2A-2D; see section 4 for full provenance):
+       - So, Ott, Schiff, Kaplan, Sauer & Grebogi, Phys. Rev. Lett. 76, 4705
+         (1996) [PRL]; So, Ott, Sauer, Gluckman, Grebogi & Schiff, Phys. Rev.
+         E 55, 5398 (1997) [PRE].
+       - Local delay-map Jacobian by least squares over M >= d spatial
+         neighbours (PRE Eq. 20), companion structure of the delay map
+       - Fixed-point transform G(z,R) = [I-S]^-1 [F(z) - S z] with either the
+         PRL norm randomization S = J + kappa R ||F(z)-z||_1 (R d x d, U[-1,1])
+         or the PRE tensor randomization S = J + R.[F(z)-z] (PRE Eq. 4).
+         In BOTH forms J is the PRE Eq. 20 spatial-neighbour fit; "prl_norm"
+         names only the PRL randomization term, not PRL's temporal S_n.
+       - Diagonal tube -> histogram -> SOURCE PEAKS (Level A).  Peaks are
+         located on the RAW histogram; light smoothing is used only for the
+         background threshold (smoothing merged the logistic map's peaks).
+       - Period-p block-cyclic transform (PRE Eq. 30), "short" grouping scheme,
+         cyclic slab with recon[k,j] = s[(k-j) % p], p-dimensional histogram
+       - So et al. surrogate significance (Gaussian-scaled phase shuffle,
+         signed W, W0, J(W), r_J) -> Level B significant_uop_candidates
+       - Period-1 stability: HYBRID PRL/PRE -- PRL averaging of kappa=0
+         Jacobians estimated by the PRE Eq. 20 spatial-neighbour fit (not the
+         literal PRL temporal S_n construction)
+       - PROJECT EXTENSIONS, labelled as such: tau-step map, verification
+         gates (Level C), candidate-centred/monodromy stability, coverage,
+         per-point peak rates, classifier features
 
-  Validation note: the logistic-map LLE and UPO tests from the previous file
-  remain useful regression tests, but this corrected file does not claim that
-  those tests have been rerun automatically. They should be rerun after every
-  algorithmic change before MIT-BIH experiments.
+  Validation: tests/test_upo_*.py (synthetic logistic / skewed Henon systems,
+  including the PRE Table I skewed-Henon orbits).
 
 Important:
   - The So method is a method for discrete maps reconstructed from a scalar
@@ -165,14 +160,43 @@ class PipelineConfig:
     so_periods: Tuple[int, ...] = (1,)
     so_neighbors_K: int = 1       # K in So et al. short grouping scheme
     so_jacobian_neighbors: int = 7  # M spatial neighbors for local Jacobian
+                                    # (PRE Eq. 20 requires M >= d; PRE Ikeda: M=7)
     so_random_R: int = 100
     so_kappa: float = 3.0
     so_hist_bins: int = 30
-    so_slab_fraction: float = 0.08  # still used for the period-p residual check
-                                      # (line ~862), which is a relative-scale
-                                      # comparison and not subject to the same
-                                      # curse-of-dimensionality problem as the
-                                      # fixed-point diagonal filter below.
+
+    # UPO map mode.  "one_sample" is the source-faithful So et al. one-sample
+    # delay map (lag-1 embedding, Cao dimension at lag 1, tau must be 1).
+    # "tau_step" is a PROJECT EXTENSION reusing the TDMI tau and embedding.
+    upo_map_mode: str = "one_sample"
+    # "prl_norm": S = J + kappa R ||F(z)-z||_1 (PRL randomization term);
+    # "pre_tensor": S = J + R.[F(z)-z] (PRE Eq. 4).  In both, J is the PRE
+    # Eq. 20 spatial-neighbour fit -- "prl_norm" is NOT PRL's temporal S_n.
+    so_randomization: str = "prl_norm"
+    # PROJECT choice: histogram axes span the attractor range padded by this
+    # fraction of its span (see _so_histogram_range).
+    so_hist_range_pad: float = 0.10
+    # PROJECT choice: period-p slab keeps this percentile of the transformed
+    # points closest to the cyclic hyperplane (same rationale as the tube).
+    so_slab_percentile: float = 10.0
+    so_min_embedded_points: int = 30
+
+    # So et al. surrogate significance for UPO peaks (independent of the LLE
+    # surrogate analysis controlled by compute_surrogates).
+    so_assess_significance: bool = False
+    so_surrogate_count: int = 50     # PRE Sec. IV used 50 surrogates
+    so_significance_alpha: float = 0.05  # PROJECT convention on J(deviation)
+
+    # Level C verification gates -- PROJECT EXTENSION, never source detection.
+    so_verify_peaks: bool = True
+    verify_neighbors: int = 30
+    verify_max_residual: float = 0.05     # ||F_hat(z*) - z*|| / std(x)
+    verify_min_r2: float = 0.90
+    verify_min_support_ratio: float = 2.0  # peak count / median occupied-cell count
+
+    # Classifier feature contract: "source", "significant_source", "extended"
+    upo_feature_mode: str = "source"
+
     so_diagonal_percentile: float = 10.0  # replaces the old fixed-fraction
                                             # diagonal filter for period-1 fixed
                                             # point detection. Found via direct
@@ -195,9 +219,9 @@ class PipelineConfig:
                                             # points at d=6 where the fixed
                                             # threshold produced 5.
 
-    # UPO coverage / density measure (the actual Devaney "density of periodic
-    # orbits" proxy -- a single detected fixed point alone is not evidence of
-    # chaos; density/coverage of the attractor by detected UPOs is). Radius is
+    # Peak coverage -- a PROJECT-derived metric (fraction of 200 sampled
+    # attractor points lying near detected peaks); it is NOT a density of
+    # periodic orbits.  Radius is
     # NOT a fixed distance or fixed fraction of attractor extent, for the same
     # curse-of-dimensionality reason as so_diagonal_percentile above -- it is
     # set relative to the k-th nearest-neighbor spacing WITHIN the normalized
@@ -942,33 +966,189 @@ def rosenstein_lle(embedded, theiler=20, max_iter=40, min_fit_points=6,
     }
 
 
-def _delay_map_jacobian_from_local_fit(embedded, idx, neighbor_indices, step=1):
-    """
-    Jacobian in the delay-coordinate companion-matrix form: only the first
-    row (evolution of the raw scalar series) is estimated from data via
-    least squares; the remaining rows are the exact, deterministic shift
-    structure inherent to delay embedding (z(n+1)'s coordinates 2..d are,
-    by construction, exactly equal to z(n)'s coordinates 1..d-1).
-    """
-    X = np.asarray(embedded, dtype=float)
-    d = X.shape[1]
-    neigh = np.asarray(neighbor_indices, dtype=int)
-    step = int(step)
-    if step < 1:
-        raise ValueError("step must be >= 1")
-    neigh = neigh[(neigh >= 0) & (neigh + step < len(X))]
-    if len(neigh) < d + 2 or idx + step >= len(X):
-        return None
-    Z = X[neigh]
-    Y0 = X[neigh + step, 0]
-    center = X[idx]
-    D = Z - center
-    A = D
-    b = Y0 - X[idx, 0]
-    try:
-        grad, *_ = np.linalg.lstsq(A, b, rcond=None)
-    except np.linalg.LinAlgError:
-        return None
+# =============================================================================
+# 4. UPO detection -- So et al. (PRL 1996; PRE 1997)
+# =============================================================================
+#
+# Primary sources (both read in full for this implementation):
+#   [PRL] P. So, E. Ott, S. J. Schiff, D. T. Kaplan, T. Sauer, C. Grebogi,
+#         "Detecting unstable periodic orbits in chaotic experimental data",
+#         Phys. Rev. Lett. 76, 4705 (1996).
+#   [PRE] P. So, E. Ott, T. Sauer, B. J. Gluckman, C. Grebogi, S. J. Schiff,
+#         "Extracting unstable periodic orbits from chaotic time series data",
+#         Phys. Rev. E 55, 5398 (1997).
+#
+# Provenance is tracked explicitly.  SOURCE components follow the papers:
+#   - local delay-map Jacobian by least squares over M spatial neighbours
+#     [PRE Eq. (20)], companion structure of the delay map [PRE Eq. (1)]
+#   - fixed-point transform G(z,R) = [I-S]^-1 [F(z) - S z]  [PRE Eq. (3)]
+#       PRL norm form  : S = J + kappa R ||F(z)-z||_1, R d x d, U[-1,1]
+#       PRE tensor form: S = J + R.[F(z)-z], R a d x d x d tensor [PRE Eq. (4)]
+#     (J is always the PRE Eq. (20) fit; the PRL's own temporal-difference
+#     S_n is not implemented, so "prl_norm" is a PRL randomization on a PRE
+#     Jacobian.)
+#   - diagonal tube reduction and histogram peaks [PRE Sec. II D]
+#   - period-p block transform, "short" grouping scheme, cyclic slab and
+#     p-dimensional first-component histogram [PRE Eqs. (27)-(30), Sec. III]
+#   - Gaussian-scaled phase-shuffle surrogates, signed W, W0 (J(W0)=0.5),
+#     J(W) and r_J = W/W0 [PRL; PRE Sec. IV]
+#
+# HYBRID PRL/PRE (neither purely source nor a project extension):
+#   - period-1 stability: the PRL procedure of averaging kappa=0 S_n over the
+#     data points whose transformed values form the peak, but with each S_n
+#     estimated by the PRE Eq. (20) spatial-neighbour fit instead of the PRL
+#     temporal-difference construction.  The literal PRL variant is not
+#     implemented and gives materially different values on the Henon map.
+#
+# PROJECT EXTENSIONS (never described as the So et al. method):
+#   - tau-step delay map (map_mode="tau_step")
+#   - candidate residual, R^2 and support-ratio verification gates
+#   - candidate-centred / monodromy stability (incl. p > 1)
+#   - peak coverage, per-point peak rates, classifier feature construction
+#   - histogram range fixed to the padded attractor range, percentile tube
+#     and slab widths, and the median+MAD peak threshold (the papers state
+#     only "a small cross-section tube", "a thin slab" and "look for peaks")
+#
+# Result API.  Detection results never contain a generic "candidates" field:
+#   Level A  source_peak_candidates         histogram peaks (SOURCE)
+#   Level B  significant_uop_candidates     None = significance NOT assessed;
+#                                           []   = assessed, none significant
+#   Level C  verification_gated_candidates  PROJECT EXTENSION gates
+#            verification_failed_peaks
+# A Level-A source peak remains a source peak whatever Level C decides.
+
+SO_PRL_CITATION = ("So, Ott, Schiff, Kaplan, Sauer & Grebogi, "
+                   "Phys. Rev. Lett. 76, 4705 (1996)")
+SO_PRE_CITATION = ("So, Ott, Sauer, Gluckman, Grebogi & Schiff, "
+                   "Phys. Rev. E 55, 5398 (1997)")
+
+UPO_MAP_MODES = ("one_sample", "tau_step")
+SO_RANDOMIZATIONS = ("prl_norm", "pre_tensor")
+UPO_FEATURE_MODES = ("source", "significant_source", "extended")
+
+UPO_STATUS_OK = "ok"
+# "No peak" outcomes: the analysis ran and found no histogram peak, so peak
+# counts / rates / coverages are 0.  KNOWN LIMITATION (open for Phase 2E):
+# tube_empty and too_few_in_tube are treated as "no peaks" here, but whether
+# they are genuinely peak-free or a data-sufficiency failure has not been
+# resolved scientifically.  No threshold has been invented to decide it.
+UPO_NO_PEAK_STATUSES = frozenset({"no_peaks", "tube_empty", "too_few_in_tube"})
+# Genuine pipeline failures: UPO features are NaN, never 0.
+UPO_FAILURE_STATUSES = frozenset({
+    "constant_data", "nonfinite_input", "too_few_points",
+    "embedding_not_saturated", "no_valid_transforms", "analysis_error",
+})
+
+LEVEL_A_FIELD = "source_peak_candidates"
+LEVEL_B_FIELD = "significant_uop_candidates"
+LEVEL_C_PASS_FIELD = "verification_gated_candidates"
+LEVEL_C_FAIL_FIELD = "verification_failed_peaks"
+
+UPO_LEVELS = {
+    "A": {"field": LEVEL_A_FIELD, "provenance": "SOURCE",
+          "meaning": "histogram peaks of the So-transformed data; not by "
+                     "themselves significant, unstable, verified or clinical"},
+    "B": {"field": LEVEL_B_FIELD, "provenance": "SOURCE",
+          "meaning": "source peaks whose deviation above the surrogate mean "
+                     "is significant under the So et al. J(W) distribution"},
+    "C": {"field": [LEVEL_C_PASS_FIELD, LEVEL_C_FAIL_FIELD],
+          "provenance": "PROJECT EXTENSION",
+          "meaning": "source peaks passing / failing project residual, R^2 "
+                     "and support-ratio gates; never redefines Level A"},
+}
+
+UPO_FEATURE_CONTRACT = {
+    "source": (
+        "lle_per_beat",
+        "source_peak_count",
+        "source_peaks_per_point",
+        "source_peak_coverage",
+    ),
+    "significant_source": (
+        "lle_per_beat",
+        "significant_peak_count",
+        "significant_peaks_per_point",
+        "significant_peak_coverage",
+        "source_rJ",
+    ),
+    "extended": (
+        "lle_per_beat",
+        "verified_unstable_count",
+        "verified_unstable_per_point",
+        "verified_unstable_coverage",
+    ),
+}
+
+UPO_FEATURE_DEFINITIONS = {
+    "lle_per_beat": "Rosenstein largest Lyapunov exponent (independent of UPO analysis)",
+    "source_peak_count": "number of So histogram peaks (Level A), all analysed periods",
+    "source_peaks_per_point": "source_peak_count / number of UPO-embedded points (a rate, not a density)",
+    "source_peak_coverage": "PROJECT metric: fraction of sampled attractor points near a source peak",
+    "significant_peak_count": "number of Level B (surrogate-significant) source peaks",
+    "significant_peaks_per_point": "significant_peak_count / number of UPO-embedded points",
+    "significant_peak_coverage": "PROJECT metric: coverage by Level B peaks",
+    "source_rJ": "So et al. r_J = W / W0 for the period-1 histogram",
+    "verified_unstable_count": "PROJECT EXTENSION: Level C gated peaks with unstable monodromy",
+    "verified_unstable_per_point": "verified_unstable_count / number of UPO-embedded points",
+    "verified_unstable_coverage": "PROJECT metric: coverage by verified unstable peaks",
+}
+
+
+def validate_upo_config(config=CFG):
+    """Reject ambiguous or contradictory UPO settings instead of guessing."""
+    if config.upo_map_mode not in UPO_MAP_MODES:
+        raise ValueError(f"upo_map_mode must be one of {UPO_MAP_MODES}, "
+                         f"got {config.upo_map_mode!r}")
+    if config.so_randomization not in SO_RANDOMIZATIONS:
+        raise ValueError(f"so_randomization must be one of {SO_RANDOMIZATIONS}, "
+                         f"got {config.so_randomization!r}")
+    if config.upo_feature_mode not in UPO_FEATURE_MODES:
+        raise ValueError(f"upo_feature_mode must be one of {UPO_FEATURE_MODES}, "
+                         f"got {config.upo_feature_mode!r}")
+    if config.upo_feature_mode == "significant_source" and not config.so_assess_significance:
+        raise ValueError("upo_feature_mode='significant_source' requires "
+                         "so_assess_significance=True")
+    if any(int(p) < 1 for p in config.so_periods):
+        raise ValueError("so_periods must contain positive integers")
+    return True
+
+
+def resolve_upo_map(map_mode, tau):
+    """Map-mode metadata.  one_sample is the So et al. map and requires tau=1."""
+    if map_mode not in UPO_MAP_MODES:
+        raise ValueError(f"map_mode must be one of {UPO_MAP_MODES}, got {map_mode!r}")
+    tau = int(tau)
+    if tau < 1:
+        raise ValueError("tau must be >= 1")
+    if map_mode == "one_sample":
+        if tau != 1:
+            raise ValueError(
+                "map_mode='one_sample' is the source-faithful So et al. one-sample "
+                f"delay map and requires lag-1 embedded vectors (tau=1); got tau={tau}. "
+                "Use map_mode='tau_step' (PROJECT EXTENSION) for tau > 1.")
+        return {"map_mode": "one_sample", "tau": 1, "step": 1,
+                "source_faithful_map": True,
+                "map_label": "SOURCE: one-sample delay map z(n) -> z(n+1) (So et al.)"}
+    return {"map_mode": "tau_step", "tau": tau, "step": tau,
+            "source_faithful_map": False,
+            "map_label": (f"PROJECT EXTENSION: tau-step delay map z(n) -> z(n+{tau}) "
+                          "on a lag-tau embedding; NOT the So et al. source map")}
+
+
+def _detection_label(period, map_info, randomization):
+    form = "PRL norm" if randomization == "prl_norm" else "PRE tensor"
+    kind = "fixed-point transform" if period == 1 else f"period-{period} block transform"
+    return (f"So et al. histogram source peaks, period {period} "
+            f"({kind}, {form} randomization, PRE Eq. 20 Jacobian) [{map_info['map_label']}]")
+
+
+# -------------------------------------------------------------------------
+# Local delay-map Jacobian [PRE Eq. (20)]
+# -------------------------------------------------------------------------
+
+def _companion(grad):
+    grad = np.asarray(grad, dtype=float)
+    d = grad.size
     J = np.zeros((d, d))
     J[0, :] = grad
     if d > 1:
@@ -976,370 +1156,816 @@ def _delay_map_jacobian_from_local_fit(embedded, idx, neighbor_indices, step=1):
     return J
 
 
-def _spatial_neighbors(embedded, idx, K, exclude=1):
-    X = np.asarray(embedded, dtype=float)
-    d = np.linalg.norm(X - X[idx], axis=1)
-    d[idx] = np.inf
-    if exclude > 0:
-        lo = max(0, idx - exclude)
-        hi = min(len(X), idx + exclude + 1)
-        d[lo:hi] = np.inf
-    order = np.argsort(d)
-    order = order[np.isfinite(d[order])]
-    return order[:K]
+def _delay_map_jacobian_from_local_fit(embedded, idx, neighbor_indices, step=1):
+    """
+    Local delay-map Jacobian [PRE Eq. (20)]:
 
+        w_1^k(n+s) - z_1(n+s) = grad f(z(n)) . [w^k - z(n)],   k = 1..M, M >= d
+
+    i.e. the response X[nbr+s, 0] - X[idx+s, 0] is regressed (least squares)
+    on X[nbr] - X[idx].  Only the first row of the companion matrix is
+    estimated; rows 2..d are the exact delay shift [PRE Eq. (1)].
+    """
+    X = np.asarray(embedded, dtype=float)
+    d = X.shape[1]
+    step = int(step)
+    if step < 1:
+        raise ValueError("step must be >= 1")
+    neigh = np.asarray(neighbor_indices, dtype=int)
+    neigh = neigh[(neigh >= 0) & (neigh + step < len(X))]
+    if len(neigh) < d or idx + step >= len(X):
+        return None
+    A = X[neigh] - X[idx]
+    b = X[neigh + step, 0] - X[idx + step, 0]
+    try:
+        grad, _, rank, _ = np.linalg.lstsq(A, b, rcond=None)
+    except np.linalg.LinAlgError:
+        return None
+    if rank < d or not np.all(np.isfinite(grad)):
+        return None
+    return _companion(grad)
+
+
+def _spatial_neighbors(embedded, idx, K, exclude=1, valid_limit=None):
+    """K nearest phase-space neighbours of X[idx], excluding |j-idx| <= exclude."""
+    X = np.asarray(embedded, dtype=float)
+    lim = len(X) if valid_limit is None else int(valid_limit)
+    d = np.linalg.norm(X[:lim] - X[idx], axis=1)
+    lo = max(0, idx - max(int(exclude), 0))
+    hi = min(lim, idx + max(int(exclude), 0) + 1)
+    d[lo:hi] = np.inf
+    if idx < lim:
+        d[idx] = np.inf
+    order = np.argsort(d, kind="stable")
+    order = order[np.isfinite(d[order])]
+    return order[:int(K)]
+
+
+def _local_jacobians(X, step, M, exclude):
+    """Jacobian for every point that has an image z(n+step)."""
+    n, d = X.shape
+    M = max(int(M), d)
+    limit = n - step
+    Js = [None] * n
+    for i in range(limit):
+        neigh = _spatial_neighbors(X, i, K=M, exclude=exclude, valid_limit=limit)
+        Js[i] = _delay_map_jacobian_from_local_fit(X, i, neigh, step=step)
+    return Js
+
+
+# -------------------------------------------------------------------------
+# So transforms
+# -------------------------------------------------------------------------
 
 def _random_R_matrix(rng, d, kappa):
-    """
-    Random perturbation matrix per So et al. (1996), PRL 76, 4705, Eq. (4):
-    the higher-dimensional perturbation term is kappa * R * ||z_{n+1}-z_n||,
-    where R is a d x d matrix with entries drawn independently and uniformly
-    from [-1, 1] and the norm is the L1 norm of the state difference (the
-    paper specifies L1 explicitly).
-    """
+    """PRL randomization: d x d matrix, entries i.i.d. uniform on [-1, 1]."""
     return rng.uniform(-1.0, 1.0, size=(d, d))
+
+
+def _random_R_tensor(rng, d, kappa):
+    """PRE randomization: d x d x d tensor, entries i.i.d. uniform on [-1, 1]."""
+    return rng.uniform(-1.0, 1.0, size=(d, d, d))
+
+
+def _draw_R(rng, count, d, randomization):
+    if randomization == "prl_norm":
+        return rng.uniform(-1.0, 1.0, size=(count, d, d))
+    if randomization == "pre_tensor":
+        return rng.uniform(-1.0, 1.0, size=(count, d, d, d))
+    raise ValueError(f"unknown randomization {randomization!r}")
 
 
 def _l1_norm(v):
     return np.sum(np.abs(v))
 
 
-def so_fixed_point_transform(z, Fz, J, R, kappa):
+def so_perturbation(R, delta, kappa, randomization="prl_norm"):
     """
-    So et al. (1996) fixed-point transform, Eq. (1) and Eq. (4):
-        G(z, R) = [I - S(z, R)]^-1 [F(z) - S(z, R) z]
-        S(z, R) = J_F(z) + kappa * R * ||F(z) - z||_1
+    Randomizing term added to the Jacobian.
+
+      prl_norm  : kappa * R * ||delta||_1         (R: [..., d, d])   [PRL]
+      pre_tensor: kappa * (R . delta)_ij = kappa * sum_k R_ijk delta_k
+                                                  (R: [..., d, d, d]) [PRE Eq. (4)]
+
+    delta is F(z) - z for fixed points and F(z_k) - z_{k+1} for period p.
+    "prl_norm" refers to this randomization term only: the J it is added to
+    is the PRE Eq. 20 fit, never the PRL temporal-difference S_n.
+    PRE writes R.[F(z)-z] with R free; the tensor here is kappa times a
+    U[-1,1] tensor, matching the PRE 1-D example R = k*eta, eta ~ U[-1,1].
     """
-    d = len(z)
-    delta = Fz - z
-    S = J + kappa * R * _l1_norm(delta)
-    M = np.eye(d) - S
+    R = np.asarray(R, dtype=float)
+    delta = np.asarray(delta, dtype=float)
+    if randomization == "prl_norm":
+        return kappa * R * _l1_norm(delta)
+    if randomization == "pre_tensor":
+        return kappa * np.einsum("...ijk,k->...ij", R, delta)
+    raise ValueError(f"unknown randomization {randomization!r}")
+
+
+def so_fixed_point_transform(z, Fz, J, R, kappa, randomization="prl_norm"):
+    """
+    So fixed-point transform [PRE Eq. (3)]:
+        z_hat = G(z, R) = [I - S]^-1 [F(z) - S z]
+    with S = J + so_perturbation(R, F(z) - z).
+    """
+    z = np.asarray(z, dtype=float)
+    Fz = np.asarray(Fz, dtype=float)
+    S = np.asarray(J, dtype=float) + so_perturbation(R, Fz - z, kappa, randomization)
     try:
-        return np.linalg.solve(M, Fz - S @ z)
+        return np.linalg.solve(np.eye(len(z)) - S, Fz - S @ z)
     except np.linalg.LinAlgError:
         return None
+
+
+def so_fixed_point_transform_tensor(z, Fz, J, R_tensor, kappa):
+    """PRE tensor-form fixed-point transform (see so_fixed_point_transform)."""
+    return so_fixed_point_transform(z, Fz, J, R_tensor, kappa, randomization="pre_tensor")
+
+
+def _batched_solve(A, b):
+    """Solve A x = b for stacked systems; singular systems give NaN rows."""
+    try:
+        return np.linalg.solve(A, b[..., None])[..., 0]
+    except np.linalg.LinAlgError:
+        out = np.full(b.shape, np.nan)
+        for i in range(len(A)):
+            try:
+                out[i] = np.linalg.solve(A[i], b[i])
+            except np.linalg.LinAlgError:
+                pass
+        return out
+
+
+def _batched_fixed_point_transform(z, Fz, J, Rs, kappa, randomization):
+    d = len(z)
+    S = J[None, :, :] + so_perturbation(Rs, Fz - z, kappa, randomization)
+    A = np.eye(d)[None, :, :] - S
+    rhs = Fz[None, :] - np.einsum("rij,j->ri", S, z)
+    return _batched_solve(A, rhs)
+
+
+def _so_period_block_system(Z, FZ, S_list):
+    """
+    Block-cyclic system of PRE Eq. (30).  Block row k (0-based) reads
+        -S_k zhat_k + zhat_{k+1 mod p} = F(z_k) - S_k z_k,
+    the linearization F(z_k) = z*(k+1) + S_k [z_k - z*(k)] of PRE Eq. (29).
+    """
+    p = len(Z)
+    d = np.asarray(Z[0]).size
+    B = np.zeros((p * d, p * d))
+    rhs = np.zeros(p * d)
+    for k in range(p):
+        kp1 = (k + 1) % p
+        S = S_list[k]
+        B[k*d:(k+1)*d, k*d:(k+1)*d] = -S
+        B[k*d:(k+1)*d, kp1*d:(kp1+1)*d] += np.eye(d)
+        rhs[k*d:(k+1)*d] = FZ[k] - S @ Z[k]
+    return B, rhs
+
+
+def _so_period_transform(Z, FZ, J_list, R_list, kappa, randomization="prl_norm"):
+    """
+    Period-p So transform [PRE Eq. (30)] for one combination of test points,
+    with S(z_k, z_{k+1}, R_k) = J(z_k) + R_k.[F(z_k) - z_{k+1}].
+    Returns the (p, d) array (zhat_1, ..., zhat_p) or None if singular.
+    """
+    p = len(Z)
+    S_list = [np.asarray(J_list[k], float)
+              + so_perturbation(R_list[k], np.asarray(FZ[k]) - np.asarray(Z[(k+1) % p]),
+                                kappa, randomization)
+              for k in range(p)]
+    B, rhs = _so_period_block_system(Z, FZ, S_list)
+    try:
+        return np.linalg.solve(B, rhs).reshape(p, -1)
+    except np.linalg.LinAlgError:
+        return None
+
+
+def _batched_period_transform(Z, FZ, J_list, Rs, kappa, randomization):
+    """Rs: list of p stacks of random matrices/tensors, each of length r."""
+    p = len(Z)
+    d = Z[0].size
+    r = len(Rs[0])
+    B = np.zeros((r, p*d, p*d))
+    rhs = np.zeros((r, p*d))
+    eye = np.eye(d)
+    for k in range(p):
+        kp1 = (k + 1) % p
+        S = J_list[k][None] + so_perturbation(Rs[k], FZ[k] - Z[kp1], kappa, randomization)
+        B[:, k*d:(k+1)*d, k*d:(k+1)*d] = -S
+        B[:, k*d:(k+1)*d, kp1*d:(kp1+1)*d] += eye
+        rhs[:, k*d:(k+1)*d] = FZ[k][None] - np.einsum("rij,j->ri", S, Z[k])
+    return _batched_solve(B, rhs).reshape(r, p, d)
+
+
+# -------------------------------------------------------------------------
+# Delay-coordinate cyclic structure [PRE Eqs. (27)-(28)]
+# -------------------------------------------------------------------------
+
+def cyclic_orbit_matrix(s, d):
+    """
+    Delay-coordinate period-p orbit from its p independent values.
+
+    With z(n) = (x(n), x(n-1), ..., x(n-d+1)) and z*(k+1) = F(z*(k)), the
+    j-th component (0-based) of the k-th orbit point is x at time k-j, so
+        recon[k, j] = s[(k - j) % p].
+    (The earlier (k + j) % p indexing was wrong for p >= 3.)
+    """
+    s = np.asarray(s, dtype=float)
+    p = len(s)
+    k = np.arange(p)[:, None]
+    j = np.arange(int(d))[None, :]
+    return s[(k - j) % p]
+
+
+def _cyclic_slab_reduction(Zhat):
+    """
+    First-component reduction of a transformed period-p point [PRE Sec. III B]:
+    s = (zhat_1(1), ..., zhat_1(p)), reconstructed with cyclic_orbit_matrix;
+    the residual is the distance from the cyclic hyperplane (0 on it).
+    """
+    Zhat = np.asarray(Zhat, dtype=float)
+    p, d = Zhat.shape
+    s = Zhat[:, 0].copy()
+    return s, float(np.linalg.norm(Zhat - cyclic_orbit_matrix(s, d)))
+
+
+def _batched_cyclic_residual(Zhat):
+    r, p, d = Zhat.shape
+    k = np.arange(p)[:, None]
+    j = np.arange(d)[None, :]
+    recon = Zhat[:, :, 0][:, (k - j) % p]
+    return np.linalg.norm((Zhat - recon).reshape(r, -1), axis=1)
 
 
 def _project_fixed_point_tube(transformed, percentile=10.0):
     """
-    Reduce the transformed fixed-point distribution using So's diagonal tube:
-    keep the points whose components are closest to their own mean (i.e.
-    closest to lying on the diagonal z_1=z_2=...=z_d, which every genuine
-    fixed point satisfies exactly in delay coordinates).
-
-    Uses a PERCENTILE cutoff (always keep the closest `percentile`% of points)
-    rather than a fixed distance threshold. A fixed threshold was tested
-    directly and found to collapse to keeping ~0.01% of points at a realistic
-    higher embedding dimension (d=6) where it kept ~25% at d=2 -- a genuine
-    curse-of-dimensionality effect. A percentile cutoff self-calibrates to
-    whatever the ambient dimension's distance distribution actually looks
-    like, rather than requiring a hand-tuned, dimension-dependent constant.
+    Diagonal tube reduction [PRE Sec. II D]: every delay-coordinate fixed
+    point lies on z_1 = ... = z_d.  The perpendicular distance to the
+    diagonal is ||z - mean(z) 1||; the PROJECT choice here keeps the closest
+    `percentile` % (a self-calibrating tube width -- a fixed width collapses
+    at higher d).  Returns (scalar diagonal coordinate, keep mask).
     """
     Z = np.asarray(transformed, dtype=float)
     if len(Z) == 0:
         return np.empty(0), np.zeros(0, dtype=bool)
-    centered = Z - np.mean(Z, axis=1, keepdims=True)
-    distance = np.linalg.norm(centered, axis=1)
-    threshold = np.percentile(distance, percentile)
-    keep = distance <= threshold
-    scalar = np.mean(Z[keep], axis=1)
-    return scalar, keep
+    distance = np.linalg.norm(Z - np.mean(Z, axis=1, keepdims=True), axis=1)
+    keep = distance <= np.percentile(distance, percentile)
+    return np.mean(Z[keep], axis=1), keep
 
 
-def upo_coverage(candidates, embedded, config=CFG, rng_seed=0):
+def canonical_cyclic_rotation(s):
+    """Rotation of a cyclic sequence that starts at its largest element."""
+    s = np.asarray(s, dtype=float)
+    return np.roll(s, -int(np.argmax(s)))
+
+
+def minimal_cyclic_period(s, tol):
+    """Smallest q dividing p with s invariant under rotation by q."""
+    s = np.asarray(s, dtype=float)
+    p = len(s)
+    for q in range(1, p + 1):
+        if p % q == 0 and np.max(np.abs(s - np.roll(s, -q))) <= tol:
+            return q
+    return p
+
+
+# -------------------------------------------------------------------------
+# Histogram and peaks
+# -------------------------------------------------------------------------
+
+def _so_histogram_range(embedded, pad_fraction):
     """
-    Density/coverage measure for detected UPOs -- the actual proxy for
-    Devaney's "density of periodic orbits" condition. The existence of a
-    single detected fixed point is not itself evidence of chaos; what matters
-    is how much of the reconstructed attractor sits near SOME detected UPO.
-
-    Procedure: normalize the attractor per-dimension to [0,1], sample
-    reference points directly from the real embedded trajectory (not an
-    arbitrary coordinate grid -- a fixed grid's cell count grows
-    exponentially with embedding dimension, leaving nearly all cells empty
-    regardless of whether the system is chaotic), and compute the fraction
-    of reference points lying within a distance-based radius of the nearest
-    detected UPO.
-
-    The radius is deliberately NOT a fixed constant or fixed fraction of the
-    attractor's extent. Direct testing showed that approach suffers a severe
-    curse-of-dimensionality collapse: what discriminates well at low
-    embedding dimension can become meaningless at realistic higher
-    dimensions purely from distance concentration, independent of whether
-    real UPO structure is present. Instead, the radius is set relative to
-    the k-th nearest-neighbor spacing within the normalized attractor
-    itself, which self-calibrates to whatever the ambient dimension's
-    typical point density actually is.
+    PROJECT choice: histogram axes span the observed attractor coordinate
+    range, padded by pad_fraction of its span on each side.  Transformed
+    points far outside (near-singular I - S) are excluded; without this the
+    min/max of the transformed data can stretch the grid so that distinct
+    peaks merge.  Periodic orbits slightly off the attractor remain inside
+    the padding [PRE: the Henon fixed point -1.903 lies off the attractor].
     """
-    if len(candidates) == 0 or len(embedded) == 0:
-        return {"coverage": 0.0, "radius": np.nan, "n_reference": 0, "n_upos": 0}
+    x = np.asarray(embedded, dtype=float)[:, 0]
+    lo, hi = float(np.min(x)), float(np.max(x))
+    span = hi - lo
+    if not np.isfinite(span) or span <= 1e-12:
+        return None
+    pad = float(pad_fraction) * span
+    return (lo - pad, hi + pad)
 
-    X = np.asarray(embedded, dtype=float)
-    mins, maxs = X.min(axis=0), X.max(axis=0)
-    span = np.maximum(maxs - mins, 1e-12)
-    X_norm = (X - mins) / span
 
-    upo_locs = np.array([c["location"] for c in candidates])
-    upo_locs_norm = (upo_locs - mins) / span
+def _histogram_peak_threshold(hist, config):
+    """
+    PROJECT peak rule (the papers say only "look for peaks"): threshold
+    = max(median + so_peak_sigma * MAD-scale of a lightly smoothed
+    histogram, so_peak_min_count).  Smoothing is used for the background
+    estimate only; peaks are located on the raw histogram.
+    """
+    from scipy.ndimage import gaussian_filter
+    h = np.asarray(hist, dtype=float)
+    sm = gaussian_filter(h, sigma=0.5, mode="constant")
+    bg = float(np.median(sm))
+    scale = max(float(np.median(np.abs(sm - bg))) / 0.6744897501960817, 1e-12)
+    return max(bg + config.so_peak_sigma * scale, float(config.so_peak_min_count))
 
-    rng = np.random.default_rng(rng_seed)
-    n_ref = min(config.coverage_n_reference, len(X_norm))
-    ref_idx = rng.choice(len(X_norm), size=n_ref, replace=False)
-    reference_points = X_norm[ref_idx]
 
-    sample_size = min(500, len(X_norm))
-    sample_idx = rng.choice(len(X_norm), size=sample_size, replace=False)
-    sample = X_norm[sample_idx]
-    nn_dists = []
-    for i in range(len(sample)):
-        d = np.linalg.norm(sample - sample[i], axis=1)
-        d[i] = np.inf
-        k = min(config.coverage_radius_neighbors_k, len(d) - 1)
-        nn_dists.append(np.partition(d, k)[k])
-    typical_spacing = np.median(nn_dists)
-    radius = config.coverage_radius_multiplier * typical_spacing
+def _histogram_peaks(hist, threshold):
+    """Local maxima (3^p neighbourhood) with count >= threshold; one per plateau."""
+    from scipy.ndimage import maximum_filter, label
+    h = np.asarray(hist, dtype=float)
+    local = (h == maximum_filter(h, size=3, mode="constant", cval=-np.inf)) & (h >= threshold)
+    lab, nlab = label(local, structure=np.ones((3,) * h.ndim))
+    cells = []
+    for lbl in range(1, nlab + 1):
+        members = np.argwhere(lab == lbl)
+        cells.append(tuple(int(v) for v in members[0]))
+    cells.sort(key=lambda c: -h[c])
+    return cells
 
-    covered = 0
-    for ref in reference_points:
-        dists = np.linalg.norm(upo_locs_norm - ref, axis=1)
-        if np.min(dists) <= radius:
-            covered += 1
 
-    coverage = covered / len(reference_points)
+def _in_cell(points, edges, cell):
+    """Boolean mask of points (n, p) inside histogram cell `cell`."""
+    pts = np.asarray(points, dtype=float).reshape(len(points), -1)
+    mask = np.ones(len(pts), dtype=bool)
+    for j, c in enumerate(cell):
+        e = edges[j]
+        upper = pts[:, j] <= e[c + 1] if c == len(e) - 2 else pts[:, j] < e[c + 1]
+        mask &= (pts[:, j] >= e[c]) & upper
+    return mask
+
+
+def _histogram_on_edges(points, edges):
+    pts = np.asarray(points, dtype=float).reshape(len(points), -1) if len(points) else \
+        np.empty((0, len(edges)))
+    hist, _ = np.histogramdd(pts, bins=[np.asarray(e) for e in edges])
+    return hist
+
+
+# -------------------------------------------------------------------------
+# Detection results
+# -------------------------------------------------------------------------
+
+def _new_detection_result(period, map_info, config, status, n_points, d):
     return {
-        "coverage": coverage, "radius": float(radius), "typical_spacing": float(typical_spacing),
-        "n_reference": len(reference_points), "n_upos": len(candidates),
+        "detection_label": _detection_label(period, map_info, config.so_randomization),
+        "period": int(period),
+        "map_mode": map_info["map_mode"],
+        "source_faithful_map": bool(map_info["source_faithful_map"]),
+        "map_label": map_info["map_label"],
+        "tau": int(map_info["tau"]),
+        "step": int(map_info["step"]),
+        "randomization": config.so_randomization,
+        "status": status,
+        "n_points": int(n_points),
+        "embedding_dimension": int(d),
+        "levels": UPO_LEVELS,
+        LEVEL_A_FIELD: [],
+        "significance_assessed": False,
+        "significance": None,
+        LEVEL_B_FIELD: None,
+        "verification_assessed": False,
+        LEVEL_C_PASS_FIELD: None,
+        LEVEL_C_FAIL_FIELD: None,
+        "citations": (SO_PRL_CITATION, SO_PRE_CITATION),
     }
 
 
-def detect_so_fixed_points(embedded, tau=1, config=CFG, rng=None):
-    """So et al. fixed-point extraction with data-derived candidate states.
+def _input_status(X, config, step, period):
+    n, d = X.shape
+    if not np.all(np.isfinite(X)):
+        return "nonfinite_input"
+    if n and float(np.ptp(X[:, 0])) <= 1e-12:
+        return "constant_data"
+    need = max(int(config.so_min_embedded_points), period * step + max(config.so_jacobian_neighbors, d) + 2)
+    if n < need:
+        return "too_few_points"
+    return None
 
-    Histogram peaks are found in the scalar diagonal coordinate of transformed
-    points.  For each peak, the candidate state is the diagonal projection of
-    the *actual transformed points in that peak*, rather than an artificial
-    all-center vector.  The within-peak scatter is retained as a genuine
-    diagonal-consistency diagnostic.
+
+SOURCE_STABILITY_PROVENANCE = (
+    "HYBRID PRL/PRE: PRL averaging of kappa=0 Jacobians estimated using the "
+    "PRE Eq. 20 spatial-neighbor least-squares fit; hybrid PRL/PRE "
+    "implementation, not the literal PRL temporal S_n construction")
+
+
+def source_period1_stability(jacobians, member_indices):
     """
-    if rng is None: rng=np.random.default_rng(config.random_seed)
-    X=np.asarray(embedded,dtype=float); n,d=X.shape; tau=int(tau)
-    if tau<1: raise ValueError("tau must be >= 1")
-    transformed=[]; source_idx=[]
-    M=max(config.so_jacobian_neighbors,d+2)
-    for i in range(n-tau):
-        neigh=_spatial_neighbors(X,i,K=M,exclude=max(1,tau))
-        if len(neigh)<d+2: continue
-        J=_delay_map_jacobian_from_local_fit(X,i,neigh,step=tau)
-        if J is None: continue
-        z=X[i]; Fz=X[i+tau]
-        for _ in range(config.so_random_R):
-            R=_random_R_matrix(rng,d,config.so_kappa)
-            zh=so_fixed_point_transform(z,Fz,J,R,config.so_kappa)
-            if zh is not None and np.all(np.isfinite(zh)):
-                transformed.append(zh); source_idx.append(i)
-    if not transformed:
-        return {"candidates":[],"transformed":np.empty((0,d)),"scalar":np.empty(0)}
-    transformed=np.asarray(transformed); source_idx=np.asarray(source_idx,int)
-    scalar,keep=_project_fixed_point_tube(transformed,config.so_diagonal_percentile)
-    transformed_kept=transformed[keep]; source_kept=source_idx[keep]
-    if len(scalar)<config.so_peak_min_count:
-        return {"candidates":[],"transformed":transformed_kept,"scalar":scalar,"source_indices":source_kept}
-    hist,edges=np.histogram(scalar,bins=config.so_hist_bins); centers=0.5*(edges[:-1]+edges[1:])
-    smoothed=gaussian_filter1d(hist.astype(float),sigma=0.5)
-    bg=np.median(smoothed); mad=np.median(np.abs(smoothed-bg)); scale=max(mad/0.6744897501960817,1e-12)
-    threshold=bg+config.so_peak_sigma*scale
-    peaks,_=find_peaks(hist.astype(float),height=max(threshold,config.so_peak_min_count),distance=1)
-    candidates=[]
-    for pidx in peaks:
-        in_bin=(scalar>=edges[pidx]) & ((scalar<edges[pidx+1]) if pidx < len(hist)-1 else (scalar<=edges[pidx+1]))
-        pts=transformed_kept[in_bin]
-        if len(pts)==0: continue
-        # Project each transformed state to the diagonal, then use the mean
-        # projected coordinate as the fixed-point candidate.
-        diag_coord=np.mean(pts,axis=1)
-        c=float(np.mean(diag_coord)); zhat=np.full(d,c,dtype=float)
-        diagonal_error=float(np.median(np.std(pts,axis=1)))
-        centroid_error=float(np.linalg.norm(np.mean(pts,axis=0)-zhat))
-        candidates.append({"period":1,"location":zhat,"scalar_location":c,
-            "histogram_count":int(hist[pidx]),"peak_height":float(hist[pidx]),
-            "diagonal_error":diagonal_error,"centroid_diagonal_error":centroid_error,
-            "is_diagonal_consistent":bool(centroid_error <= max(0.10*np.std(transformed_kept),1e-12)),
-            "peak_bin":int(pidx),"transformed_points_in_peak":int(len(pts))})
-    return {"candidates":candidates,"transformed":transformed_kept,"scalar":scalar,
-            "source_indices":source_kept,"histogram":hist,"edges":edges,"smoothed_histogram":smoothed}
+    HYBRID PRL/PRE period-1 stability.
 
-
-# -------------------------------------------------------------------------
-# General period-p So transform (1997)
-# -------------------------------------------------------------------------
-
-def _so_period_transform(Z, FZ, J_list, R_list, kappa):
-    p = len(Z)
-    d = Z[0].size
-    pd = p * d
-    B = np.zeros((pd, pd))
-    rhs = np.zeros(pd)
-    for k in range(p):
-        kp1 = (k + 1) % p
-        zk = Z[k]; Fzk = FZ[k]; Rk = R_list[k]; Jk = J_list[k]
-        S = Jk + kappa * Rk * _l1_norm(Fzk - Z[kp1])
-        r0 = k*d; r1 = r0+d
-        B[r0:r1, r0:r1] = -S
-        if k < p - 1:
-            B[r0:r1, (k+1)*d:(k+2)*d] = np.eye(d)
-        else:
-            B[r0:r1, 0:d] = np.eye(d)
-        rhs[r0:r1] = Fzk - S @ zk
-    try:
-        return np.linalg.solve(B, rhs).reshape(p, d)
-    except np.linalg.LinAlgError:
+    Procedure from the PRL: average S_n with kappa = 0 over the distinct data
+    points whose transformed values lie in the peak, and take eigenvalues
+    ("Lyapunov numbers" per map step).  Here each S_n (kappa = 0) is the
+    local Jacobian estimated by the PRE Eq. 20 spatial-neighbour least-squares
+    fit -- NOT the literal PRL construction of S_n from temporal differences
+    of consecutive delay vectors.  The result therefore does not reproduce
+    the literal PRL stability procedure.  (The result key remains
+    "source_stability" for API stability; its "provenance" field is
+    authoritative.)
+    """
+    Js = [jacobians[i] for i in np.unique(np.asarray(member_indices, dtype=int))
+          if jacobians[i] is not None]
+    if not Js:
         return None
+    S_bar = np.mean(Js, axis=0)
+    eig = np.linalg.eigvals(S_bar)
+    mod = np.sort(np.abs(eig))[::-1]
+    return {
+        "provenance": SOURCE_STABILITY_PROVENANCE,
+        "jacobian_method": "PRE Eq. 20 spatial-neighbor least squares",
+        "literal_prl_temporal_S_n": False,
+        "mean_S": S_bar,
+        "eigenvalues": eig,
+        "lyapunov_numbers": mod,
+        "n_points_averaged": int(len(Js)),
+        "unstable": bool(mod[0] > 1.0 + 1e-8),
+        "saddle": bool(mod[0] > 1.0 + 1e-8 and mod[-1] < 1.0 - 1e-8),
+    }
 
 
-def _cyclic_slab_reduction(Zhat):
-    Zhat = np.asarray(Zhat, dtype=float)
-    p, d = Zhat.shape
-    independent = Zhat[:, 0].copy()
-    recon = np.empty_like(Zhat)
-    for k in range(p):
-        for j in range(d):
-            recon[k, j] = independent[(k+j) % p]
-    residual = np.linalg.norm(Zhat - recon)
-    return independent, residual
+def detect_so_fixed_points(embedded, tau=1, config=CFG, rng=None, map_mode=None,
+                           hist_range=None):
+    """
+    So et al. period-1 detection:
+        So transformation -> transformed points -> diagonal tube
+        -> histogram -> peaks (Level A source peaks).
+
+    Stability is NOT part of the Level A detection criterion: after a peak
+    has been detected, a separate diagnostic ("source_stability", HYBRID
+    PRL/PRE, see source_period1_stability) is attached to it.  It never adds,
+    removes or relabels a peak and may be None.
+
+    `tau` is the embedding lag of `embedded`.  map_mode defaults to
+    config.upo_map_mode; one_sample (SOURCE) requires tau=1.
+    """
+    if rng is None:
+        rng = np.random.default_rng(config.random_seed)
+    map_info = resolve_upo_map(config.upo_map_mode if map_mode is None else map_mode, tau)
+    step = map_info["step"]
+    X = np.asarray(embedded, dtype=float)
+    if X.ndim != 2:
+        raise ValueError("embedded must be a 2-D array (points x dimension)")
+    n, d = X.shape
+    status = _input_status(X, config, step, 1)
+    result = _new_detection_result(1, map_info, config, status or UPO_STATUS_OK, n, d)
+    result.update({"transformed": np.empty((0, d)), "scalar": np.empty(0),
+                   "source_indices": np.empty(0, dtype=int), "histogram": None, "edges": None})
+    if status is not None:
+        return result
+    randomization = config.so_randomization
+    Js = _local_jacobians(X, step, config.so_jacobian_neighbors, max(1, step))
+    out, src = [], []
+    for i in range(n - step):
+        if Js[i] is None:
+            continue
+        zh = _batched_fixed_point_transform(
+            X[i], X[i + step], Js[i], _draw_R(rng, config.so_random_R, d, randomization),
+            config.so_kappa, randomization)
+        ok = np.all(np.isfinite(zh), axis=1)
+        out.append(zh[ok])
+        src.append(np.full(int(ok.sum()), i, dtype=int))
+    result["jacobians"] = Js
+    transformed = np.concatenate(out) if out else np.empty((0, d))
+    source_idx = np.concatenate(src) if src else np.empty(0, dtype=int)
+    if len(transformed) == 0:
+        result["status"] = "no_valid_transforms"
+        return result
+    scalar, keep = _project_fixed_point_tube(transformed, config.so_diagonal_percentile)
+    rng_range = hist_range if hist_range is not None else _so_histogram_range(X, config.so_hist_range_pad)
+    edges = [np.linspace(rng_range[0], rng_range[1], config.so_hist_bins + 1)]
+    inside = (scalar >= edges[0][0]) & (scalar <= edges[0][-1])
+    transformed_kept = transformed[keep][inside]
+    scalar = scalar[inside]
+    source_kept = source_idx[keep][inside]
+    hist = _histogram_on_edges(scalar[:, None], edges)
+    result.update({"transformed": transformed_kept, "scalar": scalar,
+                   "source_indices": source_kept, "histogram": hist, "edges": edges,
+                   "reduced": scalar[:, None], "histogram_range": tuple(rng_range)})
+    if len(scalar) == 0:
+        result["status"] = "tube_empty"
+        return result
+    if len(scalar) < config.so_peak_min_count:
+        result["status"] = "too_few_in_tube"
+        return result
+    threshold = _histogram_peak_threshold(hist, config)
+    result["peak_threshold"] = threshold
+    peaks = []
+    for cell in _histogram_peaks(hist, threshold):
+        m = _in_cell(scalar[:, None], edges, cell)
+        pts = transformed_kept[m]
+        if len(pts) == 0:
+            continue
+        c = float(np.mean(np.mean(pts, axis=1)))
+        members = np.unique(source_kept[m])
+        peaks.append({
+            "period": 1,
+            "provenance": "SOURCE",
+            "level": "A",
+            "location": np.full(d, c),
+            "scalar_location": c,
+            "orbit_coordinates": np.array([c]),
+            "orbit_points": np.full((1, d), c),
+            "minimal_period": 1,
+            "histogram_count": int(hist[cell]),
+            "peak_cell": cell,
+            "transformed_points_in_peak": int(len(pts)),
+            "diagonal_error": float(np.median(np.std(pts, axis=1))),
+            "source_member_indices": members,
+            # Diagnostic attached to an already-detected peak; not a detection criterion.
+            "source_stability": source_period1_stability(Js, members),
+        })
+    result[LEVEL_A_FIELD] = peaks
+    result["status"] = UPO_STATUS_OK if peaks else "no_peaks"
+    return result
 
 
-def detect_so_period_p(embedded, period, tau=1, config=CFG, rng=None):
+def detect_so_period_p(embedded, period, tau=1, config=CFG, rng=None, map_mode=None,
+                       hist_range=None):
+    """
+    So et al. period-p detection (p >= 2) [PRE Sec. III]:
+      - backbone of p temporally consecutive points, K nearest spatial
+        neighbours of each -> p clusters of K+1 test points ("short" scheme)
+      - every combination through the block-cyclic transform, PRE Eq. (30),
+        with many random R per combination
+      - thin slab about the cyclic p-plane, first-component reduction
+        s = (zhat_1(1), ..., zhat_1(p)), p-dimensional histogram, peaks.
+    Each histogram peak is a Level A source peak.  Cyclic rotations of one
+    orbit appear as separate peaks; `canonical_orbit` groups them.
+    """
+    period = int(period)
     if period < 2:
         raise ValueError("Use detect_so_fixed_points for period 1.")
-    if rng is None:
-        rng = np.random.default_rng(config.random_seed + period)
-
-    X = np.asarray(embedded, dtype=float)
-    n, d = X.shape
-    tau = int(tau)
-    if tau < 1:
-        raise ValueError("tau must be >= 1")
-    K = config.so_neighbors_K
-    M = max(config.so_jacobian_neighbors, d + 2)
-
-    if n < period + d + 10:
-        return {"candidates": [], "reduced": np.empty((0, period))}
-
-    neighbor_lists = []
-    jacobians = []
-    for i in range(n - tau):
-        neigh = _spatial_neighbors(X, i, K=M, exclude=max(1, tau))
-        neigh = np.asarray([i, *neigh], dtype=int)
-        J = _delay_map_jacobian_from_local_fit(X, i, neigh[1:], step=tau)
-        neighbor_lists.append(neigh)
-        jacobians.append(J)
-
-    reduced_all = []
-    max_backbones = config.so_max_backbones
-    backbone_indices = list(range(n - (period * tau)))
-    if max_backbones is not None and len(backbone_indices) > max_backbones:
-        backbone_indices = list(np.linspace(0, len(backbone_indices)-1, max_backbones).astype(int))
-
-    for start in backbone_indices:
-        clusters = []
-        valid = True
-        for k in range(period):
-            idx = start + k * tau
-            choices = neighbor_lists[idx]
-            choices = choices[choices + tau < n]
-            if len(choices) == 0:
-                valid = False
-                break
-            clusters.append(choices)
-        if not valid:
-            continue
-
-        for combo in itertools.product(*clusters):
-            Z = [X[idx] for idx in combo]
-            FZ = [X[idx+tau] for idx in combo]
-            J_list = []
-            good = True
-            for idx in combo:
-                J = jacobians[idx]
-                if J is None:
-                    good = False
-                    break
-                J_list.append(J)
-            if not good:
-                continue
-
-            for _ in range(config.so_random_R_period_p):
-                R_list = [_random_R_matrix(rng, d, config.so_kappa) for _ in range(period)]
-                Zhat = _so_period_transform(Z, FZ, J_list, R_list, config.so_kappa)
-                if Zhat is None or not np.all(np.isfinite(Zhat)):
-                    continue
-                reduced, residual = _cyclic_slab_reduction(Zhat)
-                scale = max(np.linalg.norm(Zhat), 1e-12)
-                if residual <= config.so_slab_fraction * scale:
-                    reduced_all.append(reduced)
-
-    if len(reduced_all) < config.so_peak_min_count:
-        return {"candidates": [], "reduced": np.asarray(reduced_all)}
-
-    reduced = np.asarray(reduced_all)
     if period > 3:
         raise ValueError("Full p-dimensional histogram becomes impractical for p>3. Use p<=3.")
+    if rng is None:
+        rng = np.random.default_rng(config.random_seed + period)
+    map_info = resolve_upo_map(config.upo_map_mode if map_mode is None else map_mode, tau)
+    step = map_info["step"]
+    X = np.asarray(embedded, dtype=float)
+    if X.ndim != 2:
+        raise ValueError("embedded must be a 2-D array (points x dimension)")
+    n, d = X.shape
+    status = _input_status(X, config, step, period)
+    result = _new_detection_result(period, map_info, config, status or UPO_STATUS_OK, n, d)
+    result.update({"reduced": np.empty((0, period)), "histogram": None, "edges": None})
+    if status is not None:
+        return result
+    randomization = config.so_randomization
+    limit = n - step
+    Js = _local_jacobians(X, step, config.so_jacobian_neighbors, max(1, step))
+    clusters_of = {}
 
-    ranges = []
-    for j in range(period):
-        lo, hi = np.min(reduced[:, j]), np.max(reduced[:, j])
-        if np.isclose(lo, hi):
-            hi = lo + 1e-9
-        ranges.append((lo, hi))
+    def cluster(i):
+        if i not in clusters_of:
+            nb = _spatial_neighbors(X, i, K=config.so_neighbors_K, exclude=max(1, step),
+                                    valid_limit=limit)
+            members = np.asarray([i, *nb], dtype=int)
+            clusters_of[i] = members[[Js[m] is not None for m in members]]
+        return clusters_of[i]
 
-    hist, edges = np.histogramdd(reduced, bins=config.so_hist_bins, range=ranges)
-    padded = np.pad(hist, 1, mode="constant")
-    candidate_cells = np.argwhere(hist >= config.so_peak_min_count)
-
-    candidates = []
-    for cell in candidate_cells:
-        pc = tuple(cell + 1)
-        slices = tuple(slice(c-1, c+2) for c in pc)
-        local = padded[slices]
-        if hist[tuple(cell)] < np.max(local):
+    starts = list(range(n - period * step))
+    if config.so_max_backbones is not None and len(starts) > config.so_max_backbones:
+        starts = list(np.unique(np.linspace(0, len(starts) - 1,
+                                            config.so_max_backbones).astype(int)))
+    reduced_all, resid_all = [], []
+    r = int(config.so_random_R_period_p)
+    for start in starts:
+        cl = [cluster(start + k * step) for k in range(period)]
+        if any(len(c) == 0 for c in cl):
             continue
-        loc = [0.5*(edges[j][c]+edges[j][c+1]) for j, c in enumerate(cell)]
-        candidates.append({
-            "period": period, "orbit_coordinates": np.asarray(loc, dtype=float),
-            "histogram_count": int(hist[tuple(cell)]),
+        for combo in itertools.product(*cl):
+            Z = [X[c] for c in combo]
+            FZ = [X[c + step] for c in combo]
+            J_list = [Js[c] for c in combo]
+            Rs = [_draw_R(rng, r, d, randomization) for _ in range(period)]
+            Zhat = _batched_period_transform(Z, FZ, J_list, Rs, config.so_kappa, randomization)
+            ok = np.all(np.isfinite(Zhat.reshape(r, -1)), axis=1)
+            if np.any(ok):
+                reduced_all.append(Zhat[ok][:, :, 0])
+                resid_all.append(_batched_cyclic_residual(Zhat[ok]))
+    if not reduced_all:
+        result["status"] = "no_valid_transforms"
+        return result
+    reduced = np.concatenate(reduced_all)
+    resid = np.concatenate(resid_all)
+    keep = resid <= np.percentile(resid, config.so_slab_percentile)
+    reduced = reduced[keep]
+    rng_range = hist_range if hist_range is not None else _so_histogram_range(X, config.so_hist_range_pad)
+    edges = [np.linspace(rng_range[0], rng_range[1], config.so_hist_bins + 1)] * period
+    inside = np.all((reduced >= rng_range[0]) & (reduced <= rng_range[1]), axis=1)
+    reduced = reduced[inside]
+    hist = _histogram_on_edges(reduced, edges)
+    result.update({"reduced": reduced, "histogram": hist, "edges": edges,
+                   "histogram_range": tuple(rng_range), "jacobians": Js})
+    if len(reduced) == 0:
+        result["status"] = "tube_empty"
+        return result
+    if len(reduced) < config.so_peak_min_count:
+        result["status"] = "too_few_in_tube"
+        return result
+    threshold = _histogram_peak_threshold(hist, config)
+    result["peak_threshold"] = threshold
+    bin_width = (rng_range[1] - rng_range[0]) / config.so_hist_bins
+    peaks = []
+    for cell in _histogram_peaks(hist, threshold):
+        m = _in_cell(reduced, edges, cell)
+        if not np.any(m):
+            continue
+        s = np.mean(reduced[m], axis=0)
+        peaks.append({
+            "period": period,
+            "provenance": "SOURCE",
+            "level": "A",
+            "orbit_coordinates": s,
+            "canonical_orbit": canonical_cyclic_rotation(s),
+            "minimal_period": minimal_cyclic_period(s, tol=bin_width),
+            "orbit_points": cyclic_orbit_matrix(s, d),
+            "location": cyclic_orbit_matrix(s, d)[0],
+            "histogram_count": int(hist[cell]),
+            "peak_cell": cell,
+            "transformed_points_in_peak": int(np.sum(m)),
+            # The papers define no separate stability procedure for p > 1.
+            "source_stability": None,
         })
+    result[LEVEL_A_FIELD] = peaks
+    result["status"] = UPO_STATUS_OK if peaks else "no_peaks"
+    return result
 
-    return {"candidates": candidates, "reduced": reduced, "histogram": hist, "edges": edges}
 
+# -------------------------------------------------------------------------
+# Level C -- PROJECT EXTENSION verification and stability
+# -------------------------------------------------------------------------
 
-# =============================================================================
-# UPO stability
-# =============================================================================
+def _local_affine_model(X, q, neighborhood, step):
+    """Least-squares affine model of the first delay coordinate near q."""
+    n, d = X.shape
+    valid_n = n - step
+    k = max(int(neighborhood), d + 2)
+    if valid_n < k:
+        return None
+    dist = np.linalg.norm(X[:valid_n] - q, axis=1)
+    idx = np.argsort(dist, kind="stable")[:k]
+    A = np.column_stack([np.ones(k), X[idx] - q])
+    y = X[idx + step, 0]
+    coef, *_ = np.linalg.lstsq(A, y, rcond=None)
+    pred = A @ coef
+    ss_res = float(np.sum((y - pred) ** 2))
+    ss_tot = float(np.sum((y - np.mean(y)) ** 2))
+    r2 = 1.0 if ss_tot <= 1e-15 else 1.0 - ss_res / ss_tot
+    Fq = np.empty(d)
+    Fq[0] = coef[0]
+    Fq[1:] = q[:-1]
+    return {"F_q": Fq, "jacobian": _companion(coef[1:]), "r2": float(r2)}
+
 
 def estimate_jacobian_at_candidate(embedded, candidate, neighborhood=25, step=1):
-    """Estimate the local tau-step map Jacobian near an actual candidate."""
-    X=np.asarray(embedded,dtype=float); z0=np.asarray(candidate,dtype=float); d=X.shape[1]
-    step=int(step); valid_n=len(X)-step
-    if valid_n<=d+2: return None
-    dist=np.linalg.norm(X[:valid_n]-z0,axis=1)
-    idx=np.argsort(dist)[:max(int(neighborhood),d+2)]
-    if len(idx)<d+2: return None
-    center=int(idx[0])
-    return _delay_map_jacobian_from_local_fit(X,center,idx[1:],step=step)
+    """PROJECT EXTENSION: companion Jacobian of a local fit centred on a candidate."""
+    X = np.asarray(embedded, dtype=float)
+    model = _local_affine_model(X, np.asarray(candidate, dtype=float), neighborhood, int(step))
+    return None if model is None else model["jacobian"]
 
 
-def fixed_point_stability(embedded,z_star,neighborhood=30,step=1):
-    """Linear stability from the companion-form Jacobian of the delay map."""
-    X=np.asarray(embedded,dtype=float); z=np.asarray(z_star,dtype=float)
-    if X.ndim!=2 or X.shape[1]<2: return None
-    J=estimate_jacobian_at_candidate(X,z,neighborhood=neighborhood,step=step)
-    if J is None or not np.all(np.isfinite(J)): return None
-    eig=np.linalg.eigvals(J); mod=np.abs(eig)
-    unstable=bool(np.any(mod>1.0+1e-8))
-    return {"jacobian":J,"multipliers":eig,"multiplier_moduli":mod,
-            "unstable":unstable,"saddle":bool(np.any(mod>1.0+1e-8) and np.any(mod<1.0-1e-8)),
-            "max_multiplier":float(np.max(mod)),"min_multiplier":float(np.min(mod)),
-            "candidate_residual":float(np.linalg.norm(_delay_map_apply(X,z,step=step)-z)) if False else np.nan}
+def monodromy_stability(embedded, orbit_points, neighborhood=30, step=1):
+    """
+    PROJECT EXTENSION (not the So et al. stability method): product of
+    candidate-centred local Jacobians around the orbit, J(z_p)...J(z_1).
+    For p = 1 this is candidate-centred fixed-point stability.
+    """
+    X = np.asarray(embedded, dtype=float)
+    pts = np.atleast_2d(np.asarray(orbit_points, dtype=float))
+    Mono = np.eye(X.shape[1])
+    for q in pts:
+        J = estimate_jacobian_at_candidate(X, q, neighborhood=neighborhood, step=step)
+        if J is None or not np.all(np.isfinite(J)):
+            return None
+        Mono = J @ Mono
+    eig = np.linalg.eigvals(Mono)
+    mod = np.sort(np.abs(eig))[::-1]
+    return {
+        "provenance": "PROJECT EXTENSION (candidate-centred monodromy)",
+        "monodromy": Mono,
+        "multipliers": eig,
+        "multiplier_moduli": mod,
+        "unstable": bool(mod[0] > 1.0 + 1e-8),
+        "saddle": bool(mod[0] > 1.0 + 1e-8 and mod[-1] < 1.0 - 1e-8),
+    }
+
+
+def fixed_point_stability(embedded, z_star, neighborhood=30, step=1):
+    """PROJECT EXTENSION: candidate-centred period-1 stability."""
+    X = np.asarray(embedded, dtype=float)
+    if X.ndim != 2 or X.shape[1] < 2:
+        return None
+    return monodromy_stability(X, np.asarray(z_star, dtype=float)[None, :],
+                               neighborhood=neighborhood, step=step)
+
+
+def candidate_verification(embedded, peak, histogram, config=CFG, step=1):
+    """
+    PROJECT EXTENSION verification of one source peak:
+      residual      max_k ||F_hat(z*(k)) - z*(k+1)|| / std(x), local affine F_hat
+      r2            min_k R^2 of those local fits
+      support_ratio peak count / median count of occupied histogram cells
+    """
+    X = np.asarray(embedded, dtype=float)
+    pts = np.atleast_2d(peak["orbit_points"])
+    p = len(pts)
+    scale = max(float(np.std(X[:, 0])), 1e-12)
+    residuals, r2s = [], []
+    for k in range(p):
+        model = _local_affine_model(X, pts[k], config.verify_neighbors, step)
+        if model is None:
+            return {"residual": np.nan, "r2": np.nan, "support_ratio": np.nan,
+                    "passes": False, "failed_gates": ["model_unavailable"]}
+        residuals.append(float(np.linalg.norm(model["F_q"] - pts[(k + 1) % p])) / scale)
+        r2s.append(model["r2"])
+    h = np.asarray(histogram, dtype=float)
+    occupied = h[h > 0]
+    support = float(peak["histogram_count"]) / max(float(np.median(occupied)), 1e-12) \
+        if occupied.size else np.nan
+    residual, r2 = max(residuals), min(r2s)
+    failed = []
+    if not residual <= config.verify_max_residual:
+        failed.append("residual")
+    if not r2 >= config.verify_min_r2:
+        failed.append("r2")
+    if not support >= config.verify_min_support_ratio:
+        failed.append("support_ratio")
+    return {"residual": residual, "r2": r2, "support_ratio": support,
+            "passes": not failed, "failed_gates": failed,
+            "provenance": "PROJECT EXTENSION"}
+
+
+def apply_verification_gates(result, embedded, config=CFG):
+    """
+    Fill Level C.  Source peaks (Level A) are never removed or modified in
+    meaning: failing peaks are listed in verification_failed_peaks and
+    remain in source_peak_candidates.
+    """
+    passed, failed = [], []
+    hist = result.get("histogram")
+    for peak in result.get(LEVEL_A_FIELD, []):
+        ver = candidate_verification(embedded, peak, hist, config=config, step=result["step"])
+        stab = monodromy_stability(embedded, peak["orbit_points"],
+                                   neighborhood=config.verify_neighbors, step=result["step"])
+        entry = dict(peak)
+        entry.update({"level": "C", "verification": ver, "extension_stability": stab,
+                      "verified_unstable": bool(ver["passes"] and stab is not None
+                                                and stab["unstable"])})
+        (passed if ver["passes"] else failed).append(entry)
+    result[LEVEL_C_PASS_FIELD] = passed
+    result[LEVEL_C_FAIL_FIELD] = failed
+    result["verification_assessed"] = True
+    return result
+
+
+# -------------------------------------------------------------------------
+# Coverage -- PROJECT metric (not UPO density)
+# -------------------------------------------------------------------------
+
+def peak_coverage(locations, embedded, config=CFG, rng_seed=0):
+    """
+    PROJECT-derived coverage (NOT a density of periodic orbits):
+
+      1. normalise the embedded attractor to [0, 1] per coordinate;
+      2. sample n_ref = min(coverage_n_reference (=200), N) attractor points
+         without replacement (rng_seed);
+      3. radius = coverage_radius_multiplier x median distance to the
+         coverage_radius_neighbors_k-th nearest neighbour within a sample
+         of min(500, N) attractor points;
+      4. coverage = fraction of the n_ref points within `radius` of at least
+         one peak location (d-dimensional orbit points).
+
+    No peaks -> 0.0.
+    """
+    X = np.asarray(embedded, dtype=float)
+    locs = np.asarray(locations, dtype=float).reshape(-1, X.shape[1]) if len(X) else np.empty((0, 1))
+    if len(locs) == 0 or len(X) == 0:
+        return {"coverage": 0.0, "radius": np.nan, "n_reference": 0, "n_locations": 0}
+    mins, maxs = X.min(axis=0), X.max(axis=0)
+    span = np.maximum(maxs - mins, 1e-12)
+    X_norm = (X - mins) / span
+    locs_norm = (locs - mins) / span
+    rng = np.random.default_rng(rng_seed)
+    n_ref = min(config.coverage_n_reference, len(X_norm))
+    reference = X_norm[rng.choice(len(X_norm), size=n_ref, replace=False)]
+    sample = X_norm[rng.choice(len(X_norm), size=min(500, len(X_norm)), replace=False)]
+    nn = []
+    for i in range(len(sample)):
+        dd = np.linalg.norm(sample - sample[i], axis=1)
+        dd[i] = np.inf
+        k = min(config.coverage_radius_neighbors_k, len(dd) - 1)
+        nn.append(np.partition(dd, k)[k])
+    spacing = float(np.median(nn))
+    radius = config.coverage_radius_multiplier * spacing
+    dmin = np.min(np.linalg.norm(reference[:, None, :] - locs_norm[None, :, :], axis=2), axis=1)
+    return {"coverage": float(np.mean(dmin <= radius)), "radius": float(radius),
+            "typical_spacing": spacing, "n_reference": int(n_ref),
+            "n_locations": int(len(locs)),
+            "definition": "PROJECT: fraction of sampled attractor points near a peak"}
+
+
+def _population_points(peaks, d):
+    if not peaks:
+        return np.empty((0, d))
+    return np.vstack([np.atleast_2d(p["orbit_points"]) for p in peaks])
 
 
 # =============================================================================
@@ -1378,35 +2004,125 @@ def aaft_surrogate(x, rng=None):
 def gaussian_scaled_phase_shuffle(x, rng=None):
     return aaft_surrogate(x, rng=rng)
 
+def so_J(surrogate_W, w):
+    """So et al. J(W'): fraction of surrogates whose maximum deviation W exceeds W'."""
+    Ws = np.asarray(surrogate_W, dtype=float)
+    return float(np.mean(Ws > w)) if Ws.size else np.nan
 
-def so_surrogate_density_significance(real_result, surrogate_results):
-    scalar = np.asarray(real_result.get("scalar", []), float)
-    edges = np.asarray(real_result.get("edges"), float)
-    if scalar.size == 0 or edges.size < 2 or not surrogate_results:
-        return {"W": np.nan, "p_value": np.nan, "ratio_to_median_surrogate_W": np.nan}
-    real_hist, _ = np.histogram(scalar, bins=edges)
-    sur = np.asarray([np.histogram(np.asarray(r.get("scalar", []), float), bins=edges)[0] for r in surrogate_results], float)
+
+def so_surrogate_significance(observed_result, surrogate_results, alpha=0.05):
+    """
+    So et al. surrogate test [PRL; PRE Sec. IV].
+
+    Every histogram is taken on the OBSERVED edges.  With rho_bar_sur the
+    mean surrogate histogram:
+        w(z)  = rho(z) - rho_bar_sur(z)          (signed; never abs())
+        W     = max_z w(z)                       observed maximum deviation
+        W_i   = max_z [rho_sur,i(z) - rho_bar_sur(z)]
+        J(W') = fraction of W_i exceeding W'
+        W0    = median(W_i), so J(W0) = 0.5
+        r_J   = W / W0
+    The finite-sample p-value (1 + #{W_i >= W}) / (n + 1) is reported
+    separately.  A source peak is significant when J(deviation at its cell)
+    < alpha (alpha is a PROJECT convention; the papers report J and r_J).
+    """
+    edges = observed_result.get("edges")
+    obs = observed_result.get("histogram")
+    if edges is None or obs is None:
+        raise ValueError("observed result has no histogram; significance cannot be assessed")
+    obs = np.asarray(obs, dtype=float)
+    sur = np.asarray([_histogram_on_edges(np.asarray(r.get("reduced", np.empty((0, len(edges))))), edges)
+                      for r in surrogate_results], dtype=float)
+    if len(sur) < 2:
+        raise ValueError("at least two surrogate histograms are required")
     mean = np.mean(sur, axis=0)
-    W = float(np.max(np.abs(real_hist - mean)))
-    Ws = np.max(np.abs(sur - mean), axis=1)
+    flat = (sur - mean).reshape(len(sur), -1)
+    Ws = np.max(flat, axis=1)
+    deviation = obs - mean
+    W = float(np.max(deviation))
     W0 = float(np.median(Ws))
+    per_peak = []
+    for peak in observed_result.get(LEVEL_A_FIELD, []):
+        dev = float(deviation[peak["peak_cell"]])
+        J_peak = so_J(Ws, dev)
+        per_peak.append({"deviation": dev, "J": J_peak,
+                         "p_value_finite": float((1 + np.sum(Ws >= dev)) / (len(Ws) + 1)),
+                         "rJ": float(dev / W0) if W0 > 0 else np.nan,
+                         "significant": bool(J_peak < alpha)})
     return {
-        "real_histogram": real_hist, "surrogate_mean_histogram": mean, "surrogate_W": Ws,
-        "W": W, "p_value": float((1+np.sum(Ws >= W))/(len(Ws)+1)),
-        "ratio_to_median_surrogate_W": float(W/max(W0, 1e-12)),
+        "provenance": "SOURCE (So et al. surrogate test)",
+        "n_surrogates": int(len(sur)),
+        "observed_histogram": obs,
+        "surrogate_mean_histogram": mean,
+        "deviation": deviation,
+        "surrogate_W": Ws,
+        "W": W,
+        "W0": W0,
+        "J_W": so_J(Ws, W),
+        "J_W0": so_J(Ws, W0),
+        "rJ": float(W / W0) if W0 > 0 else np.nan,
+        "p_value_finite": float((1 + np.sum(Ws >= W)) / (len(Ws) + 1)),
+        "alpha": float(alpha),
+        "per_peak": per_peak,
     }
 
 
-def run_surrogate_analysis(rr, tau, m, real_lle, real_fixed, lle_theiler, config=CFG):
-    """Optional fixed-parameter AAFT surrogate test.
+def assess_so_significance(result, x, config=CFG, rng=None, embedding_dimension=None):
+    """
+    Fill Level B for a detection result.  Gaussian-scaled phase-shuffle
+    surrogates of the scalar series x are embedded with the observed lag
+    and dimension and run through the identical detector on the observed
+    histogram range.  On success significant_uop_candidates is a list
+    (possibly empty); if the test cannot be carried out it stays None and
+    significance_assessed stays False.
+    """
+    if result["status"] in UPO_FAILURE_STATUSES or result.get("edges") is None:
+        result["significance"] = {"not_assessed_reason": f"detection status {result['status']}"}
+        return result
+    if rng is None:
+        rng = np.random.default_rng(config.random_seed + 104729)
+    x = _as_1d(x)
+    tau = result["tau"]
+    m = int(embedding_dimension or result["embedding_dimension"])
+    period = result["period"]
+    sur_results = []
+    for _ in range(int(config.so_surrogate_count)):
+        emb = _embed_backward(gaussian_scaled_phase_shuffle(x, rng=rng), tau, m)
+        kw = dict(tau=tau, config=config, rng=rng, map_mode=result["map_mode"],
+                  hist_range=result["histogram_range"])
+        r = detect_so_fixed_points(emb, **kw) if period == 1 else detect_so_period_p(emb, period, **kw)
+        if r["status"] not in UPO_FAILURE_STATUSES:
+            sur_results.append(r)
+    try:
+        sig = so_surrogate_significance(result, sur_results, alpha=config.so_significance_alpha)
+    except ValueError as exc:
+        result["significance"] = {"not_assessed_reason": str(exc)}
+        return result
+    significant = []
+    for peak, info in zip(result[LEVEL_A_FIELD], sig["per_peak"]):
+        if info["significant"]:
+            entry = dict(peak)
+            entry.update({"level": "B", "significance": info})
+            significant.append(entry)
+    result["significance"] = sig
+    result["significance_assessed"] = True
+    result[LEVEL_B_FIELD] = significant
+    return result
+
+
+def run_surrogate_analysis(rr, tau, m, real_lle, lle_theiler, config=CFG):
+    """Optional fixed-parameter AAFT surrogate test for the LLE.
 
     Surrogates keep the real series' marginal distribution and linear power
     spectrum while destroying its nonlinear temporal organization. Crucially,
     tau and m are held fixed at the values selected from the real series so
     surrogate re-optimization cannot manufacture a favorable null model.
+
+    UPO surrogate significance is separate (so_assess_significance /
+    assess_so_significance) and does not depend on this LLE analysis.
     """
     rng = np.random.default_rng(config.random_seed + 7919)
-    lle_values=[]; fixed_results=[]
+    lle_values=[]
     for _ in range(int(config.surrogate_count)):
         xs = aaft_surrogate(rr, rng=rng)
         emb = _embed_backward(xs, tau, m)
@@ -1419,13 +2135,6 @@ def run_surrogate_analysis(rr, tau, m, real_lle, real_fixed, lle_theiler, config
                                min_r2=config.lle_min_r2,
                                require_valid_fit=False)
         lle_values.append(lv)
-        fixed_results.append(detect_so_fixed_points(emb, tau=tau, config=config, rng=rng))
-    real_scalar=np.asarray(real_fixed.get("scalar",[]),float)
-    real_edges=np.asarray(real_fixed.get("edges",[]),float)
-    if real_scalar.size and real_edges.size>=2:
-        sig=so_surrogate_density_significance(real_fixed,fixed_results)
-    else:
-        sig={"W":np.nan,"p_value":np.nan,"ratio_to_median_surrogate_W":np.nan}
     finite=np.asarray(lle_values,float); finite=finite[np.isfinite(finite)]
     if np.isfinite(real_lle) and len(finite):
         z=(real_lle-float(np.mean(finite)))/max(float(np.std(finite,ddof=1)),1e-12) if len(finite)>1 else np.nan
@@ -1433,19 +2142,180 @@ def run_surrogate_analysis(rr, tau, m, real_lle, real_fixed, lle_theiler, config
     else:
         z=np.nan; p_lle=np.nan
     return {
-        "n_surrogates": len(fixed_results),
+        "n_surrogates": len(lle_values),
         "lle_surrogates": finite,
         "lle_z": float(z) if np.isfinite(z) else np.nan,
         "lle_p_upper": p_lle,
-        "upo": sig,
         "null_preserves_tau_m": True,
     }
 
 
-def upo_peak_statistic(result):
-    if not result.get("candidates"):
-        return 0.0
-    return float(max(c.get("peak_height", c.get("histogram_count", 0.0)) for c in result["candidates"]))
+def _aggregate_upo_status(statuses):
+    for s in statuses:
+        if s in UPO_FAILURE_STATUSES:
+            return s
+    if UPO_STATUS_OK in statuses:
+        return UPO_STATUS_OK
+    return statuses[0] if statuses else "no_peaks"
+
+
+# Significance status of a UPO analysis.  Keeps "not requested", "requested
+# but could not be assessed", "assessed" (Level B is then a list, possibly
+# empty) and "detector failed" distinct.
+SIGNIFICANCE_NOT_REQUESTED = "not_requested"
+SIGNIFICANCE_ASSESSED = "assessed"
+SIGNIFICANCE_NOT_ASSESSED = "significance_not_assessed"
+SIGNIFICANCE_DETECTOR_FAILURE = "not_assessed_detector_failure"
+SIGNIFICANCE_STATUSES = (SIGNIFICANCE_NOT_REQUESTED, SIGNIFICANCE_ASSESSED,
+                         SIGNIFICANCE_NOT_ASSESSED, SIGNIFICANCE_DETECTOR_FAILURE)
+
+
+def _initial_significance_status(config, status):
+    if not config.so_assess_significance:
+        return SIGNIFICANCE_NOT_REQUESTED
+    if status in UPO_FAILURE_STATUSES:
+        return SIGNIFICANCE_DETECTOR_FAILURE
+    return SIGNIFICANCE_NOT_ASSESSED
+
+
+def _empty_upo_analysis(map_info, config, status, tau, m, n_points=0, embedded=None):
+    return {
+        "map_mode": map_info["map_mode"] if map_info else config.upo_map_mode,
+        "source_faithful_map": bool(map_info["source_faithful_map"]) if map_info else
+                               config.upo_map_mode == "one_sample",
+        "map_label": map_info["map_label"] if map_info else None,
+        "tau": tau, "embedding_dimension": m, "n_embedded_points": int(n_points),
+        "status": status,
+        "significance_requested": bool(config.so_assess_significance),
+        "significance_assessed": False,
+        "significance_status": _initial_significance_status(config, status),
+        "significance_not_assessed_reasons": {},
+        "verification_assessed": False,
+        "randomization": config.so_randomization,
+        "periods": {},
+        "levels": UPO_LEVELS,
+        LEVEL_A_FIELD: [], LEVEL_B_FIELD: None,
+        LEVEL_C_PASS_FIELD: None, LEVEL_C_FAIL_FIELD: None,
+        "verified_unstable": None,
+        "coverage": {"source": None, "significant": None, "verified_unstable": None},
+        "source_rJ": np.nan,
+        "embedded": embedded,
+    }
+
+
+def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
+    """
+    UPO analysis of a scalar series.
+
+    one_sample (SOURCE, default): lag-1 embedding with the Cao dimension
+    selected at lag 1; the detector receives lag-1 vectors.
+    tau_step (PROJECT EXTENSION): reuses the TDMI tau and the LLE's Cao
+    dimension / embedding.
+
+    Returns status-labelled metadata plus the Level A/B/C populations of
+    all analysed periods.  Failures are reported as statuses, not raised.
+    """
+    validate_upo_config(config)
+    xs = np.asarray(x, dtype=float).reshape(-1)
+    if not np.all(np.isfinite(xs)):
+        return _empty_upo_analysis(None, config, "nonfinite_input", None, None)
+    if xs.size == 0 or float(np.ptp(xs)) <= 1e-12:
+        return _empty_upo_analysis(None, config, "constant_data", None, None)
+    if config.upo_map_mode == "one_sample":
+        tau_u = 1
+        m_u, _, _ = cao_method(xs, 1, config.cao_max_dim, config.cao_tol, config.cao_theiler)
+    else:
+        if lle_tau is None:
+            mi = time_delayed_mutual_information(xs, config.tdmi_max_tau, config.tdmi_bins)
+            lle_tau = find_optimal_tau(mi, config.tdmi_smooth_window)
+        tau_u = int(lle_tau)
+        m_u = int(lle_m) if lle_m is not None else \
+            cao_method(xs, tau_u, config.cao_max_dim, config.cao_tol, config.cao_theiler)[0]
+    map_info = resolve_upo_map(config.upo_map_mode, tau_u)
+    if m_u > config.cao_max_dim:
+        return _empty_upo_analysis(map_info, config, "embedding_not_saturated", tau_u, int(m_u))
+    emb = _embed_backward(xs, tau_u, m_u)
+    if rng is None:
+        rng = np.random.default_rng(config.random_seed)
+    sig_rng = np.random.default_rng(config.random_seed + 104729)
+    periods = {}
+    for p in sorted(set(int(v) for v in config.so_periods)):
+        if p == 1:
+            r = detect_so_fixed_points(emb, tau=tau_u, config=config, rng=rng)
+        else:
+            r = detect_so_period_p(emb, p, tau=tau_u, config=config, rng=rng)
+        if config.so_assess_significance:
+            assess_so_significance(r, xs, config=config, rng=sig_rng, embedding_dimension=m_u)
+        if config.so_verify_peaks and r["status"] not in UPO_FAILURE_STATUSES:
+            apply_verification_gates(r, emb, config=config)
+        periods[p] = r
+    out = _empty_upo_analysis(map_info, config,
+                              _aggregate_upo_status([r["status"] for r in periods.values()]),
+                              tau_u, int(m_u), n_points=len(emb), embedded=emb)
+    out["periods"] = periods
+    d = emb.shape[1]
+    source = [c for r in periods.values() for c in r[LEVEL_A_FIELD]]
+    out[LEVEL_A_FIELD] = source
+    if out["status"] in UPO_FAILURE_STATUSES:
+        return out
+    out["significance_assessed"] = bool(periods) and all(r["significance_assessed"] for r in periods.values())
+    if config.so_assess_significance:
+        # Requested but not computable (e.g. fewer than two usable surrogates)
+        # is reported explicitly; Level B then stays None, never [].
+        out["significance_status"] = (SIGNIFICANCE_ASSESSED if out["significance_assessed"]
+                                      else SIGNIFICANCE_NOT_ASSESSED)
+        out["significance_not_assessed_reasons"] = {
+            p: (r["significance"] or {}).get("not_assessed_reason")
+            for p, r in periods.items() if not r["significance_assessed"]}
+    if out["significance_assessed"]:
+        out[LEVEL_B_FIELD] = [c for r in periods.values() for c in r[LEVEL_B_FIELD]]
+        p1 = periods.get(1)
+        out["source_rJ"] = p1["significance"]["rJ"] if p1 is not None else np.nan
+    out["verification_assessed"] = bool(periods) and all(r["verification_assessed"] for r in periods.values())
+    if out["verification_assessed"]:
+        out[LEVEL_C_PASS_FIELD] = [c for r in periods.values() for c in r[LEVEL_C_PASS_FIELD]]
+        out[LEVEL_C_FAIL_FIELD] = [c for r in periods.values() for c in r[LEVEL_C_FAIL_FIELD]]
+        out["verified_unstable"] = [c for c in out[LEVEL_C_PASS_FIELD] if c["verified_unstable"]]
+    seed = config.random_seed
+    out["coverage"] = {
+        "source": peak_coverage(_population_points(source, d), emb, config, rng_seed=seed),
+        "significant": (peak_coverage(_population_points(out[LEVEL_B_FIELD], d), emb, config, rng_seed=seed)
+                        if out[LEVEL_B_FIELD] is not None else None),
+        "verified_unstable": (peak_coverage(_population_points(out["verified_unstable"], d), emb, config,
+                                            rng_seed=seed)
+                              if out["verified_unstable"] is not None else None),
+    }
+    return out
+
+
+def upo_summary_features(upo):
+    """Per-population peak counts, per-point rates and coverages."""
+    n = int(upo.get("n_embedded_points") or 0)
+    status = upo.get("status")
+    failed = status in UPO_FAILURE_STATUSES
+
+    def population(peaks, coverage):
+        if failed or peaks is None:
+            return np.nan, np.nan, np.nan
+        count = float(len(peaks))
+        rate = count / n if n > 0 else np.nan
+        cov = 0.0 if not peaks else (coverage or {}).get("coverage", np.nan)
+        return count, rate, float(cov)
+
+    cov = upo.get("coverage") or {}
+    s = population(upo.get(LEVEL_A_FIELD), cov.get("source"))
+    g = population(upo.get(LEVEL_B_FIELD), cov.get("significant"))
+    v = population(upo.get("verified_unstable"), cov.get("verified_unstable"))
+    rJ = upo.get("source_rJ", np.nan)
+    return {
+        "source_peak_count": s[0], "source_peaks_per_point": s[1], "source_peak_coverage": s[2],
+        "significant_peak_count": g[0], "significant_peaks_per_point": g[1],
+        "significant_peak_coverage": g[2],
+        "source_rJ": float(rJ) if (not failed and upo.get("significance_assessed")
+                                   and rJ is not None and np.isfinite(rJ)) else np.nan,
+        "verified_unstable_count": v[0], "verified_unstable_per_point": v[1],
+        "verified_unstable_coverage": v[2],
+    }
 
 
 # =============================================================================
@@ -1488,28 +2358,19 @@ def analyze_segment(rr_intervals, config=CFG):
                                     min_r2=config.lle_min_r2,
                                     require_valid_fit=config.lle_require_valid_fit)
 
-    rng = np.random.default_rng(config.random_seed)
-    fixed = detect_so_fixed_points(embedded, tau=tau, config=config, rng=rng)
-    for c in fixed.get("candidates", []):
-        stability = fixed_point_stability(embedded, c["location"], neighborhood=30, step=tau)
-        if stability:
-            c.update(stability)
-
-    # A detected fixed point is only counted as a UPO for coverage after its
-    # local multipliers establish instability. Unknown stability is not treated
-    # as evidence of an unstable periodic orbit.
-    unstable_candidates = [c for c in fixed.get("candidates", []) if c.get("unstable") is True]
-    coverage = upo_coverage(unstable_candidates, embedded, config=config, rng_seed=config.random_seed)
-
-    periodic = {}
-    for p in config.so_periods:
-        if p == 1:
-            continue
-        periodic[p] = detect_so_period_p(embedded, p, tau=tau, config=config, rng=rng)
+    # UPO analysis: separate from the LLE.  In one_sample mode it uses its own
+    # lag-1 embedding (Cao at lag 1); tau_step reuses tau, m and the embedding.
+    try:
+        upo = run_upo_analysis(rr_dynamics, config=config, lle_tau=tau, lle_m=m,
+                               rng=np.random.default_rng(config.random_seed))
+    except np.linalg.LinAlgError as exc:
+        upo = _empty_upo_analysis(None, config, "analysis_error", None, None)
+        upo["error"] = repr(exc)
+    periodic = {p: r for p, r in upo["periods"].items() if p != 1}
 
     surrogate = None
     if config.compute_surrogates:
-        surrogate = run_surrogate_analysis(rr_dynamics, tau, m, lle, fixed,
+        surrogate = run_surrogate_analysis(rr_dynamics, tau, m, lle,
                                            lle_theiler, config=config)
 
     return {
@@ -1519,7 +2380,16 @@ def analyze_segment(rr_intervals, config=CFG):
         "stationarity": stationarity, "tau": tau, "embedding_dimension": m,
         "tdmi": mi, "cao_E1": e1, "cao_E2": e2, "embedded": embedded,
         "lle_per_beat": lle, "lle_theiler_beats": int(lle_theiler), "lle_diagnostics": lle_diag,
-        "so_fixed_points": fixed, "so_periodic_orbits": periodic, "upo_coverage": coverage,
+        "upo": upo,
+        "so_fixed_points": upo["periods"].get(1), "so_periodic_orbits": periodic,
+        "upo_map_mode": upo["map_mode"],
+        "upo_source_faithful_map": upo["source_faithful_map"],
+        "upo_tau": upo["tau"],
+        "upo_embedding_dimension": upo["embedding_dimension"],
+        "upo_n_embedded_points": upo["n_embedded_points"],
+        "upo_status": upo["status"],
+        "upo_significance_assessed": upo["significance_assessed"],
+        "upo_significance_status": upo["significance_status"],
         "surrogate_analysis": surrogate,
     }
 
@@ -1587,7 +2457,8 @@ def summarize_twin_results(chaotic_results, periodic_results):
     def extract(results):
         lle=np.asarray([r.get("lle_per_beat",np.nan) for r in results],float)
         coverage=np.asarray([
-            r.get("upo_coverage",{}).get("coverage",np.nan) for r in results
+            upo_summary_features(r["upo"])["source_peak_coverage"] if "upo" in r else np.nan
+            for r in results
         ],float)
         valid=np.isfinite(lle)
         return lle,coverage,valid
@@ -1603,7 +2474,7 @@ def summarize_twin_results(chaotic_results, periodic_results):
             "periodic_valid_values": lp[vp],
             "mann_whitney_valid_only": _mann_whitney_nan_safe(lc,lp),
         },
-        "upo_coverage": {
+        "source_peak_coverage": {
             "chaotic_values": cc[np.isfinite(cc)],
             "periodic_values": cp[np.isfinite(cp)],
             "mann_whitney": _mann_whitney_nan_safe(cc,cp),
@@ -1715,12 +2586,22 @@ CLASSIFIER_ABNORMAL_FRACTION = 0.10
 # cardiologist annotation label onto a detected beat.
 ANNOTATION_MATCH_TOLERANCE_MS = 75.0
 
-CLASSIFIER_FEATURE_COLUMNS = [
-    "lle_per_beat",
-    "upo_coverage",
-    "n_unstable_upos",
-    "upo_candidate_density",
-]
+UPO_ROW_METADATA_COLUMNS = (
+    "upo_feature_mode",
+    "upo_map_mode",
+    "upo_status",
+    "upo_significance_assessed",
+    "upo_significance_status",
+)
+
+
+def classifier_feature_columns(config=CFG):
+    """
+    Explicit classifier feature list for config.upo_feature_mode, taken
+    from UPO_FEATURE_CONTRACT.  There is no implicit default feature list.
+    """
+    validate_upo_config(config)
+    return list(UPO_FEATURE_CONTRACT[config.upo_feature_mode])
 
 
 def load_mitbih_record_with_annotations(
@@ -1933,47 +2814,45 @@ def make_rr_windows(
     return windows
 
 
-def extract_classifier_features(result):
+def extract_classifier_features(result, feature_mode):
     """
-    Extract only features that are actually produced by analyze_segment().
-
+    Features of one analyze_segment() result for an explicit feature mode
+    (UPO_FEATURE_CONTRACT).  Uses only the analysed RR window: no labels,
+    abnormal fraction, record identity, other windows or model outputs.
     No reconstruction parameter (tau or m) is used as a disease feature.
+
+    No peaks -> counts, rates and coverages are 0.
+    UPO pipeline failure (UPO_FAILURE_STATUSES) -> UPO features are NaN.
+    Significance requested but not assessable (significance_status ==
+    "significance_not_assessed") -> significance-dependent features are NaN
+    (never 0); source-peak features are unaffected.
+
+    Using significant_source on a result for which significance was never
+    requested is a configuration error and raises ValueError.
     """
+    if feature_mode not in UPO_FEATURE_CONTRACT:
+        raise ValueError(f"feature_mode must be one of {tuple(UPO_FEATURE_CONTRACT)}, "
+                         f"got {feature_mode!r}")
+    upo = result["upo"]
+    if feature_mode == "significant_source" and not upo.get("significance_requested", False) \
+            and upo["status"] not in UPO_FAILURE_STATUSES:
+        raise ValueError("feature_mode='significant_source' requires UPO surrogate "
+                         "significance to have been requested (so_assess_significance=True)")
     lle = result.get("lle_per_beat", np.nan)
+    values = upo_summary_features(upo)
+    values["lle_per_beat"] = float(lle) if lle is not None and np.isfinite(lle) else np.nan
+    return {col: values[col] for col in UPO_FEATURE_CONTRACT[feature_mode]}
 
-    coverage_result = result.get("upo_coverage", {})
-    coverage = coverage_result.get("coverage", np.nan)
 
-    fixed = result.get("so_fixed_points", {})
-    candidates = fixed.get("candidates", [])
-
-    n_unstable = sum(
-        bool(c.get("unstable") is True)
-        for c in candidates
-    )
-
-    # Density is normalized by the number of embedded trajectory points so
-    # different window lengths would remain comparable.
-    embedded = result.get("embedded", np.empty((0, 1)))
-    n_embedded = len(embedded)
-
-    candidate_density = (
-        float(n_unstable) / float(n_embedded)
-        if n_embedded > 0
-        else np.nan
-    )
-
+def upo_row_metadata(result, feature_mode):
+    """Per-row UPO provenance recorded next to the features."""
+    upo = result["upo"]
     return {
-        "lle_per_beat": (
-            float(lle) if np.isfinite(lle) else np.nan
-        ),
-        "upo_coverage": (
-            float(coverage)
-            if np.isfinite(coverage)
-            else np.nan
-        ),
-        "n_unstable_upos": float(n_unstable),
-        "upo_candidate_density": candidate_density,
+        "upo_feature_mode": feature_mode,
+        "upo_map_mode": upo["map_mode"],
+        "upo_status": upo["status"],
+        "upo_significance_assessed": bool(upo["significance_assessed"]),
+        "upo_significance_status": upo["significance_status"],
     }
 
 
@@ -2036,8 +2915,12 @@ def analyze_mitbih_record_windows(
     )
 
     rows = []
+    feature_mode = config.upo_feature_mode
+    feature_columns = classifier_feature_columns(config)
 
     for window_number, window in enumerate(windows):
+        # Features are computed from the RR window alone; the label and
+        # abnormal fraction are attached only after feature extraction.
         try:
             result = analyze_segment(
                 window["rr"],
@@ -2051,15 +2934,19 @@ def analyze_mitbih_record_windows(
                 "window": int(window_number),
                 "label": int(window["label"]),
                 "abnormal_fraction": float(window["abnormal_fraction"]),
-                "lle_per_beat": np.nan,
-                "upo_coverage": np.nan,
-                "n_unstable_upos": np.nan,
-                "upo_candidate_density": np.nan,
+                **{col: np.nan for col in feature_columns},
+                "upo_feature_mode": feature_mode,
+                "upo_map_mode": config.upo_map_mode,
+                "upo_status": "analysis_error",
+                "upo_significance_assessed": False,
+                "upo_significance_status": (SIGNIFICANCE_DETECTOR_FAILURE
+                                            if config.so_assess_significance
+                                            else SIGNIFICANCE_NOT_REQUESTED),
                 "analysis_error": str(exc),
             })
             continue
 
-        features = extract_classifier_features(result)
+        features = extract_classifier_features(result, feature_mode)
 
         rows.append({
             "record": str(record_name),
@@ -2067,6 +2954,7 @@ def analyze_mitbih_record_windows(
             "label": int(window["label"]),
             "abnormal_fraction": float(window["abnormal_fraction"]),
             **features,
+            **upo_row_metadata(result, feature_mode),
             "analysis_error": "",
         })
 
@@ -2144,7 +3032,7 @@ def build_mitbih_classification_dataset(
     meta_df = pd.DataFrame(metadata)
 
     if len(df):
-        for col in CLASSIFIER_FEATURE_COLUMNS + [
+        for col in classifier_feature_columns(config) + list(UPO_ROW_METADATA_COLUMNS) + [
             "label",
             "record",
             "window",
@@ -2158,16 +3046,25 @@ def build_mitbih_classification_dataset(
 
 def run_grouped_logistic_regression(
     df,
-    feature_columns=CLASSIFIER_FEATURE_COLUMNS,
+    feature_columns,
     n_splits=5,
     random_state=42,
 ):
     """
     Record-grouped logistic regression.
 
+    feature_columns is required and explicit (see classifier_feature_columns);
+    there is no hard-coded default feature list.
+
     Imputation and scaling are fitted inside each training fold, preventing
     information leakage from the held-out records.
     """
+    feature_columns = list(feature_columns)
+    if not feature_columns:
+        raise ValueError("feature_columns must be a non-empty explicit list")
+    leaking = {"label", "record", "abnormal_fraction", "window"} & set(feature_columns)
+    if leaking:
+        raise ValueError(f"feature_columns must not include {sorted(leaking)}")
     from sklearn.impute import SimpleImputer
     from sklearn.linear_model import LogisticRegression
     from sklearn.metrics import (
@@ -2370,17 +3267,17 @@ def run_grouped_logistic_regression(
     }
 
 
-def nonlinear_feature_statistics(df):
+def nonlinear_feature_statistics(df, feature_columns):
     """
-    Descriptive/Mann-Whitney statistics for LLE and UPO coverage.
+    Descriptive/Mann-Whitney statistics for the explicit feature columns.
 
-    LLE uses only finite fits. UPO coverage is evaluated independently.
+    Each feature uses only its own finite values.
     """
     from scipy.stats import mannwhitneyu
 
     output = {}
 
-    for feature in ["lle_per_beat", "upo_coverage"]:
+    for feature in feature_columns:
         abnormal = df.loc[
             df["label"] == 1,
             feature,
@@ -2488,11 +3385,13 @@ def run_binary_experiment(
     print("  labels:")
     print(df["label"].value_counts().sort_index())
 
-    stats = nonlinear_feature_statistics(df)
+    feature_columns = classifier_feature_columns(config)
+
+    stats = nonlinear_feature_statistics(df, feature_columns)
 
     model = run_grouped_logistic_regression(
         df,
-        feature_columns=CLASSIFIER_FEATURE_COLUMNS,
+        feature_columns=feature_columns,
         n_splits=5,
         random_state=42,
     )
@@ -2507,6 +3406,9 @@ def run_binary_experiment(
         "metadata": metadata,
         "statistics": stats,
         "model": model,
+        "feature_mode": config.upo_feature_mode,
+        "feature_columns": feature_columns,
+        "upo_map_mode": config.upo_map_mode,
         "feature_path": feature_path,
         "metadata_path": metadata_path,
     }
@@ -2582,9 +3484,11 @@ def main_binary_experiment():
         "Abnormal-window threshold: "
         f"{CLASSIFIER_ABNORMAL_FRACTION:.1%}"
     )
+    print(f"UPO feature mode: {base_cfg.upo_feature_mode}")
+    print(f"UPO map mode: {base_cfg.upo_map_mode}")
     print(
         "Features: "
-        + ", ".join(CLASSIFIER_FEATURE_COLUMNS)
+        + ", ".join(classifier_feature_columns(base_cfg))
     )
 
     raw_result = run_binary_experiment(
@@ -2618,16 +3522,19 @@ def main_binary_experiment():
     ]:
         means = result["model"]["fold_means"]
 
+        coverage_col = [c for c in result["feature_columns"] if c.endswith("_coverage")][0]
         comparison_rows.append({
             "configuration": name,
+            "upo_feature_mode": result["feature_mode"],
+            "upo_map_mode": result["upo_map_mode"],
             "lle_fit_success_normal":
                 result["statistics"]["lle_fit_success"]["normal_rate"],
             "lle_fit_success_abnormal":
                 result["statistics"]["lle_fit_success"]["abnormal_rate"],
             "lle_mann_whitney_p":
                 result["statistics"]["lle_per_beat"]["mann_whitney_p"],
-            "upo_coverage_mann_whitney_p":
-                result["statistics"]["upo_coverage"]["mann_whitney_p"],
+            f"{coverage_col}_mann_whitney_p":
+                result["statistics"][coverage_col]["mann_whitney_p"],
             "mean_fold_ROC_AUC":
                 means.get("roc_auc", np.nan),
             "mean_fold_PR_AUC":
