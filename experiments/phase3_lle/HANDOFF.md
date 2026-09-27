@@ -27,13 +27,13 @@ Never merge into main, never open a pull request. Commit and push after every st
 | A3 posthoc lle.json | done | b415607 |
 | A4 opt-in keep UPO on short LLE embedding | done | 4aac419 |
 | A5 cao_e1_undefined diagnostic | done | 7f53a25 |
-| B1 baseline (dev seeds) | running (results/dev/baseline.jsonl, resumable) | |
+| B1 baseline (dev seeds) | done | (this commit) |
 | B2 diagnosis (dev seeds) | done | 655233a |
-| B3 candidates + PREREGISTRATION.md | pending | |
+| B3 candidates + PREREGISTRATION.md | in progress (dev runs of c1-c4) | |
 | B4 test-seed evaluation | pending | |
 | B5 adopt winner (opt-in) | pending | |
 | B6 docs/PHASE3_LLE_VALIDATION.md | pending | |
-| C docs/PHASE4_UPO_PROPOSAL.md | done | (this commit) |
+| C docs/PHASE4_UPO_PROPOSAL.md | done | a14da95 |
 
 ## Notes
 - A1: rerunning Phase 2E analysis under a newer library stack also rewrites
@@ -93,3 +93,17 @@ Never merge into main, never open a pull request. Commit and push after every st
   results/dev/tuning.jsonl; `--summary` prints rates per grid combination.
   Vectorized divergence_curve in estimators.py reproduces fp.rosenstein_lle's
   curve to 7e-16.
+- B3 tuning result (results/dev/tuning.jsonl; `python -m experiments.phase3_lle.tune --summary`):
+  tau 1 + fit from k=1 gives dev power 1.00 at clean/30/20/10 dB for most LLE
+  combos; sinusoid and logistic_p4 never flagged; IAAFT keeps AR(1) closer to
+  nominal than AAFT; 0-1 test has power <= 0.07. Chosen candidates (estimators.py,
+  99 IAAFT surrogates, window-specific RNG): c1_rosenstein_m2_iaaft,
+  c2_kantz_m3_sat_iaaft, c3_eps_m2_iaaft, c4_zero_one_iaaft.
+  Dev run: `run_phase3 --phase dev --methods c1_...,c2_...,c3_...,c4_... --workers 3`
+  (log /tmp/claude-0/b3dev.log). NEXT: analysis --phase dev, write
+  PREREGISTRATION.md, commit + push it, only then `--phase test --methods all`.
+- B1 (results/dev/baseline.jsonl, results/dev/tables/B1_baseline.md): existing
+  Rosenstein + 199 AAFT, p <= 0.05. Dev 256: FPR WN 7/100, AR1 4/100, sinusoid
+  0/30, logistic_p4 0/30 (LLE undefined); power logistic 14/30, Henon 12/30,
+  20 dB 19/30 and 14/30; bias -0.571 / -0.301. 512: power 30/30 and 27/30.
+  Median runtime 14 s (256) / 32 s (512) under 4-way contention.

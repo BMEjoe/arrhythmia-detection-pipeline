@@ -213,3 +213,102 @@ def zero_one_K(x, rng, n_c=100, frac_n=10):
         if np.std(Dc) > 0:
             Ks.append(np.corrcoef(nn, Dc)[0, 1])
     return float(np.median(Ks)) if Ks else np.nan
+
+
+# =============================================================================
+# B3 candidates (parameters fixed in PREREGISTRATION.md)
+# =============================================================================
+
+N_SURROGATES = 99          # p <= 0.05  <=>  at most 4 of 99 surrogates >= observed; size 5/100
+
+
+def nn_median_distance(X, theiler):
+    D = np.sqrt(np.maximum(((X[:, None, :] - X[None, :, :]) ** 2).sum(-1), 0.0))
+    i = np.arange(len(X))
+    D[np.abs(i[:, None] - i[None, :]) <= int(theiler)] = np.inf
+    d = D.min(1)
+    d = d[np.isfinite(d) & (d > 1e-15)]
+    return float(np.median(d)) if len(d) else 0.0
+
+
+def divergence_statistic(x, m, nbr, fit, theiler):
+    """LLE statistic: tau = 1 embedding (fp._embed_backward), divergence curve, fit."""
+    X = fp._embed_backward(np.asarray(x, dtype=float), 1, int(m))
+    if nbr == "nn1":
+        y, _ = divergence_curve(X, theiler)
+    elif nbr == "eps":
+        y, _ = divergence_curve(X, theiler, min_dist=nn_median_distance(X, theiler))
+    elif nbr == "knn5":
+        y, _ = divergence_curve(X, theiler, n_neighbors=5)
+    else:
+        raise ValueError(nbr)
+    if fit == "f15":
+        ks = np.arange(1, 6)
+        yy = y[ks]
+        return (float(np.polyfit(ks, yy, 1)[0]) if np.all(np.isfinite(yy)) else np.nan), 5
+    if fit == "s30":
+        return saturation_fit(y, k_start=1, frac=0.3, min_points=3, max_end=12, plateau_from=25)
+    raise ValueError(fit)
+
+
+def _surrogate_p(obs, sur):
+    """One-sided upper p with a NaN surrogate statistic counted as >= obs (conservative)."""
+    sur = np.asarray(sur, dtype=float)
+    exceed = np.sum(~np.isfinite(sur)) + np.sum(sur[np.isfinite(sur)] >= obs)
+    return float((1 + exceed) / (len(sur) + 1))
+
+
+def lle_surrogate_test(x, m, nbr, fit, kind="iaaft", n_sur=N_SURROGATES, alpha=ALPHA):
+    x = np.asarray(x, dtype=float)
+    th = fp._mean_period_beats(x)
+    with warnings_ignored():
+        obs, k_end = divergence_statistic(x, m, nbr, fit, th)
+        out = {"m": int(m), "tau": 1, "theiler": int(th), "k_end": k_end, "lle": _f(obs)}
+        if not np.isfinite(obs):
+            out.update(p=None, detected=False, status="lle undefined (no finite divergence fit)")
+            return out
+        rng = window_rng(x, stream=2 if kind == "iaaft" else 1)
+        sur = [divergence_statistic(s, m, nbr, fit, th)[0] for s in surrogates(x, kind, n_sur, rng)]
+    p = _surrogate_p(obs, sur)
+    fin = np.asarray([s for s in sur if np.isfinite(s)])
+    out.update({"p": p, "n_surrogates": int(n_sur), "n_surrogates_finite": int(len(fin)),
+                "surrogate_median": _f(np.median(fin)) if len(fin) else None,
+                "detected": bool(p <= alpha), "status": "ok"})
+    return out
+
+
+def c1_rosenstein_m2_iaaft(x):
+    """C1: tau 1, m 2, single nearest neighbour, fit steps 1..5, 99 IAAFT surrogates."""
+    return lle_surrogate_test(x, 2, "nn1", "f15")
+
+
+def c2_kantz_m3_sat_iaaft(x):
+    """C2: tau 1, m 3, mean distance of 5 nearest neighbours, saturation-aware
+    fit (steps 1..k_end, 30 % of the rise to plateau, 3..12), 99 IAAFT surrogates."""
+    return lle_surrogate_test(x, 3, "knn5", "s30")
+
+
+def c3_eps_m2_iaaft(x):
+    """C3: tau 1, m 2, nearest neighbour beyond the median NN distance
+    (noise-scale exclusion), fit steps 1..5, 99 IAAFT surrogates."""
+    return lle_surrogate_test(x, 2, "eps", "f15")
+
+
+def c4_zero_one_iaaft(x, n_sur=N_SURROGATES, alpha=ALPHA):
+    """C4 (independent comparison): 0-1 test K (modified, 100 c-values from a
+    fixed rng, n <= N/10), one-sided vs 99 IAAFT surrogates.  No LLE estimate."""
+    x = np.asarray(x, dtype=float)
+    with warnings_ignored():
+        K = zero_one_K(x, np.random.default_rng(0))
+        if not np.isfinite(K):
+            return {"lle": None, "K": None, "p": None, "detected": False, "status": "K undefined"}
+        sur = [zero_one_K(s, np.random.default_rng(0)) for s in surrogates(x, "iaaft", n_sur, window_rng(x, 2))]
+    p = _surrogate_p(K, sur)
+    return {"lle": None, "K": _f(K), "p": p, "n_surrogates": int(n_sur),
+            "surrogate_median": _f(np.nanmedian(sur)), "detected": bool(p <= alpha), "status": "ok"}
+
+
+METHODS.update({"c1_rosenstein_m2_iaaft": c1_rosenstein_m2_iaaft,
+                "c2_kantz_m3_sat_iaaft": c2_kantz_m3_sat_iaaft,
+                "c3_eps_m2_iaaft": c3_eps_m2_iaaft,
+                "c4_zero_one_iaaft": c4_zero_one_iaaft})
