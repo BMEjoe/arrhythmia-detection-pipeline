@@ -29,10 +29,10 @@ Never merge into main, never open a pull request. Commit and push after every st
 | A5 cao_e1_undefined diagnostic | done | 7f53a25 |
 | B1 baseline (dev seeds) | done | fd3c751 |
 | B2 diagnosis (dev seeds) | done | 655233a |
-| B3 candidates + PREREGISTRATION.md | done (preregistration pushed before any test run) | (this commit) |
-| B4 test-seed evaluation | pending | |
+| B3 candidates + PREREGISTRATION.md | done (preregistration pushed before any test run) | 25ec207 |
+| B4 test-seed evaluation | running (started after 25ec207; decide.py at 7c4a496) | |
 | B5 adopt winner (opt-in) | pending | |
-| B6 docs/PHASE3_LLE_VALIDATION.md | pending | |
+| B6 docs/PHASE3_LLE_VALIDATION.md | draft sections 1-4 committed; 5+ after B4 | |
 | C docs/PHASE4_UPO_PROPOSAL.md | done | a14da95 |
 
 ## Notes
