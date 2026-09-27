@@ -22,8 +22,8 @@ Never merge into main, never open a pull request. Commit and push after every st
 ## Status
 | Step | State | Commit |
 |---|---|---|
-| A1 Tables B/C aggregation fix | done | (this commit) |
-| A2 requirements.txt, pytest on 3.13 | pending | |
+| A1 Tables B/C aggregation fix | done | 5e22d04 |
+| A2 requirements.txt, pytest on 3.13 | done | (this commit) |
 | A3 posthoc lle.json | pending | |
 | A4 opt-in keep UPO on short LLE embedding | pending | |
 | A5 cao_e1_undefined diagnostic | pending | |
@@ -39,6 +39,22 @@ Never merge into main, never open a pull request. Commit and push after every st
 - A1: rerunning Phase 2E analysis under a newer library stack also rewrites
   plots, Table E alignment and 1-ulp float digits in two CSVs; those were
   restored (not content changes). Only Tables B/C are committed.
-- Pytest under Python 3.13 (numpy 2.1.3, scipy 1.18.1): 334 passed, 1 failed
-  (`test_hybrid_period1_stability_matches_analytic_henon_multipliers[1-prl_norm]`),
-  same as under 3.11. To be diagnosed in A2.
+- A2: pytest under Python 3.13: 334 passed, 1 failed (stability test [1-prl_norm]).
+  Cause: one ill-conditioned member Jacobian (norm 4,078) dominates the
+  arithmetic mean in source_period1_stability. The value depends on the CPU
+  floating-point path: with
+  `NPY_DISABLE_CPU_FEATURES="AVX512F AVX512CD AVX512_SKX AVX512_CLX AVX512_CNL AVX512_ICL AVX512_SPR"`
+  the suite passes 335/335. Default env: 334/1 (pre-existing, not caused by us).
+- Replicability: `run_phase2e --replicate` gives 13/44 in this container even
+  with the unmodified pipeline (different machine; 1e-15 differences amplified by
+  ill-conditioned quantities). Therefore the ground-rule check for
+  final_pipeline.py changes is done as:
+  1. before the change: `python -m experiments.phase3_lle.replicate_check --save /tmp/claude-0/rep_before.jsonl`
+     (regenerate it from the pre-change commit if /tmp was lost);
+  2. after: `--compare` must give 44/44, AND `run_phase2e --replicate` must still
+     give 13/44 with a replicability.json identical to the pre-change one
+     (saved at /tmp/claude-0/replicability_env_before.json); then
+     `git checkout experiments/phase2e/results/replicability.json` (keep the
+     original-machine file committed).
+  3. pytest: default env must give exactly the same 1 failure; with AVX-512
+     disabled it must give 335/335 (plus any new tests).

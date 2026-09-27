@@ -1,0 +1,16 @@
+# Python 3.13 (Phase 2E run: 3.13.15, experiments/phase2e/results/manifest.json)
+#
+# Recorded in experiments/phase2e/results/manifest.json:
+numpy==2.1.3
+#
+# Recorded indirectly (tests/__pycache__/*-pytest-8.4.2.pyc in commit dd43fd0):
+pytest==8.4.2
+#
+# NOT recorded by the Phase 2E manifest. Pinned to the versions verified in
+# Phase 3 (Python 3.13.12, 2026-09-27). The values checked by the failing
+# stability test were identical under scipy 1.14.1, 1.15.3, 1.16.2, 1.17.1, 1.18.1.
+scipy==1.18.1
+pandas==3.0.6
+matplotlib==3.11.2
+scikit-learn==1.9.1
+tabulate==0.10.0

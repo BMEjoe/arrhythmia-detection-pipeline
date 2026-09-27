@@ -411,15 +411,16 @@ All from `results/audits.json` and `results/replicability.json` unless stated.
 | Stability independence | peaks identical without stability in 21/21 |
 | Source integrity | `final_pipeline.py` and the four Phase 2E runtime sources hash-identical to `results/manifest.json` |
 
-**Test suite (this session, not the recorded run environment).** `pytest tests`
-under Python 3.11.15 / numpy 2.1.3 / scipy 1.17.1 / pandas 3.0.6: **334 passed,
-1 failed**. The failing test is
+**Test suite.** Under Python 3.11.15 and, after the Phase 3 A2 follow-up, under
+Python 3.13.12 (numpy 2.1.3, scipy 1.18.1, pandas 3.0.6; `requirements.txt`):
+**334 passed, 1 failed**. The failing test is
 `tests/test_upo_stability.py::test_hybrid_period1_stability_matches_analytic_henon_multipliers[1-prl_norm]`.
 For the skewed-Hénon off-attractor peak (−1.903) the leading Lyapunov number is
 17.24 against an analytic 2.09. The `pre_tensor` variant of the same case passes
-(1.81). `HANDOFF.md` records 335/335 at `dd43fd0` under Python 3.13.15. This
-failure has not been reproduced in the recorded environment and has not been
-diagnosed; see 5.3.
+(1.81). `HANDOFF.md` records 335/335 at `dd43fd0` under Python 3.13.15.
+Diagnosis (A2, Section 5.3): the failure is a floating-point-path effect
+amplified by one ill-conditioned local Jacobian, not a Python or scipy version
+effect.
 
 ## 5. Findings about the analysis outputs
 
@@ -460,8 +461,34 @@ No pipeline result is affected.
 - `results/posthoc/lle.json` (LLE diagnostic D1) is written last by
   `posthoc_diagnostics.py::main` and is absent. Claims that depend on it are not
   made here: Cao at N = 1024–2048, and the τ = 1 vs production-τ LLE comparison.
-- The 1-failure test result in Section 4 comes from a different Python/scipy/pandas
-  stack than `results/manifest.json`.
+- **Stability-test failure (diagnosed in Phase 3, A2).** The test source is
+  byte-identical to the one compiled when the test passed (compiled bytecode
+  in `tests/__pycache__` at `dd43fd0`, same source size and constants). In this
+  container the failing value (17.241) is identical under Python 3.11 and 3.13,
+  scipy 1.14.1–1.18.1 and every forced OpenBLAS core type. Its cause:
+  - the off-attractor peak averages 108 member Jacobians
+    (`source_period1_stability`, arithmetic mean);
+  - one member is an ill-conditioned M = 2 neighbour fit with Frobenius norm
+    4,078; the next largest is 22.9;
+  - that single outlier moves the leading modulus from about 2.0 (element-wise
+    median 2.011, trimmed mean 1.977) to 17.24.
+
+  Disabling numpy's AVX-512 dispatch (`NPY_DISABLE_CPU_FEATURES`) changes the
+  ulp-level arithmetic. The member set then has 106 points and the largest member
+  norm is 93.4 instead of 4,078. The mean gives 1.917 and the full suite passes
+  335/335. The test outcome therefore depends on the
+  CPU's floating-point path. The run machine for `dd43fd0` is not recorded, so
+  which path it used is unknown. Neither the test nor the pipeline was changed.
+- **Bitwise replicability across machines.** In this container,
+  `run_phase2e --replicate` gives 13/44 bitwise-identical tasks against the stored
+  records, with the unmodified pipeline and at every numpy/glibc SIMD level
+  tried. The differing fields are at the 1e-15 relative level (LLE, R², extension
+  moduli, orbit coordinates). They are amplified only in ill-conditioned
+  quantities: hybrid source-stability Lyapunov numbers (up to 98 % relative),
+  Level-C residuals (up to 0.8 %), and a few histogram counts and peak
+  locations (up to 0.9 %). Reruns within one machine are bitwise identical
+  (44/44). The Phase 2E replicability claim (Section 4) holds for the original
+  machine only.
 
 ## 6. Limitations
 
@@ -522,6 +549,7 @@ No pipeline result is affected.
   committed in `88835d5`. The binomial tail probabilities in 3.1 and the per-peak
   location breakdown in 3.3 were computed directly from those files.
 - Later corrections (Phase 3, Part A) are marked in the text: Section 5.2
-  (Tables B/C fix, analysis rerun).
+  (Tables B/C fix, analysis rerun); Sections 4 and 5.3 (test failure and
+  cross-machine replicability, A2).
 - `experiments/phase2e/HANDOFF.md` is superseded by this report. Its progress
   section and resume instructions no longer apply.
