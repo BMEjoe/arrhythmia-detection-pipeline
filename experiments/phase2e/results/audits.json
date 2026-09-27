@@ -1,0 +1,1292 @@
+{
+ "significance_audit": {
+  "n_windows": 1378,
+  "W_mismatch": 0,
+  "W0_mismatch": 0,
+  "rJ_mismatch": 0,
+  "J_W_mismatch": 0,
+  "per_peak_J_mismatch": 0,
+  "n_peaks": 2911,
+  "J_W0_values": {
+   "0.500": 1351,
+   "0.480": 19,
+   "0.450": 4,
+   "0.490": 4
+  },
+  "Ws_recompute_note": "surrogate W_i are stored as computed by the pipeline; W, W0, J, rJ re-derived here",
+  "hand_check": {
+   "W": true,
+   "W0": true,
+   "J_W": true,
+   "J_W0": 0.5,
+   "rJ": true,
+   "signed_not_abs": true,
+   "peak_J": true
+  },
+  "mean_includes_self_note": "W_i uses a mean histogram that contains surrogate i (deviation shrunk by (n-1)/n), while the observed W uses a mean that does not contain the observation; with n = 50 the scale ratio is sqrt((n+1)/(n-1)) = 1.0202 -- a small anti-conservative asymmetry."
+ },
+ "status_consistency_violations": [],
+ "harness_errors": [],
+ "n_windows_total": 2032,
+ "runtime_warnings_total": 196,
+ "rr_route_bit_differences": {
+  "sinusoid": {
+   "median_differing_samples": 83.0,
+   "max": 90,
+   "max_abs_difference": 2.2e-16
+  },
+  "logistic": {
+   "median_differing_samples": 77.0,
+   "max": 92,
+   "max_abs_difference": 2.2e-16
+  },
+  "henon": {
+   "median_differing_samples": 76.0,
+   "max": 84,
+   "max_abs_difference": 2.2e-16
+  }
+ },
+ "stability_detector": [
+  {
+   "M": 2.0,
+   "all_off_stability_none": true,
+   "data_seed": 3032515042,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    1.9237388581534067,
+    0.15594632230279395
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    1.9475305710748678,
+    0.1540412276221297
+   ],
+   "fp1_extension_moduli": [
+    1.9226190557724787,
+    0.15068612017945734
+   ],
+   "fp1_hybrid_moduli": [
+    1.9396129786779486,
+    0.279030726893636
+   ],
+   "fp1_hybrid_n_points": 321.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.009177431286473303,
+   "fp2_analytic_moduli": [
+    3.259822097891452,
+    0.0920295620408392
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    1.9475305710748678,
+    0.1540412276221297
+   ],
+   "fp2_extension_moduli": [
+    1.9226190557724787,
+    0.15068612017945734
+   ],
+   "fp2_hybrid_moduli": [
+    1.9396129786779486,
+    0.279030726893636
+   ],
+   "fp2_hybrid_n_points": 321.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 1.7718863854654827,
+   "kind": "detector",
+   "n_peaks": 1.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 0.0,
+   "seed": 0,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "henon",
+   "task_id": "stability:00000",
+   "window_length": 1024,
+   "runtime_s": 3.881800660999943,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 7.0,
+   "all_off_stability_none": true,
+   "data_seed": 3032515042,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    1.9237388581534067,
+    0.15594632230279395
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    1.9472334821185893,
+    0.15406472965614793
+   ],
+   "fp1_extension_moduli": [
+    1.922619055772479,
+    0.15068612017945732
+   ],
+   "fp1_hybrid_moduli": [
+    1.928671123748114,
+    0.20813126120842088
+   ],
+   "fp1_hybrid_n_points": 326.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.009062934504224351,
+   "fp2_analytic_moduli": [
+    3.259822097891452,
+    0.0920295620408392
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    1.9472334821185893,
+    0.15406472965614793
+   ],
+   "fp2_extension_moduli": [
+    1.922619055772479,
+    0.15068612017945732
+   ],
+   "fp2_hybrid_moduli": [
+    1.928671123748114,
+    0.20813126120842088
+   ],
+   "fp2_hybrid_n_points": 326.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 1.7717718886832339,
+   "kind": "detector",
+   "n_peaks": 1.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 0.0,
+   "seed": 0,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "henon",
+   "task_id": "stability:00001",
+   "window_length": 1024,
+   "runtime_s": 5.22478515200055,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 2.0,
+   "all_off_stability_none": true,
+   "data_seed": 105936610,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    1.9237388581534067,
+    0.15594632230279395
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    1.9546160998617128,
+    0.1534828245921154
+   ],
+   "fp1_extension_moduli": [
+    1.9214265864268856,
+    0.1625145712720531
+   ],
+   "fp1_hybrid_moduli": [
+    1.9312242754829305,
+    0.21277511429710808
+   ],
+   "fp1_hybrid_n_points": 333.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.011907406935351639,
+   "fp2_analytic_moduli": [
+    3.259822097891452,
+    0.0920295620408392
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    1.9546160998617128,
+    0.1534828245921154
+   ],
+   "fp2_extension_moduli": [
+    1.9214265864268856,
+    0.1625145712720531
+   ],
+   "fp2_hybrid_moduli": [
+    1.9312242754829305,
+    0.21277511429710808
+   ],
+   "fp2_hybrid_n_points": 333.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 1.774616361114361,
+   "kind": "detector",
+   "n_peaks": 1.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 1.0,
+   "seed": 1,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "henon",
+   "task_id": "stability:00002",
+   "window_length": 1024,
+   "runtime_s": 5.425002775999019,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 7.0,
+   "all_off_stability_none": true,
+   "data_seed": 105936610,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    1.9237388581534067,
+    0.15594632230279395
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    1.952761284034846,
+    0.15362860911505383
+   ],
+   "fp1_extension_moduli": [
+    1.921426586426887,
+    0.16251457127205357
+   ],
+   "fp1_hybrid_moduli": [
+    1.9078870253735833,
+    0.16348054819837018
+   ],
+   "fp1_hybrid_n_points": 331.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.011192906810421177,
+   "fp2_analytic_moduli": [
+    3.259822097891452,
+    0.0920295620408392
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    1.952761284034846,
+    0.15362860911505383
+   ],
+   "fp2_extension_moduli": [
+    1.921426586426887,
+    0.16251457127205357
+   ],
+   "fp2_hybrid_moduli": [
+    1.9078870253735833,
+    0.16348054819837018
+   ],
+   "fp2_hybrid_n_points": 331.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 1.7739018609894306,
+   "kind": "detector",
+   "n_peaks": 1.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 1.0,
+   "seed": 1,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "henon",
+   "task_id": "stability:00003",
+   "window_length": 1024,
+   "runtime_s": 4.169630628999585,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 2.0,
+   "all_off_stability_none": true,
+   "data_seed": 197256315,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    1.9237388581534067,
+    0.15594632230279395
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    1.9441787856726593,
+    0.15430679637634462
+   ],
+   "fp1_extension_moduli": [
+    1.9076449261096637,
+    0.14779353654670938
+   ],
+   "fp1_hybrid_moduli": [
+    1.9186135911036,
+    0.20156621809016187
+   ],
+   "fp1_hybrid_n_points": 318.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.007885519087750592,
+   "fp2_analytic_moduli": [
+    3.259822097891452,
+    0.0920295620408392
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    1.9441787856726593,
+    0.15430679637634462
+   ],
+   "fp2_extension_moduli": [
+    1.9076449261096637,
+    0.14779353654670938
+   ],
+   "fp2_hybrid_moduli": [
+    1.9186135911036,
+    0.20156621809016187
+   ],
+   "fp2_hybrid_n_points": 318.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 1.77059447326676,
+   "kind": "detector",
+   "n_peaks": 1.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 2.0,
+   "seed": 2,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "henon",
+   "task_id": "stability:00004",
+   "window_length": 1024,
+   "runtime_s": 3.9176202609996835,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 7.0,
+   "all_off_stability_none": true,
+   "data_seed": 197256315,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    1.9237388581534067,
+    0.15594632230279395
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    1.9442492760732275,
+    0.15430120185303897
+   ],
+   "fp1_extension_moduli": [
+    1.9076449261096646,
+    0.14779353654670943
+   ],
+   "fp1_hybrid_moduli": [
+    1.91654385187437,
+    0.1646697565500007
+   ],
+   "fp1_hybrid_n_points": 324.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.007912692274848476,
+   "fp2_analytic_moduli": [
+    3.259822097891452,
+    0.0920295620408392
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    1.9442492760732275,
+    0.15430120185303897
+   ],
+   "fp2_extension_moduli": [
+    1.9076449261096646,
+    0.14779353654670943
+   ],
+   "fp2_hybrid_moduli": [
+    1.91654385187437,
+    0.1646697565500007
+   ],
+   "fp2_hybrid_n_points": 324.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 1.7706216464538578,
+   "kind": "detector",
+   "n_peaks": 1.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 2.0,
+   "seed": 2,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "henon",
+   "task_id": "stability:00005",
+   "window_length": 1024,
+   "runtime_s": 3.8385720100013714,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 2.0,
+   "all_off_stability_none": true,
+   "data_seed": 1961576188,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    2.236632669203145,
+    0.13413020570198605
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    2.1985388780527853,
+    0.13645426196224728
+   ],
+   "fp1_extension_moduli": [
+    2.1528501778827382,
+    0.16112349261101042
+   ],
+   "fp1_hybrid_moduli": [
+    2.3055379587815437,
+    0.13796834481231673
+   ],
+   "fp1_hybrid_n_points": 252.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.011500713505885218,
+   "fp2_analytic_moduli": [
+    2.0926695753165023,
+    0.14335755799126912
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    2.0915145996106688,
+    0.1434367228686065
+   ],
+   "fp2_extension_moduli": [
+    2.054175798456157,
+    0.14106603664608272
+   ],
+   "fp2_hybrid_moduli": [
+    1.9374405126952081,
+    0.7741908886911749
+   ],
+   "fp2_hybrid_n_points": 107.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 0.008597324880504909,
+   "kind": "detector",
+   "n_peaks": 2.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 0.0,
+   "seed": 0,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "skewed_henon",
+   "task_id": "stability:00006",
+   "window_length": 1024,
+   "runtime_s": 3.9389842850014247,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 7.0,
+   "all_off_stability_none": true,
+   "data_seed": 1961576188,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    2.236632669203145,
+    0.13413020570198605
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    2.202033262811055,
+    0.1362377240464698
+   ],
+   "fp1_extension_moduli": [
+    2.152850177882737,
+    0.16112349261100964
+   ],
+   "fp1_hybrid_moduli": [
+    2.321194442137004,
+    0.13123367101081027
+   ],
+   "fp1_hybrid_n_points": 256.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.010441272571492188,
+   "fp2_analytic_moduli": [
+    2.0926695753165023,
+    0.14335755799126912
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    2.0930912177688943,
+    0.1433286793490928
+   ],
+   "fp2_extension_moduli": [
+    2.0541757984561557,
+    0.14106603664608297
+   ],
+   "fp2_hybrid_moduli": [
+    1.8495228425676702,
+    0.08874111314806322
+   ],
+   "fp2_hybrid_n_points": 112.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 0.003203344793732521,
+   "kind": "detector",
+   "n_peaks": 2.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 0.0,
+   "seed": 0,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "skewed_henon",
+   "task_id": "stability:00007",
+   "window_length": 1024,
+   "runtime_s": 4.883918145998905,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 2.0,
+   "all_off_stability_none": true,
+   "data_seed": 2479861447,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    2.236632669203145,
+    0.13413020570198605
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    2.1843269728732366,
+    0.13734207548853536
+   ],
+   "fp1_extension_moduli": [
+    2.15642670907652,
+    0.12177943014130194
+   ],
+   "fp1_hybrid_moduli": [
+    2.3585505763871915,
+    0.12508943457222846
+   ],
+   "fp1_hybrid_n_points": 272.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.01581895631006769,
+   "fp2_analytic_moduli": [
+    2.0926695753165023,
+    0.14335755799126912
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    2.091545729396114,
+    0.14343458800999684
+   ],
+   "fp2_extension_moduli": [
+    2.043234645819135,
+    0.14392442387576254
+   ],
+   "fp2_hybrid_moduli": [
+    1.8632074929070037,
+    0.03961980351987033
+   ],
+   "fp2_hybrid_n_points": 100.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 0.008368885772899404,
+   "kind": "detector",
+   "n_peaks": 2.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 1.0,
+   "seed": 1,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "skewed_henon",
+   "task_id": "stability:00008",
+   "window_length": 1024,
+   "runtime_s": 6.052873043001455,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 7.0,
+   "all_off_stability_none": true,
+   "data_seed": 2479861447,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    2.236632669203145,
+    0.13413020570198605
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    2.1836977748697137,
+    0.13738164843708692
+   ],
+   "fp1_extension_moduli": [
+    2.1564267090765186,
+    0.12177943014130221
+   ],
+   "fp1_hybrid_moduli": [
+    2.3058229655964744,
+    0.11802953834445963
+   ],
+   "fp1_hybrid_n_points": 275.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.016010487464275247,
+   "fp2_analytic_moduli": [
+    2.0926695753165023,
+    0.14335755799126912
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    2.092335816227304,
+    0.14338042568182519
+   ],
+   "fp2_extension_moduli": [
+    2.0432346458191364,
+    0.1439244238757624
+   ],
+   "fp2_hybrid_moduli": [
+    1.906121354347042,
+    0.07119015499165351
+   ],
+   "fp2_hybrid_n_points": 106.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 0.002510618899324024,
+   "kind": "detector",
+   "n_peaks": 2.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 1.0,
+   "seed": 1,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "skewed_henon",
+   "task_id": "stability:00009",
+   "window_length": 1024,
+   "runtime_s": 6.204875605999405,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 2.0,
+   "all_off_stability_none": true,
+   "data_seed": 2601622717,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    2.236632669203145,
+    0.13413020570198605
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    2.187355962617751,
+    0.13715188799950534
+   ],
+   "fp1_extension_moduli": [
+    2.1819454525318775,
+    0.13104781390359227
+   ],
+   "fp1_hybrid_moduli": [
+    2.4403984026903585,
+    0.13756395737243673
+   ],
+   "fp1_hybrid_n_points": 289.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.014897334101176107,
+   "fp2_analytic_moduli": [
+    2.0926695753165023,
+    0.14335755799126912
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    2.0926189198994445,
+    0.14336102820594576
+   ],
+   "fp2_extension_moduli": [
+    2.0525268010586535,
+    0.14438659591241076
+   ],
+   "fp2_hybrid_moduli": [
+    1.9395001440377406,
+    0.7719946816819852
+   ],
+   "fp2_hybrid_n_points": 94.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 0.00038245085973942494,
+   "kind": "detector",
+   "n_peaks": 2.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 2.0,
+   "seed": 2,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "skewed_henon",
+   "task_id": "stability:00010",
+   "window_length": 1024,
+   "runtime_s": 5.052239759001168,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  },
+  {
+   "M": 7.0,
+   "all_off_stability_none": true,
+   "data_seed": 2601622717,
+   "experiment": "stability",
+   "fp1_analytic_moduli": [
+    2.236632669203145,
+    0.13413020570198605
+   ],
+   "fp1_analytic_moduli_at_detected": [
+    2.1884723780989503,
+    0.1370819220759823
+   ],
+   "fp1_extension_moduli": [
+    2.1819454525318767,
+    0.13104781390359233
+   ],
+   "fp1_hybrid_moduli": [
+    2.439692102750188,
+    0.11800985548305547
+   ],
+   "fp1_hybrid_n_points": 283.0,
+   "fp1_hybrid_unstable": true,
+   "fp1_peak_abs_error": 0.014557819895397062,
+   "fp2_analytic_moduli": [
+    2.0926695753165023,
+    0.14335755799126912
+   ],
+   "fp2_analytic_moduli_at_detected": [
+    2.092687066970637,
+    0.14335635974196487
+   ],
+   "fp2_extension_moduli": [
+    2.0525268010586526,
+    0.14438659591241046
+   ],
+   "fp2_hybrid_moduli": [
+    1.8547451917545814,
+    0.12494456565405791
+   ],
+   "fp2_hybrid_n_points": 96.0,
+   "fp2_hybrid_unstable": true,
+   "fp2_peak_abs_error": 0.0001321809031216148,
+   "kind": "detector",
+   "n_peaks": 2.0,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": true,
+   "realization": 2.0,
+   "seed": 2,
+   "status_with_stability": "ok",
+   "status_without_stability": "ok",
+   "system": "skewed_henon",
+   "task_id": "stability:00011",
+   "window_length": 1024,
+   "runtime_s": 3.9195536770002946,
+   "fields_differing_without_stability": NaN,
+   "significance_status": NaN,
+   "significant_peak_count": NaN,
+   "source_peak_count": NaN,
+   "upo_status": NaN
+  }
+ ],
+ "stability_pipeline": [
+  {
+   "M": NaN,
+   "all_off_stability_none": NaN,
+   "data_seed": 493659376,
+   "experiment": "stability",
+   "fp1_analytic_moduli": NaN,
+   "fp1_analytic_moduli_at_detected": NaN,
+   "fp1_extension_moduli": NaN,
+   "fp1_hybrid_moduli": NaN,
+   "fp1_hybrid_n_points": NaN,
+   "fp1_hybrid_unstable": NaN,
+   "fp1_peak_abs_error": NaN,
+   "fp2_analytic_moduli": NaN,
+   "fp2_analytic_moduli_at_detected": NaN,
+   "fp2_extension_moduli": NaN,
+   "fp2_hybrid_moduli": NaN,
+   "fp2_hybrid_n_points": NaN,
+   "fp2_hybrid_unstable": NaN,
+   "fp2_peak_abs_error": NaN,
+   "kind": "pipeline",
+   "n_peaks": NaN,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": NaN,
+   "realization": NaN,
+   "seed": 0,
+   "status_with_stability": NaN,
+   "status_without_stability": NaN,
+   "system": "henon",
+   "task_id": "stability:00012",
+   "window_length": 256,
+   "runtime_s": 21.889327917000628,
+   "fields_differing_without_stability": [],
+   "significance_status": "assessed",
+   "significant_peak_count": 1.0,
+   "source_peak_count": 2.0,
+   "upo_status": "ok"
+  },
+  {
+   "M": NaN,
+   "all_off_stability_none": NaN,
+   "data_seed": 216778323,
+   "experiment": "stability",
+   "fp1_analytic_moduli": NaN,
+   "fp1_analytic_moduli_at_detected": NaN,
+   "fp1_extension_moduli": NaN,
+   "fp1_hybrid_moduli": NaN,
+   "fp1_hybrid_n_points": NaN,
+   "fp1_hybrid_unstable": NaN,
+   "fp1_peak_abs_error": NaN,
+   "fp2_analytic_moduli": NaN,
+   "fp2_analytic_moduli_at_detected": NaN,
+   "fp2_extension_moduli": NaN,
+   "fp2_hybrid_moduli": NaN,
+   "fp2_hybrid_n_points": NaN,
+   "fp2_hybrid_unstable": NaN,
+   "fp2_peak_abs_error": NaN,
+   "kind": "pipeline",
+   "n_peaks": NaN,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": NaN,
+   "realization": NaN,
+   "seed": 1,
+   "status_with_stability": NaN,
+   "status_without_stability": NaN,
+   "system": "henon",
+   "task_id": "stability:00013",
+   "window_length": 256,
+   "runtime_s": 20.81774775100166,
+   "fields_differing_without_stability": [],
+   "significance_status": "assessed",
+   "significant_peak_count": 1.0,
+   "source_peak_count": 1.0,
+   "upo_status": "ok"
+  },
+  {
+   "M": NaN,
+   "all_off_stability_none": NaN,
+   "data_seed": 378400350,
+   "experiment": "stability",
+   "fp1_analytic_moduli": NaN,
+   "fp1_analytic_moduli_at_detected": NaN,
+   "fp1_extension_moduli": NaN,
+   "fp1_hybrid_moduli": NaN,
+   "fp1_hybrid_n_points": NaN,
+   "fp1_hybrid_unstable": NaN,
+   "fp1_peak_abs_error": NaN,
+   "fp2_analytic_moduli": NaN,
+   "fp2_analytic_moduli_at_detected": NaN,
+   "fp2_extension_moduli": NaN,
+   "fp2_hybrid_moduli": NaN,
+   "fp2_hybrid_n_points": NaN,
+   "fp2_hybrid_unstable": NaN,
+   "fp2_peak_abs_error": NaN,
+   "kind": "pipeline",
+   "n_peaks": NaN,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": NaN,
+   "realization": NaN,
+   "seed": 2,
+   "status_with_stability": NaN,
+   "status_without_stability": NaN,
+   "system": "henon",
+   "task_id": "stability:00014",
+   "window_length": 256,
+   "runtime_s": 22.220655154998894,
+   "fields_differing_without_stability": [],
+   "significance_status": "assessed",
+   "significant_peak_count": 1.0,
+   "source_peak_count": 1.0,
+   "upo_status": "ok"
+  },
+  {
+   "M": NaN,
+   "all_off_stability_none": NaN,
+   "data_seed": 1949141757,
+   "experiment": "stability",
+   "fp1_analytic_moduli": NaN,
+   "fp1_analytic_moduli_at_detected": NaN,
+   "fp1_extension_moduli": NaN,
+   "fp1_hybrid_moduli": NaN,
+   "fp1_hybrid_n_points": NaN,
+   "fp1_hybrid_unstable": NaN,
+   "fp1_peak_abs_error": NaN,
+   "fp2_analytic_moduli": NaN,
+   "fp2_analytic_moduli_at_detected": NaN,
+   "fp2_extension_moduli": NaN,
+   "fp2_hybrid_moduli": NaN,
+   "fp2_hybrid_n_points": NaN,
+   "fp2_hybrid_unstable": NaN,
+   "fp2_peak_abs_error": NaN,
+   "kind": "pipeline",
+   "n_peaks": NaN,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": NaN,
+   "realization": NaN,
+   "seed": 0,
+   "status_with_stability": NaN,
+   "status_without_stability": NaN,
+   "system": "logistic",
+   "task_id": "stability:00015",
+   "window_length": 256,
+   "runtime_s": 20.426208353999755,
+   "fields_differing_without_stability": [],
+   "significance_status": "assessed",
+   "significant_peak_count": 2.0,
+   "source_peak_count": 2.0,
+   "upo_status": "ok"
+  },
+  {
+   "M": NaN,
+   "all_off_stability_none": NaN,
+   "data_seed": 1652537900,
+   "experiment": "stability",
+   "fp1_analytic_moduli": NaN,
+   "fp1_analytic_moduli_at_detected": NaN,
+   "fp1_extension_moduli": NaN,
+   "fp1_hybrid_moduli": NaN,
+   "fp1_hybrid_n_points": NaN,
+   "fp1_hybrid_unstable": NaN,
+   "fp1_peak_abs_error": NaN,
+   "fp2_analytic_moduli": NaN,
+   "fp2_analytic_moduli_at_detected": NaN,
+   "fp2_extension_moduli": NaN,
+   "fp2_hybrid_moduli": NaN,
+   "fp2_hybrid_n_points": NaN,
+   "fp2_hybrid_unstable": NaN,
+   "fp2_peak_abs_error": NaN,
+   "kind": "pipeline",
+   "n_peaks": NaN,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": NaN,
+   "realization": NaN,
+   "seed": 1,
+   "status_with_stability": NaN,
+   "status_without_stability": NaN,
+   "system": "logistic",
+   "task_id": "stability:00016",
+   "window_length": 256,
+   "runtime_s": 20.575153591000344,
+   "fields_differing_without_stability": [],
+   "significance_status": "assessed",
+   "significant_peak_count": 2.0,
+   "source_peak_count": 2.0,
+   "upo_status": "ok"
+  },
+  {
+   "M": NaN,
+   "all_off_stability_none": NaN,
+   "data_seed": 292278060,
+   "experiment": "stability",
+   "fp1_analytic_moduli": NaN,
+   "fp1_analytic_moduli_at_detected": NaN,
+   "fp1_extension_moduli": NaN,
+   "fp1_hybrid_moduli": NaN,
+   "fp1_hybrid_n_points": NaN,
+   "fp1_hybrid_unstable": NaN,
+   "fp1_peak_abs_error": NaN,
+   "fp2_analytic_moduli": NaN,
+   "fp2_analytic_moduli_at_detected": NaN,
+   "fp2_extension_moduli": NaN,
+   "fp2_hybrid_moduli": NaN,
+   "fp2_hybrid_n_points": NaN,
+   "fp2_hybrid_unstable": NaN,
+   "fp2_peak_abs_error": NaN,
+   "kind": "pipeline",
+   "n_peaks": NaN,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": NaN,
+   "realization": NaN,
+   "seed": 2,
+   "status_with_stability": NaN,
+   "status_without_stability": NaN,
+   "system": "logistic",
+   "task_id": "stability:00017",
+   "window_length": 256,
+   "runtime_s": 20.88260460499987,
+   "fields_differing_without_stability": [],
+   "significance_status": "assessed",
+   "significant_peak_count": 1.0,
+   "source_peak_count": 2.0,
+   "upo_status": "ok"
+  },
+  {
+   "M": NaN,
+   "all_off_stability_none": NaN,
+   "data_seed": 3525481314,
+   "experiment": "stability",
+   "fp1_analytic_moduli": NaN,
+   "fp1_analytic_moduli_at_detected": NaN,
+   "fp1_extension_moduli": NaN,
+   "fp1_hybrid_moduli": NaN,
+   "fp1_hybrid_n_points": NaN,
+   "fp1_hybrid_unstable": NaN,
+   "fp1_peak_abs_error": NaN,
+   "fp2_analytic_moduli": NaN,
+   "fp2_analytic_moduli_at_detected": NaN,
+   "fp2_extension_moduli": NaN,
+   "fp2_hybrid_moduli": NaN,
+   "fp2_hybrid_n_points": NaN,
+   "fp2_hybrid_unstable": NaN,
+   "fp2_peak_abs_error": NaN,
+   "kind": "pipeline",
+   "n_peaks": NaN,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": NaN,
+   "realization": NaN,
+   "seed": 0,
+   "status_with_stability": NaN,
+   "status_without_stability": NaN,
+   "system": "white_noise",
+   "task_id": "stability:00018",
+   "window_length": 256,
+   "runtime_s": 36.00455747500018,
+   "fields_differing_without_stability": [],
+   "significance_status": "assessed",
+   "significant_peak_count": 0.0,
+   "source_peak_count": 2.0,
+   "upo_status": "ok"
+  },
+  {
+   "M": NaN,
+   "all_off_stability_none": NaN,
+   "data_seed": 448579287,
+   "experiment": "stability",
+   "fp1_analytic_moduli": NaN,
+   "fp1_analytic_moduli_at_detected": NaN,
+   "fp1_extension_moduli": NaN,
+   "fp1_hybrid_moduli": NaN,
+   "fp1_hybrid_n_points": NaN,
+   "fp1_hybrid_unstable": NaN,
+   "fp1_peak_abs_error": NaN,
+   "fp2_analytic_moduli": NaN,
+   "fp2_analytic_moduli_at_detected": NaN,
+   "fp2_extension_moduli": NaN,
+   "fp2_hybrid_moduli": NaN,
+   "fp2_hybrid_n_points": NaN,
+   "fp2_hybrid_unstable": NaN,
+   "fp2_peak_abs_error": NaN,
+   "kind": "pipeline",
+   "n_peaks": NaN,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": NaN,
+   "realization": NaN,
+   "seed": 1,
+   "status_with_stability": NaN,
+   "status_without_stability": NaN,
+   "system": "white_noise",
+   "task_id": "stability:00019",
+   "window_length": 256,
+   "runtime_s": 34.735850648999985,
+   "fields_differing_without_stability": [],
+   "significance_status": "assessed",
+   "significant_peak_count": 0.0,
+   "source_peak_count": 1.0,
+   "upo_status": "ok"
+  },
+  {
+   "M": NaN,
+   "all_off_stability_none": NaN,
+   "data_seed": 2708556317,
+   "experiment": "stability",
+   "fp1_analytic_moduli": NaN,
+   "fp1_analytic_moduli_at_detected": NaN,
+   "fp1_extension_moduli": NaN,
+   "fp1_hybrid_moduli": NaN,
+   "fp1_hybrid_n_points": NaN,
+   "fp1_hybrid_unstable": NaN,
+   "fp1_peak_abs_error": NaN,
+   "fp2_analytic_moduli": NaN,
+   "fp2_analytic_moduli_at_detected": NaN,
+   "fp2_extension_moduli": NaN,
+   "fp2_hybrid_moduli": NaN,
+   "fp2_hybrid_n_points": NaN,
+   "fp2_hybrid_unstable": NaN,
+   "fp2_peak_abs_error": NaN,
+   "kind": "pipeline",
+   "n_peaks": NaN,
+   "n_runtime_warnings": 0,
+   "peaks_identical_without_stability": true,
+   "period2_source_stability_all_none": NaN,
+   "realization": NaN,
+   "seed": 2,
+   "status_with_stability": NaN,
+   "status_without_stability": NaN,
+   "system": "white_noise",
+   "task_id": "stability:00020",
+   "window_length": 256,
+   "runtime_s": 32.74584323199997,
+   "fields_differing_without_stability": [],
+   "significance_status": "assessed",
+   "significant_peak_count": 0.0,
+   "source_peak_count": 2.0,
+   "upo_status": "ok"
+  }
+ ],
+ "flag_independence": [
+  {
+   "all_upo_fields_identical": true,
+   "data_seed": 493659376,
+   "experiment": "flag_independence",
+   "lle_surrogates_absent_when_flag_false": true,
+   "lle_surrogates_ran_when_flag_true": true,
+   "n_runtime_warnings": 0,
+   "same_J_W": true,
+   "same_W": true,
+   "same_W0": true,
+   "same_lle_per_beat": true,
+   "same_rJ": true,
+   "same_significance_assessed": true,
+   "same_significant_peak_count": true,
+   "same_source_peak_count": true,
+   "same_upo_significance_status": true,
+   "same_upo_status": true,
+   "seed": 0,
+   "surrogate_W_identical": true,
+   "system": "henon",
+   "task_id": "flag_independence:00000",
+   "window_length": 256,
+   "runtime_s": 38.31446208200032
+  },
+  {
+   "all_upo_fields_identical": true,
+   "data_seed": 216778323,
+   "experiment": "flag_independence",
+   "lle_surrogates_absent_when_flag_false": true,
+   "lle_surrogates_ran_when_flag_true": true,
+   "n_runtime_warnings": 0,
+   "same_J_W": true,
+   "same_W": true,
+   "same_W0": true,
+   "same_lle_per_beat": true,
+   "same_rJ": true,
+   "same_significance_assessed": true,
+   "same_significant_peak_count": true,
+   "same_source_peak_count": true,
+   "same_upo_significance_status": true,
+   "same_upo_status": true,
+   "seed": 1,
+   "surrogate_W_identical": true,
+   "system": "henon",
+   "task_id": "flag_independence:00001",
+   "window_length": 256,
+   "runtime_s": 43.06359673099905
+  },
+  {
+   "all_upo_fields_identical": true,
+   "data_seed": 1949141757,
+   "experiment": "flag_independence",
+   "lle_surrogates_absent_when_flag_false": true,
+   "lle_surrogates_ran_when_flag_true": true,
+   "n_runtime_warnings": 0,
+   "same_J_W": true,
+   "same_W": true,
+   "same_W0": true,
+   "same_lle_per_beat": true,
+   "same_rJ": true,
+   "same_significance_assessed": true,
+   "same_significant_peak_count": true,
+   "same_source_peak_count": true,
+   "same_upo_significance_status": true,
+   "same_upo_status": true,
+   "seed": 0,
+   "surrogate_W_identical": true,
+   "system": "logistic",
+   "task_id": "flag_independence:00002",
+   "window_length": 256,
+   "runtime_s": 41.09482714799924
+  },
+  {
+   "all_upo_fields_identical": true,
+   "data_seed": 1652537900,
+   "experiment": "flag_independence",
+   "lle_surrogates_absent_when_flag_false": true,
+   "lle_surrogates_ran_when_flag_true": true,
+   "n_runtime_warnings": 0,
+   "same_J_W": true,
+   "same_W": true,
+   "same_W0": true,
+   "same_lle_per_beat": true,
+   "same_rJ": true,
+   "same_significance_assessed": true,
+   "same_significant_peak_count": true,
+   "same_source_peak_count": true,
+   "same_upo_significance_status": true,
+   "same_upo_status": true,
+   "seed": 1,
+   "surrogate_W_identical": true,
+   "system": "logistic",
+   "task_id": "flag_independence:00003",
+   "window_length": 256,
+   "runtime_s": 43.83929957300097
+  },
+  {
+   "all_upo_fields_identical": true,
+   "data_seed": 3525481314,
+   "experiment": "flag_independence",
+   "lle_surrogates_absent_when_flag_false": true,
+   "lle_surrogates_ran_when_flag_true": true,
+   "n_runtime_warnings": 0,
+   "same_J_W": true,
+   "same_W": true,
+   "same_W0": true,
+   "same_lle_per_beat": true,
+   "same_rJ": true,
+   "same_significance_assessed": true,
+   "same_significant_peak_count": true,
+   "same_source_peak_count": true,
+   "same_upo_significance_status": true,
+   "same_upo_status": true,
+   "seed": 0,
+   "surrogate_W_identical": true,
+   "system": "white_noise",
+   "task_id": "flag_independence:00004",
+   "window_length": 256,
+   "runtime_s": 65.81785444699926
+  },
+  {
+   "all_upo_fields_identical": true,
+   "data_seed": 448579287,
+   "experiment": "flag_independence",
+   "lle_surrogates_absent_when_flag_false": true,
+   "lle_surrogates_ran_when_flag_true": true,
+   "n_runtime_warnings": 0,
+   "same_J_W": true,
+   "same_W": true,
+   "same_W0": true,
+   "same_lle_per_beat": true,
+   "same_rJ": true,
+   "same_significance_assessed": true,
+   "same_significant_peak_count": true,
+   "same_source_peak_count": true,
+   "same_upo_significance_status": true,
+   "same_upo_status": true,
+   "seed": 1,
+   "surrogate_W_identical": true,
+   "system": "white_noise",
+   "task_id": "flag_independence:00005",
+   "window_length": 256,
+   "runtime_s": 63.66017799899964
+  }
+ ],
+ "total_runtime_s": 31379.394353998963,
+ "replicability": {
+  "n": 44,
+  "row_identical": 44,
+  "detail_identical": 44,
+  "non_identical": []
+ }
+}

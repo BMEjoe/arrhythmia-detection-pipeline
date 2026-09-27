@@ -1,0 +1,310 @@
+[
+ {
+  "task_id": "core:00000",
+  "experiment": "core",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "core:00001",
+  "experiment": "core",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "core:00002",
+  "experiment": "core",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "core:00003",
+  "experiment": "core",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "noise:00000",
+  "experiment": "noise",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "noise:00001",
+  "experiment": "noise",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "noise:00002",
+  "experiment": "noise",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "noise:00003",
+  "experiment": "noise",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "tau_step:00000",
+  "experiment": "tau_step",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "tau_step:00001",
+  "experiment": "tau_step",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "tau_step:00002",
+  "experiment": "tau_step",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "tau_step:00003",
+  "experiment": "tau_step",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "surrogate_sens:00000",
+  "experiment": "surrogate_sens",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "surrogate_sens:00001",
+  "experiment": "surrogate_sens",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "surrogate_sens:00002",
+  "experiment": "surrogate_sens",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "surrogate_sens:00003",
+  "experiment": "surrogate_sens",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "algo_seed:00000",
+  "experiment": "algo_seed",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "algo_seed:00001",
+  "experiment": "algo_seed",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "algo_seed:00002",
+  "experiment": "algo_seed",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "algo_seed:00003",
+  "experiment": "algo_seed",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "oracle_dim:00000",
+  "experiment": "oracle_dim",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "oracle_dim:00001",
+  "experiment": "oracle_dim",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "oracle_dim:00002",
+  "experiment": "oracle_dim",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "oracle_dim:00003",
+  "experiment": "oracle_dim",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "fp_sens:00000",
+  "experiment": "fp_sens",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "fp_sens:00001",
+  "experiment": "fp_sens",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "fp_sens:00002",
+  "experiment": "fp_sens",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "fp_sens:00003",
+  "experiment": "fp_sens",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "henon_loc:00000",
+  "experiment": "henon_loc",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "henon_loc:00001",
+  "experiment": "henon_loc",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "henon_loc:00002",
+  "experiment": "henon_loc",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "henon_loc:00003",
+  "experiment": "henon_loc",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "henon_loc_oracleJ:00000",
+  "experiment": "henon_loc_oracleJ",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "henon_loc_oracleJ:00001",
+  "experiment": "henon_loc_oracleJ",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "henon_loc_oracleJ:00002",
+  "experiment": "henon_loc_oracleJ",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "henon_loc_oracleJ:00003",
+  "experiment": "henon_loc_oracleJ",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "stability:00000",
+  "experiment": "stability",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "stability:00001",
+  "experiment": "stability",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "stability:00002",
+  "experiment": "stability",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "stability:00003",
+  "experiment": "stability",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "flag_independence:00000",
+  "experiment": "flag_independence",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "flag_independence:00001",
+  "experiment": "flag_independence",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "flag_independence:00002",
+  "experiment": "flag_independence",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ },
+ {
+  "task_id": "flag_independence:00003",
+  "experiment": "flag_independence",
+  "stored_found": true,
+  "row_identical": true,
+  "detail_identical": true
+ }
+]

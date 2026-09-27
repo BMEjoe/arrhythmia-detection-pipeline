@@ -1,0 +1,7 @@
+all_upo_fields_identical,data_seed,experiment,lle_surrogates_absent_when_flag_false,lle_surrogates_ran_when_flag_true,n_runtime_warnings,same_J_W,same_W,same_W0,same_lle_per_beat,same_rJ,same_significance_assessed,same_significant_peak_count,same_source_peak_count,same_upo_significance_status,same_upo_status,seed,surrogate_W_identical,system,task_id,window_length,runtime_s
+True,493659376,flag_independence,True,True,0,True,True,True,True,True,True,True,True,True,True,0,True,henon,flag_independence:00000,256,38.31446208200032
+True,216778323,flag_independence,True,True,0,True,True,True,True,True,True,True,True,True,True,1,True,henon,flag_independence:00001,256,43.06359673099905
+True,1949141757,flag_independence,True,True,0,True,True,True,True,True,True,True,True,True,True,0,True,logistic,flag_independence:00002,256,41.09482714799924
+True,1652537900,flag_independence,True,True,0,True,True,True,True,True,True,True,True,True,True,1,True,logistic,flag_independence:00003,256,43.83929957300097
+True,3525481314,flag_independence,True,True,0,True,True,True,True,True,True,True,True,True,True,0,True,white_noise,flag_independence:00004,256,65.81785444699926
+True,448579287,flag_independence,True,True,0,True,True,True,True,True,True,True,True,True,True,1,True,white_noise,flag_independence:00005,256,63.66017799899964
