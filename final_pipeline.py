@@ -140,6 +140,13 @@ class PipelineConfig:
     lle_max_fit_fraction: float = 0.10
     lle_min_r2: float = 0.90
     lle_require_valid_fit: bool = True
+    # PROJECT option (Phase 3, A4), default False = previous behaviour: when the
+    # LLE delay embedding has < 50 points, analyze_segment raises ValueError and
+    # the (separately embedded) UPO result is lost.  True keeps the UPO result
+    # and marks only the LLE as failed (lle_per_beat = NaN,
+    # lle_diagnostics["reason"] = "insufficient embedded points after
+    # reconstruction", result["lle_embedding_too_short"] = True).
+    keep_upo_on_short_lle_embedding: bool = False
 
     # So et al. UPO method
     #
@@ -2348,15 +2355,22 @@ def analyze_segment(rr_intervals, config=CFG):
         "stationarity_warning": stationarity_diagnostics(rr_dynamics)["stationarity_warning"],
     }
     embedded, tau, m, mi, e1, e2 = takens_embed(rr_dynamics, config=config)
-    if len(embedded) < 50:
+    lle_embedding_too_short = len(embedded) < 50
+    if lle_embedding_too_short and not config.keep_upo_on_short_lle_embedding:
         raise ValueError("Insufficient embedded points after reconstruction.")
 
     lle_theiler = config.lle_theiler_beats if config.lle_theiler_beats is not None else _mean_period_beats(rr_dynamics)
-    lle, lle_diag = rosenstein_lle(embedded, theiler=lle_theiler, max_iter=config.lle_max_iter,
-                                    min_fit_points=config.lle_min_fit_points,
-                                    max_fit_fraction=config.lle_max_fit_fraction,
-                                    min_r2=config.lle_min_r2,
-                                    require_valid_fit=config.lle_require_valid_fit)
+    if lle_embedding_too_short:
+        # Opt-in path (keep_upo_on_short_lle_embedding): only the LLE fails.
+        lle, lle_diag = np.nan, {"reason": "insufficient embedded points after reconstruction",
+                                 "valid_fit": False, "valid_fit_quality": False,
+                                 "n_embedded_points": int(len(embedded))}
+    else:
+        lle, lle_diag = rosenstein_lle(embedded, theiler=lle_theiler, max_iter=config.lle_max_iter,
+                                        min_fit_points=config.lle_min_fit_points,
+                                        max_fit_fraction=config.lle_max_fit_fraction,
+                                        min_r2=config.lle_min_r2,
+                                        require_valid_fit=config.lle_require_valid_fit)
 
     # UPO analysis: separate from the LLE.  In one_sample mode it uses its own
     # lag-1 embedding (Cao at lag 1); tau_step reuses tau, m and the embedding.
@@ -2373,7 +2387,7 @@ def analyze_segment(rr_intervals, config=CFG):
         surrogate = run_surrogate_analysis(rr_dynamics, tau, m, lle,
                                            lle_theiler, config=config)
 
-    return {
+    out = {
         "rr_raw": rr, "rr_corrected": rr_corrected, "rr_dynamics": rr_dynamics,
         "used_corrected_rr_for_dynamics": bool(config.use_corrected_rr_for_dynamics),
         "rr_artifact_mask": artifact_mask,
@@ -2392,6 +2406,9 @@ def analyze_segment(rr_intervals, config=CFG):
         "upo_significance_status": upo["significance_status"],
         "surrogate_analysis": surrogate,
     }
+    if config.keep_upo_on_short_lle_embedding:
+        out["lle_embedding_too_short"] = bool(lle_embedding_too_short)
+    return out
 
 
 def analyze_ecg_record(raw_ecg, fs, config=CFG):

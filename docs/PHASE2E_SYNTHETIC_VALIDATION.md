@@ -551,7 +551,12 @@ No pipeline result is affected.
   (at least 50 points) fails 24/30 Hénon and 10/30 logistic windows. It discards
   a UPO result that `run_upo_analysis` would have returned. This is recorded
   behaviour of the production wrapper, reproduced by `metrics.py::error_fields`,
-  not a Phase 2E harness error.
+  not a Phase 2E harness error. Phase 3 (A4) added the opt-in option
+  `PipelineConfig.keep_upo_on_short_lle_embedding` (default False = unchanged).
+  With it on, all 42 core 128-sample `analysis_error` windows return the UPO
+  status that `run_upo_analysis` gives alone (41 `ok`, 1
+  `embedding_not_saturated`). Only the LLE is marked failed
+  (`tests/test_lle_short_embedding.py`).
 - **Cao at lag 1 overestimates dimension** (Hénon 4, logistic 4). Level C
   therefore gates no chaotic peak at production dimension (3.3).
 - **Localization.** The bin-mean location estimator has errors up to 0.27 bin

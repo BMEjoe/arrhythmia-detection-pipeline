@@ -24,8 +24,8 @@ Never merge into main, never open a pull request. Commit and push after every st
 |---|---|---|
 | A1 Tables B/C aggregation fix | done | 5e22d04 |
 | A2 requirements.txt, pytest on 3.13 | done | 88f344e |
-| A3 posthoc lle.json | done | (this commit) |
-| A4 opt-in keep UPO on short LLE embedding | pending | |
+| A3 posthoc lle.json | done | b415607 |
+| A4 opt-in keep UPO on short LLE embedding | done | (this commit) |
 | A5 cao_e1_undefined diagnostic | pending | |
 | B1 baseline (dev seeds) | pending | |
 | B2 diagnosis (dev seeds) | pending | |
@@ -62,3 +62,8 @@ Never merge into main, never open a pull request. Commit and push after every st
   Production LLE path is 3.8-6.4x (logistic) / 2.3-3.2x (Henon) too low;
   tau=1 + true m gives 0.69 / 0.40. White noise at tau=1, m=2 gives 0.42-0.58,
   so a surrogate/null test is needed, not only bias correction (input to B2/B3).
+- A4: `PipelineConfig.keep_upo_on_short_lle_embedding=False`. Tests in
+  tests/test_lle_short_embedding.py (3). Ground rules checked with
+  /tmp/claude-0/groundrule.sh (script body is reproduced in the A4 commit message):
+  default pytest 337 passed + 1 pre-existing failure; AVX-512 off 338/338;
+  same-env replicability 44/44; run_phase2e --replicate 13/44, file identical.
