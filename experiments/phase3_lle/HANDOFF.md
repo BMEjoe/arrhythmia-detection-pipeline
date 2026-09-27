@@ -28,12 +28,12 @@ Never merge into main, never open a pull request. Commit and push after every st
 | A4 opt-in keep UPO on short LLE embedding | done | 4aac419 |
 | A5 cao_e1_undefined diagnostic | done | 7f53a25 |
 | B1 baseline (dev seeds) | running (results/dev/baseline.jsonl, resumable) | |
-| B2 diagnosis (dev seeds) | done | (this commit) |
+| B2 diagnosis (dev seeds) | done | 655233a |
 | B3 candidates + PREREGISTRATION.md | pending | |
 | B4 test-seed evaluation | pending | |
 | B5 adopt winner (opt-in) | pending | |
 | B6 docs/PHASE3_LLE_VALIDATION.md | pending | |
-| C docs/PHASE4_UPO_PROPOSAL.md | pending | |
+| C docs/PHASE4_UPO_PROPOSAL.md | done | (this commit) |
 
 ## Notes
 - A1: rerunning Phase 2E analysis under a newer library stack also rewrites
