@@ -26,9 +26,9 @@ Never merge into main, never open a pull request. Commit and push after every st
 | A2 requirements.txt, pytest on 3.13 | done | 88f344e |
 | A3 posthoc lle.json | done | b415607 |
 | A4 opt-in keep UPO on short LLE embedding | done | 4aac419 |
-| A5 cao_e1_undefined diagnostic | done | (this commit) |
-| B1 baseline (dev seeds) | pending | |
-| B2 diagnosis (dev seeds) | pending | |
+| A5 cao_e1_undefined diagnostic | done | 7f53a25 |
+| B1 baseline (dev seeds) | running (results/dev/baseline.jsonl, resumable) | |
+| B2 diagnosis (dev seeds) | done | (this commit) |
 | B3 candidates + PREREGISTRATION.md | pending | |
 | B4 test-seed evaluation | pending | |
 | B5 adopt winner (opt-in) | pending | |
@@ -71,3 +71,25 @@ Never merge into main, never open a pull request. Commit and push after every st
   `PipelineConfig.upo_report_cao_diagnostics=False`. Tests in
   tests/test_cao_e1_diagnostics.py (7). Ground rules: pytest 344 + 1 pre-existing
   failure; AVX-512 off 345/345; same-env 44/44; --replicate 13/44 identical.
+
+## Part B notes
+- Runner: `python -m experiments.phase3_lle.run_phase3 --phase dev --methods baseline --workers 4`
+  (resumes; log in /tmp/claude-0/b1.log). Test phase is refused until
+  PREREGISTRATION.md is committed + pushed and lists the method.
+- B2 (results/dev/diagnosis.jsonl, results/dev/tables/B2_diagnosis.md,
+  plots/B2_divergence_curves_N*.png). Effect sizes at 256 (median bias):
+  * delay: V0 (TDMI tau*, m*) -> V1 (tau 1, m*): logistic -0.571 -> -0.400,
+    Henon -0.301 -> -0.141.
+  * dimension: V1 -> V2 (tau 1, Cao lag-1 m ~4): -0.022 / -0.046; V3 (true m): ~0.
+    Under noise Cao lag-1 m rises to 7-9 and V2 bias returns (logistic 20 dB -0.44).
+  * fit region: production curves (V0) saturate by k95 = 2 in 30/30 chaotic
+    windows, i.e. the 0..5 fit spans the plateau; at tau 1 / true m saturation is
+    k95 = 9 (logistic), 12 (Henon), so 0..5 is inside the linear region.
+  * noise floor: at tau 1 the k=0->1 jump is 2.0 (WN), 1.7 (AR1), 3.9 (logistic
+    20 dB) vs 0.69 clean; it inflates the 0..5 slope (WN 0.42, logistic 20 dB 0.90).
+    Fitting from k=1 removes it (WN 0.09, AR1 0.16, logistic 20 dB 0.31,
+    Henon 20 dB 0.32; clean unchanged 0.696 / 0.414).
+- B3 tuning: experiments/phase3_lle/tune.py (dev, 256, 39 surrogates), writes
+  results/dev/tuning.jsonl; `--summary` prints rates per grid combination.
+  Vectorized divergence_curve in estimators.py reproduces fp.rosenstein_lle's
+  curve to 7e-16.
