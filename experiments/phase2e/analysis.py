@@ -177,11 +177,12 @@ def table_A(core):
 def null_table(frames, system, letter):
     rows = []
     for label, df in frames:
-        for n, g in df[df["system"] == system].groupby("window_length"):
+        # surrogate_sens holds several surrogate counts: group by count as well
+        for (n, ns), g in df[df["system"] == system].groupby(["window_length", "surrogates"]):
             N = len(g)
             ksig = int((g["significant_peak_count"] >= 1).sum())
             assessed = int(g["significance_assessed"].astype(bool).sum())
-            ns = int(g["surrogates"].iloc[0])
+            ns = int(ns)
             # nominal size of "J(W) < 0.05" under exact exchangeability: #exceed <= ceil(0.05 n) - 1
             kmax = math.ceil(0.05 * ns) - 1
             rows.append({
