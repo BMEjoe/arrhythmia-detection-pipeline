@@ -23,8 +23,8 @@ Never merge into main, never open a pull request. Commit and push after every st
 | Step | State | Commit |
 |---|---|---|
 | A1 Tables B/C aggregation fix | done | 5e22d04 |
-| A2 requirements.txt, pytest on 3.13 | done | (this commit) |
-| A3 posthoc lle.json | pending | |
+| A2 requirements.txt, pytest on 3.13 | done | 88f344e |
+| A3 posthoc lle.json | done | (this commit) |
 | A4 opt-in keep UPO on short LLE embedding | pending | |
 | A5 cao_e1_undefined diagnostic | pending | |
 | B1 baseline (dev seeds) | pending | |
@@ -58,3 +58,7 @@ Never merge into main, never open a pull request. Commit and push after every st
      original-machine file committed).
   3. pytest: default env must give exactly the same 1 failure; with AVX-512
      disabled it must give 335/335 (plus any new tests).
+- A3: lle.json regenerated via posthoc_diagnostics.lle_diagnostics() only (198 s).
+  Production LLE path is 3.8-6.4x (logistic) / 2.3-3.2x (Henon) too low;
+  tau=1 + true m gives 0.69 / 0.40. White noise at tau=1, m=2 gives 0.42-0.58,
+  so a surrogate/null test is needed, not only bias correction (input to B2/B3).
