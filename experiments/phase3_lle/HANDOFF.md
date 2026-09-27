@@ -25,8 +25,8 @@ Never merge into main, never open a pull request. Commit and push after every st
 | A1 Tables B/C aggregation fix | done | 5e22d04 |
 | A2 requirements.txt, pytest on 3.13 | done | 88f344e |
 | A3 posthoc lle.json | done | b415607 |
-| A4 opt-in keep UPO on short LLE embedding | done | (this commit) |
-| A5 cao_e1_undefined diagnostic | pending | |
+| A4 opt-in keep UPO on short LLE embedding | done | 4aac419 |
+| A5 cao_e1_undefined diagnostic | done | (this commit) |
 | B1 baseline (dev seeds) | pending | |
 | B2 diagnosis (dev seeds) | pending | |
 | B3 candidates + PREREGISTRATION.md | pending | |
@@ -64,6 +64,10 @@ Never merge into main, never open a pull request. Commit and push after every st
   so a surrogate/null test is needed, not only bias correction (input to B2/B3).
 - A4: `PipelineConfig.keep_upo_on_short_lle_embedding=False`. Tests in
   tests/test_lle_short_embedding.py (3). Ground rules checked with
-  /tmp/claude-0/groundrule.sh (script body is reproduced in the A4 commit message):
+  experiments/phase3_lle/groundrule_check.sh:
   default pytest 337 passed + 1 pre-existing failure; AVX-512 off 338/338;
   same-env replicability 44/44; run_phase2e --replicate 13/44, file identical.
+- A5: `cao_method(..., return_diagnostics=False)` and
+  `PipelineConfig.upo_report_cao_diagnostics=False`. Tests in
+  tests/test_cao_e1_diagnostics.py (7). Ground rules: pytest 344 + 1 pre-existing
+  failure; AVX-512 off 345/345; same-env 44/44; --replicate 13/44 identical.

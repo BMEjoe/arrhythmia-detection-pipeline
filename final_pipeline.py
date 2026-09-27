@@ -147,6 +147,12 @@ class PipelineConfig:
     # lle_diagnostics["reason"] = "insufficient embedded points after
     # reconstruction", result["lle_embedding_too_short"] = True).
     keep_upo_on_short_lle_embedding: bool = False
+    # PROJECT option (Phase 3, A5), default False = previous output.  True adds
+    # Cao diagnostics to run_upo_analysis output ("cao_e1_undefined",
+    # "cao_e1_undefined_duplicate_vectors", "cao_e1_undefined_too_few_vectors",
+    # "cao_not_saturated", "cao_diagnostics") without changing any status: the
+    # status stays "embedding_not_saturated" whenever Cao gives max_dim + 1.
+    upo_report_cao_diagnostics: bool = False
 
     # So et al. UPO method
     #
@@ -768,7 +774,7 @@ def _cao_forward_embed(x, tau, m):
     return np.column_stack([x[j*tau:j*tau+n] for j in range(m)])
 
 
-def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
+def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2, return_diagnostics=False):
     """
     Cao (1997) E1/E2 embedding-dimension estimator.
 
@@ -776,6 +782,11 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
     dimension saturation; E2 is retained as the deterministic/stochastic
     diagnostic.  The So/Rosenstein reconstruction elsewhere remains the
     backward delay-coordinate representation.
+
+    return_diagnostics (PROJECT, Phase 3 A5; default False = unchanged 3-tuple):
+    also return a dict that says WHY E(m) is undefined where it is, so that
+    "E1 undefined" can be told apart from "E1 did not plateau".  It does not
+    change the chosen dimension.
     """
     x = _as_1d(x)
     tau = int(tau)
@@ -784,15 +795,24 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
 
     E = np.full(max_dim + 1, np.nan, dtype=float)
     Estar = np.full(max_dim + 1, np.nan, dtype=float)
+    # per-m reason E(m) is undefined: None (defined), "too_few_vectors",
+    # "all_neighbours_duplicate" (every nearest neighbour at distance <= 1e-15)
+    # or "no_finite_neighbour"; plus the number of reference points skipped
+    # because their nearest neighbour is an exact duplicate.
+    e_reason = [None] * (max_dim + 1)
+    n_dup = [0] * (max_dim + 1)
+    n_ref = [0] * (max_dim + 1)
 
     for m in range(1, max_dim + 1):
         Xm = _cao_forward_embed(x, tau, m)
         Xm1 = _cao_forward_embed(x, tau, m + 1)
         n = min(len(Xm), len(Xm1))
         if n < max(30, 3*m):
+            e_reason[m-1] = "too_few_vectors"
             continue
         Xm = Xm[:n]
         Xm1 = Xm1[:n]
+        n_ref[m-1] = n
 
         ratios, star = [], []
         for i in range(n):
@@ -801,6 +821,8 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
             dist[lo:hi] = np.inf
             j = int(np.argmin(dist))
             if not np.isfinite(dist[j]) or dist[j] <= 1e-15:
+                if np.isfinite(dist[j]):
+                    n_dup[m-1] += 1
                 continue
 
             # a(i,m) in Cao: nearest-neighbor distance ratio after adding
@@ -814,6 +836,8 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
         if ratios:
             E[m-1] = float(np.mean(ratios))
             Estar[m-1] = float(np.mean(star))
+        else:
+            e_reason[m-1] = "all_neighbours_duplicate" if n_dup[m-1] > 0 else "no_finite_neighbour"
 
     E1 = E[1:] / E[:-1]
     E2 = Estar[1:] / Estar[:-1]
@@ -833,7 +857,26 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
         else:
             stable_run = 0
 
-    return int(chosen), E1, E2
+    if not return_diagnostics:
+        return int(chosen), E1, E2
+    # E1[k] = E[k+1] / E[k] uses E at dimensions k+1 and k+2 (1-based m).  E is
+    # computed for m = 1..max_dim only, so E1[max_dim - 1] is NaN by
+    # construction and is excluded; E1[:max_dim - 1] are the ratios the plateau
+    # search can use.
+    undefined_reasons = sorted({r for r in e_reason[:max_dim] if r is not None})
+    e1_nan = [bool(not np.isfinite(v)) for v in E1[:max_dim - 1]]
+    diag = {
+        "provenance": "PROJECT diagnostic (Phase 3 A5); does not affect the chosen dimension",
+        "not_saturated": bool(chosen > max_dim),
+        "e1_undefined": bool(any(e1_nan)),
+        "e1_undefined_count": int(sum(e1_nan)),
+        "e1_undefined_duplicate_vectors": bool("all_neighbours_duplicate" in undefined_reasons),
+        "e1_undefined_too_few_vectors": bool("too_few_vectors" in undefined_reasons),
+        "e_undefined_reason_by_m": {m + 1: e_reason[m] for m in range(max_dim) if e_reason[m] is not None},
+        "duplicate_neighbour_count_by_m": {m + 1: int(n_dup[m]) for m in range(max_dim + 1) if n_ref[m] > 0},
+        "reference_count_by_m": {m + 1: int(n_ref[m]) for m in range(max_dim + 1) if n_ref[m] > 0},
+    }
+    return int(chosen), E1, E2, diag
 
 
 def takens_embed(x, tau=None, m=None, config=CFG):
@@ -2210,6 +2253,17 @@ def _empty_upo_analysis(map_info, config, status, tau, m, n_points=0, embedded=N
     }
 
 
+def _attach_cao_diagnostics(out, cao_diag):
+    """Opt-in (upo_report_cao_diagnostics) Cao fields; never changes a status."""
+    d = cao_diag or {}
+    out["cao_e1_undefined"] = bool(d.get("e1_undefined", False))
+    out["cao_e1_undefined_duplicate_vectors"] = bool(d.get("e1_undefined_duplicate_vectors", False))
+    out["cao_e1_undefined_too_few_vectors"] = bool(d.get("e1_undefined_too_few_vectors", False))
+    out["cao_not_saturated"] = bool(d.get("not_saturated", False))
+    out["cao_diagnostics"] = cao_diag
+    return out
+
+
 def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
     """
     UPO analysis of a scalar series.
@@ -2228,19 +2282,33 @@ def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
         return _empty_upo_analysis(None, config, "nonfinite_input", None, None)
     if xs.size == 0 or float(np.ptp(xs)) <= 1e-12:
         return _empty_upo_analysis(None, config, "constant_data", None, None)
+    cao_diag = None
     if config.upo_map_mode == "one_sample":
         tau_u = 1
-        m_u, _, _ = cao_method(xs, 1, config.cao_max_dim, config.cao_tol, config.cao_theiler)
+        if config.upo_report_cao_diagnostics:
+            m_u, _, _, cao_diag = cao_method(xs, 1, config.cao_max_dim, config.cao_tol,
+                                             config.cao_theiler, return_diagnostics=True)
+        else:
+            m_u, _, _ = cao_method(xs, 1, config.cao_max_dim, config.cao_tol, config.cao_theiler)
     else:
         if lle_tau is None:
             mi = time_delayed_mutual_information(xs, config.tdmi_max_tau, config.tdmi_bins)
             lle_tau = find_optimal_tau(mi, config.tdmi_smooth_window)
         tau_u = int(lle_tau)
-        m_u = int(lle_m) if lle_m is not None else \
-            cao_method(xs, tau_u, config.cao_max_dim, config.cao_tol, config.cao_theiler)[0]
+        if config.upo_report_cao_diagnostics:
+            # diagnostics describe Cao at tau_u even when lle_m is reused
+            m_c, _, _, cao_diag = cao_method(xs, tau_u, config.cao_max_dim, config.cao_tol,
+                                             config.cao_theiler, return_diagnostics=True)
+            m_u = int(lle_m) if lle_m is not None else m_c
+        else:
+            m_u = int(lle_m) if lle_m is not None else \
+                cao_method(xs, tau_u, config.cao_max_dim, config.cao_tol, config.cao_theiler)[0]
     map_info = resolve_upo_map(config.upo_map_mode, tau_u)
     if m_u > config.cao_max_dim:
-        return _empty_upo_analysis(map_info, config, "embedding_not_saturated", tau_u, int(m_u))
+        out = _empty_upo_analysis(map_info, config, "embedding_not_saturated", tau_u, int(m_u))
+        if config.upo_report_cao_diagnostics:
+            _attach_cao_diagnostics(out, cao_diag)
+        return out
     emb = _embed_backward(xs, tau_u, m_u)
     if rng is None:
         rng = np.random.default_rng(config.random_seed)
@@ -2260,6 +2328,8 @@ def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
                               _aggregate_upo_status([r["status"] for r in periods.values()]),
                               tau_u, int(m_u), n_points=len(emb), embedded=emb)
     out["periods"] = periods
+    if config.upo_report_cao_diagnostics:
+        _attach_cao_diagnostics(out, cao_diag)
     d = emb.shape[1]
     source = [c for r in periods.values() for c in r[LEVEL_A_FIELD]]
     out[LEVEL_A_FIELD] = source

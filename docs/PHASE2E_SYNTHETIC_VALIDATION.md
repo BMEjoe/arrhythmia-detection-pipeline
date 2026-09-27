@@ -431,6 +431,21 @@ genuinely non-saturated cases, and all of them yield `not_assessed_detector_fail
 A stable periodic orbit (logistic r = 3.5) is therefore reported as a detector
 failure in 90/90 windows.
 
+**Phase 3 (A5) diagnostic.** The status is unchanged. The opt-in option
+`PipelineConfig.upo_report_cao_diagnostics` (default False) adds these fields to
+the `run_upo_analysis` output: `cao_e1_undefined`,
+`cao_e1_undefined_duplicate_vectors`, `cao_e1_undefined_too_few_vectors`,
+`cao_not_saturated`, and a per-dimension `cao_diagnostics` dict
+(`cao_method(..., return_diagnostics=True)`; `tests/test_cao_e1_diagnostics.py`).
+All 846 Phase 2E core windows of the six non-constant systems were recomputed
+with Cao at lag 1 on the Phase 3 machine:
+
+- all 90 logistic r = 3.5 `embedding_not_saturated` windows have E1 undefined
+  because of duplicate vectors;
+- all 22 white-noise, 22 AR(1) and 1 logistic `embedding_not_saturated` windows
+  have E1 defined, so they are genuinely not saturated. The 22 AR(1) windows
+  include the one hidden behind `analysis_error` at 128 samples.
+
 ### 5.2 Tables B and C: surrogate_sens row pooled two surrogate counts (fixed)
 
 `analysis.py::null_table` grouped `surrogate_sens` only by `window_length`. That
