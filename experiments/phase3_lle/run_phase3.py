@@ -65,7 +65,7 @@ def check_preregistration(methods):
     if _git("diff", "--quiet", f"origin/{branch}", "--", rel).returncode != 0:
         raise SystemExit("refusing --phase test: local PREREGISTRATION.md differs from the pushed one")
     text = PREREG.read_text()
-    listed = set(re.findall(r"^\s*method:\s*`?([A-Za-z0-9_]+)`?", text, flags=re.M))
+    listed = set(re.findall(r"^\s*(?:[-*]\s+)?method:\s*`?([A-Za-z0-9_]+)`?", text, flags=re.M))
     missing = [m for m in methods if m not in listed]
     if missing:
         raise SystemExit(f"refusing --phase test: methods not preregistered: {missing}")

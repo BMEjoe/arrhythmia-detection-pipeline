@@ -27,9 +27,9 @@ Never merge into main, never open a pull request. Commit and push after every st
 | A3 posthoc lle.json | done | b415607 |
 | A4 opt-in keep UPO on short LLE embedding | done | 4aac419 |
 | A5 cao_e1_undefined diagnostic | done | 7f53a25 |
-| B1 baseline (dev seeds) | done | (this commit) |
+| B1 baseline (dev seeds) | done | fd3c751 |
 | B2 diagnosis (dev seeds) | done | 655233a |
-| B3 candidates + PREREGISTRATION.md | in progress (dev runs of c1-c4) | |
+| B3 candidates + PREREGISTRATION.md | done (preregistration pushed before any test run) | (this commit) |
 | B4 test-seed evaluation | pending | |
 | B5 adopt winner (opt-in) | pending | |
 | B6 docs/PHASE3_LLE_VALIDATION.md | pending | |
@@ -107,3 +107,7 @@ Never merge into main, never open a pull request. Commit and push after every st
   0/30, logistic_p4 0/30 (LLE undefined); power logistic 14/30, Henon 12/30,
   20 dB 19/30 and 14/30; bias -0.571 / -0.301. 512: power 30/30 and 27/30.
   Median runtime 14 s (256) / 32 s (512) under 4-way contention.
+- B3 done: PREREGISTRATION.md committed and pushed. From here on do NOT edit
+  estimators.py or the rule; changes only as dated amendments in the file.
+  NEXT (B4): `python -m experiments.phase3_lle.run_phase3 --phase test --methods all --workers 4`
+  (resumable; log /tmp/claude-0/b4.log), then `analysis --phase test`.
