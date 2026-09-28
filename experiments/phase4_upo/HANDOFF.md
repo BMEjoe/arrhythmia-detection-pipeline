@@ -42,7 +42,8 @@ a pull request. Commit and push after every step.
 | Step | State | Commit |
 |---|---|---|
 | Scaffold (config, systems incl. two_tone, detector, runner, methods) | done | 1695cfb |
-| Dev exploration at 256 (5 run configs) | running: results/dev/explore.jsonl, log /tmp/claude-0/p4_explore.log | |
+| Dev exploration at 256 (5 run configs) | done: results/dev/explore.jsonl; summary via explore_summary | (next commit) |
+| Dev 512 for shortlisted runs (cao:7, 2:15, 2:7; 50 surr) | running: results/dev/dev512.jsonl, log /tmp/claude-0/p4_dev512.log | |
 | m-sensitivity check | done (results/tables/m_sensitivity.md) | (this commit) |
 | Candidates + budget + PREREGISTRATION.md | pending | |
 | Test run + decide | pending | |
@@ -61,3 +62,7 @@ a pull request. Commit and push after every step.
   Detections/100 m=2/3/4: WN 4/7/9, AR1 3/1/1, sinusoid 0/0/0, logistic,
   henon, logistic@20, henon@20 all 100/100/100. Clean bias logistic
   -0.001/-0.009/-0.034, henon -0.005/-0.005/-0.008.
+- Dev exploration (256) shortlist: C1 production + extension-modulus gate >= 1.2
+  (WN0 AR2 sin0 2tone0; Henon30+20 18/60); C2 fixed m=2, M=15 + median hybrid
+  >= 1.2 (WN0 AR1 sin0 2t0; 60/60; loc 0.009); C3 fixed m=2, M=7 + trimmed-mean
+  hybrid >= 1.2 (WN0 AR3 sin0 2t0; 57/60). Baseline: WN7 AR11 sin21 2t15; 19/60.
