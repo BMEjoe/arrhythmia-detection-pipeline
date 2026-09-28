@@ -71,3 +71,7 @@ a pull request. Commit and push after every step.
   experiments.phase4_upo.run_phase4 --phase test --methods all --workers 4`
   (resumable; log /tmp/claude-0/p4_test.log; expected ~4.9 h), then
   `analysis --phase test --file test` and `decide --phase test --file test`.
+- Test run: started after a6fe566; the container restarted at ~63/4200 and the
+  run was resumed (same command; runner skips finished task ids). If `uptime`
+  shows a fresh boot and no `run_phase4` process exists, relaunch:
+  `PYTHONDONTWRITEBYTECODE=1 nohup /root/venv313/bin/python -m experiments.phase4_upo.run_phase4 --phase test --methods all --workers 4 > /tmp/claude-0/p4_test.log 2>&1 &`
