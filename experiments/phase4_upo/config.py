@@ -41,7 +41,7 @@ DEV_SEEDS = {("white_noise", 256): range(100), ("white_noise", 512): range(50),
              ("ar1", 256): range(100), ("ar1", 512): range(50)}
 DEV_SEEDS_DEFAULT = range(30)
 TEST_SEED_START = 2000
-N_TEST_SEEDS = None          # set in PREREGISTRATION.md (budget), copied here before the test run
+N_TEST_SEEDS = 150          # fixed in PREREGISTRATION.md Section 6 (runtime budget)
 
 
 def conditions():

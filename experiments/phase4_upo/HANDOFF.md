@@ -42,10 +42,10 @@ a pull request. Commit and push after every step.
 | Step | State | Commit |
 |---|---|---|
 | Scaffold (config, systems incl. two_tone, detector, runner, methods) | done | 1695cfb |
-| Dev exploration at 256 (5 run configs) | done: results/dev/explore.jsonl; summary via explore_summary | (next commit) |
-| Dev 512 for shortlisted runs (cao:7, 2:15, 2:7; 50 surr) | running: results/dev/dev512.jsonl, log /tmp/claude-0/p4_dev512.log | |
+| Dev exploration at 256 (5 run configs) | done: results/dev/explore.jsonl; summary via explore_summary | 7b8f6e1 |
+| Dev 512 for shortlisted runs (cao:7, 2:15, 2:7; 50 surr) | done: results/dev/dev512.jsonl | (this commit) |
 | m-sensitivity check | done (results/tables/m_sensitivity.md) | (this commit) |
-| Candidates + budget + PREREGISTRATION.md | pending | |
+| Candidates + budget + PREREGISTRATION.md | done: pushed before any test run; 150 test seeds (2000-2149), 50 surrogates | (this commit) |
 | Test run + decide | pending | |
 | Adopt winner (opt-in) | pending | |
 | docs/PHASE4_UPO_VALIDATION.md | pending | |
@@ -66,3 +66,8 @@ a pull request. Commit and push after every step.
   (WN0 AR2 sin0 2tone0; Henon30+20 18/60); C2 fixed m=2, M=15 + median hybrid
   >= 1.2 (WN0 AR1 sin0 2t0; 60/60; loc 0.009); C3 fixed m=2, M=7 + trimmed-mean
   hybrid >= 1.2 (WN0 AR3 sin0 2t0; 57/60). Baseline: WN7 AR11 sin21 2t15; 19/60.
+- PREREGISTRATION.md pushed. Do NOT edit methods.py, detector.py, decide.py or
+  the rule; changes only as dated amendments. NEXT: `python -m
+  experiments.phase4_upo.run_phase4 --phase test --methods all --workers 4`
+  (resumable; log /tmp/claude-0/p4_test.log; expected ~4.9 h), then
+  `analysis --phase test --file test` and `decide --phase test --file test`.
