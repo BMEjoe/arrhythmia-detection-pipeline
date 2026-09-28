@@ -30,7 +30,7 @@ Never merge into main, never open a pull request. Commit and push after every st
 | B1 baseline (dev seeds) | done | fd3c751 |
 | B2 diagnosis (dev seeds) | done | 655233a |
 | B3 candidates + PREREGISTRATION.md | done (preregistration pushed before any test run) | 25ec207 |
-| B4 test-seed evaluation | running (started after 25ec207; decide.py at 7c4a496) | |
+| B4 test-seed evaluation | done: all 4 pass; WINNER c1_rosenstein_m2_iaaft (tie-break) | (this commit) |
 | B5 adopt winner (opt-in) | pending | |
 | B6 docs/PHASE3_LLE_VALIDATION.md | draft sections 1-4 committed; 5+ after B4 | |
 | C docs/PHASE4_UPO_PROPOSAL.md | done | a14da95 |
@@ -111,3 +111,10 @@ Never merge into main, never open a pull request. Commit and push after every st
   estimators.py or the rule; changes only as dated amendments in the file.
   NEXT (B4): `python -m experiments.phase3_lle.run_phase3 --phase test --methods all --workers 4`
   (resumable; log /tmp/claude-0/b4.log), then `analysis --phase test`.
+- B4 done (results/test/*.jsonl, results/test/tables/{summary,primary}.md).
+  All candidates pass; C1/C2/C3 tie at 200/200 on 20 dB; tie-break |bias| sum:
+  C1 0.0057 < C3 0.0173 < C2 0.0236 -> WINNER c1_rosenstein_m2_iaaft.
+  NEXT (B5): add C1 to final_pipeline.py as opt-in PipelineConfig option (default
+  off) + unit test equal to estimators.c1_rosenstein_m2_iaaft; run
+  experiments/phase3_lle/groundrule_check.sh (needs /tmp/claude-0/rep_before.jsonl
+  and replicability_env_before.json; regenerate from commit 7f53a25 if lost).
