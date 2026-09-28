@@ -77,6 +77,7 @@ from __future__ import annotations
 import itertools
 import math
 import os
+import warnings
 from dataclasses import dataclass, replace
 from typing import Dict, List, Optional, Sequence, Tuple
 
@@ -153,6 +154,20 @@ class PipelineConfig:
     # "cao_not_saturated", "cao_diagnostics") without changing any status: the
     # status stays "embedding_not_saturated" whenever Cao gives max_dim + 1.
     upo_report_cao_diagnostics: bool = False
+    # PROJECT option (Phase 3, B5), default False = previous behaviour.  True adds
+    # result["lle_chaos_test"] from lle_chaos_test(): the preregistered Phase 3
+    # winner C1 (experiments/phase3_lle/PREREGISTRATION.md) -- tau = 1, m = 2
+    # Rosenstein divergence curve, slope of steps 1..5, one-sided test against
+    # 99 IAAFT surrogates, detected <=> p <= 0.05.  The production LLE and its
+    # AAFT test are unchanged.  The fields below are fixed at the preregistered
+    # values; changing them leaves the validated configuration.
+    lle_chaos_test: bool = False
+    lle_chaos_test_m: int = 2
+    lle_chaos_test_fit_first: int = 1
+    lle_chaos_test_fit_last: int = 5
+    lle_chaos_test_surrogates: int = 99
+    lle_chaos_test_alpha: float = 0.05
+    lle_chaos_test_seed_entropy: int = 20260927
 
     # So et al. UPO method
     #
@@ -2160,6 +2175,107 @@ def assess_so_significance(result, x, config=CFG, rng=None, embedding_dimension=
     return result
 
 
+def iaaft_surrogate(x, rng, max_iter=200):
+    """Iterative AAFT surrogate (Schreiber & Schmitz 1996): exact amplitude
+    distribution, power spectrum matched iteratively; stops when the rank
+    order no longer changes.  PROJECT (Phase 3 B5); used only by
+    lle_chaos_test."""
+    x = np.asarray(x, dtype=float)
+    n = len(x)
+    amp = np.abs(np.fft.rfft(x))
+    sx = np.sort(x)
+    s = rng.permutation(x)
+    prev = None
+    for _ in range(max_iter):
+        ph = np.angle(np.fft.rfft(s))
+        s_spec = np.fft.irfft(amp * np.exp(1j * ph), n=n)
+        rank = np.argsort(np.argsort(s_spec, kind="stable"), kind="stable")
+        s = sx[rank]
+        if prev is not None and np.array_equal(rank, prev):
+            break
+        prev = rank
+    return s
+
+
+def _nn_divergence_curve(X, theiler, max_iter=40):
+    """Vectorized Rosenstein mean log nearest-neighbour divergence curve.
+
+    Same neighbour choice (Euclidean argmin with Theiler exclusion), 1e-15
+    floor and count rule (>= max(10, n/4) finite terms) as rosenstein_lle;
+    equal to its mean_log_divergence to ~1e-15 (tests/test_phase3_estimators.py).
+    """
+    X = np.asarray(X, dtype=float)
+    n = len(X)
+    D = np.sqrt(np.maximum(((X[:, None, :] - X[None, :, :]) ** 2).sum(-1), 0.0))
+    idx = np.arange(n)
+    D[np.abs(idx[:, None] - idx[None, :]) <= int(theiler)] = np.inf
+    nb = np.argsort(D, axis=1, kind="stable")[:, :1]
+    ok = np.isfinite(np.take_along_axis(D, nb, axis=1))
+    logd = np.full((n, max_iter), np.nan)
+    for k in range(max_iter):
+        i = idx[:, None]
+        ii, jj = i + k, nb + k
+        valid = ok & (ii < n) & (jj < n)
+        d = np.full((n, 1), np.nan)
+        vi = np.nonzero(valid)
+        d[vi] = np.linalg.norm(X[ii[vi]] - X[jj[vi]], axis=1)
+        dd = d[:, 0]
+        good = np.isfinite(dd) & (dd > 1e-15)
+        logd[good, k] = np.log(dd[good])
+    with np.errstate(invalid="ignore"), warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        y = np.nanmean(logd, axis=0)
+    counts = np.sum(np.isfinite(logd), axis=0)
+    y[~(np.isfinite(y) & (counts >= max(10, int(0.25 * n))))] = np.nan
+    return y
+
+
+def _lle_chaos_statistic(x, m, theiler, k0, k1):
+    y = _nn_divergence_curve(_embed_backward(np.asarray(x, dtype=float), 1, int(m)), theiler)
+    ks = np.arange(int(k0), int(k1) + 1)
+    yy = y[ks]
+    return float(np.polyfit(ks, yy, 1)[0]) if np.all(np.isfinite(yy)) else np.nan
+
+
+def lle_chaos_test(x, config=CFG):
+    """
+    PROJECT chaos test (Phase 3 winner C1; experiments/phase3_lle/PREREGISTRATION.md,
+    docs/PHASE3_LLE_VALIDATION.md).  Opt-in via PipelineConfig.lle_chaos_test.
+
+    Statistic: slope over steps lle_chaos_test_fit_first..fit_last of the
+    Rosenstein divergence curve of the tau = 1, m = lle_chaos_test_m embedding
+    (Theiler = mean period).  It is also the LLE estimate (per sample).
+    Null: lle_chaos_test_surrogates IAAFT surrogates from an RNG seeded by the
+    window's own data, so windows do not share surrogate streams.
+    p = (1 + #{surrogate >= observed or undefined}) / (n + 1); detected <=>
+    p <= lle_chaos_test_alpha (size exactly 0.05 with 99 surrogates).
+    """
+    import zlib
+    x = _as_1d(x)
+    m, k0, k1 = config.lle_chaos_test_m, config.lle_chaos_test_fit_first, config.lle_chaos_test_fit_last
+    th = _mean_period_beats(x)
+    out = {"provenance": "PROJECT (Phase 3 C1): tau 1 Rosenstein + IAAFT surrogate test",
+           "tau": 1, "m": int(m), "theiler": int(th), "fit_steps": [int(k0), int(k1)],
+           "n_surrogates": int(config.lle_chaos_test_surrogates), "alpha": float(config.lle_chaos_test_alpha)}
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        obs = _lle_chaos_statistic(x, m, th, k0, k1)
+        if not np.isfinite(obs):
+            out.update(lle=np.nan, p=np.nan, detected=False, status="lle undefined (no finite divergence fit)")
+            return out
+        h = zlib.crc32(np.ascontiguousarray(np.asarray(x, dtype=float)).tobytes())
+        rng = np.random.default_rng(np.random.SeedSequence([int(config.lle_chaos_test_seed_entropy), int(h), 2]))
+        sur = np.asarray([_lle_chaos_statistic(iaaft_surrogate(x, rng), m, th, k0, k1)
+                          for _ in range(int(config.lle_chaos_test_surrogates))], dtype=float)
+    fin = np.isfinite(sur)
+    exceed = int(np.sum(~fin) + np.sum(sur[fin] >= obs))
+    p = float((1 + exceed) / (len(sur) + 1))
+    out.update({"lle": float(obs), "p": p, "surrogate_lle": sur,
+                "surrogate_median": float(np.median(sur[fin])) if fin.any() else np.nan,
+                "detected": bool(p <= config.lle_chaos_test_alpha), "status": "ok"})
+    return out
+
+
 def run_surrogate_analysis(rr, tau, m, real_lle, lle_theiler, config=CFG):
     """Optional fixed-parameter AAFT surrogate test for the LLE.
 
@@ -2478,6 +2594,8 @@ def analyze_segment(rr_intervals, config=CFG):
     }
     if config.keep_upo_on_short_lle_embedding:
         out["lle_embedding_too_short"] = bool(lle_embedding_too_short)
+    if config.lle_chaos_test:
+        out["lle_chaos_test"] = lle_chaos_test(rr_dynamics, config=config)
     return out
 
 

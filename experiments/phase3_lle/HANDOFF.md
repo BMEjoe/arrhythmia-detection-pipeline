@@ -30,8 +30,8 @@ Never merge into main, never open a pull request. Commit and push after every st
 | B1 baseline (dev seeds) | done | fd3c751 |
 | B2 diagnosis (dev seeds) | done | 655233a |
 | B3 candidates + PREREGISTRATION.md | done (preregistration pushed before any test run) | 25ec207 |
-| B4 test-seed evaluation | done: all 4 pass; WINNER c1_rosenstein_m2_iaaft (tie-break) | (this commit) |
-| B5 adopt winner (opt-in) | pending | |
+| B4 test-seed evaluation | done: all 4 pass; WINNER c1_rosenstein_m2_iaaft (tie-break) | 5cd69d5 |
+| B5 adopt winner (opt-in) | done: PipelineConfig.lle_chaos_test | (this commit) |
 | B6 docs/PHASE3_LLE_VALIDATION.md | draft sections 1-4 committed; 5+ after B4 | |
 | C docs/PHASE4_UPO_PROPOSAL.md | done | a14da95 |
 
@@ -118,3 +118,8 @@ Never merge into main, never open a pull request. Commit and push after every st
   off) + unit test equal to estimators.c1_rosenstein_m2_iaaft; run
   experiments/phase3_lle/groundrule_check.sh (needs /tmp/claude-0/rep_before.jsonl
   and replicability_env_before.json; regenerate from commit 7f53a25 if lost).
+- B5 done: final_pipeline.lle_chaos_test / iaaft_surrogate, PipelineConfig.lle_chaos_test
+  (default False) + fixed parameter fields; tests/test_lle_chaos_test.py (11).
+  Pipeline output equals stored C1 test results on 240/240 windows checked.
+  Ground rules: pytest 367 + 1 pre-existing failure; AVX-512 off 368/368;
+  same-env 44/44; --replicate 13/44 identical. NEXT: B6 report sections 5+.
