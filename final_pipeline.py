@@ -77,6 +77,7 @@ from __future__ import annotations
 import itertools
 import math
 import os
+import warnings
 from dataclasses import dataclass, replace
 from typing import Dict, List, Optional, Sequence, Tuple
 
@@ -140,6 +141,33 @@ class PipelineConfig:
     lle_max_fit_fraction: float = 0.10
     lle_min_r2: float = 0.90
     lle_require_valid_fit: bool = True
+    # PROJECT option (Phase 3, A4), default False = previous behaviour: when the
+    # LLE delay embedding has < 50 points, analyze_segment raises ValueError and
+    # the (separately embedded) UPO result is lost.  True keeps the UPO result
+    # and marks only the LLE as failed (lle_per_beat = NaN,
+    # lle_diagnostics["reason"] = "insufficient embedded points after
+    # reconstruction", result["lle_embedding_too_short"] = True).
+    keep_upo_on_short_lle_embedding: bool = False
+    # PROJECT option (Phase 3, A5), default False = previous output.  True adds
+    # Cao diagnostics to run_upo_analysis output ("cao_e1_undefined",
+    # "cao_e1_undefined_duplicate_vectors", "cao_e1_undefined_too_few_vectors",
+    # "cao_not_saturated", "cao_diagnostics") without changing any status: the
+    # status stays "embedding_not_saturated" whenever Cao gives max_dim + 1.
+    upo_report_cao_diagnostics: bool = False
+    # PROJECT option (Phase 3, B5), default False = previous behaviour.  True adds
+    # result["lle_chaos_test"] from lle_chaos_test(): the preregistered Phase 3
+    # winner C1 (experiments/phase3_lle/PREREGISTRATION.md) -- tau = 1, m = 2
+    # Rosenstein divergence curve, slope of steps 1..5, one-sided test against
+    # 99 IAAFT surrogates, detected <=> p <= 0.05.  The production LLE and its
+    # AAFT test are unchanged.  The fields below are fixed at the preregistered
+    # values; changing them leaves the validated configuration.
+    lle_chaos_test: bool = False
+    lle_chaos_test_m: int = 2
+    lle_chaos_test_fit_first: int = 1
+    lle_chaos_test_fit_last: int = 5
+    lle_chaos_test_surrogates: int = 99
+    lle_chaos_test_alpha: float = 0.05
+    lle_chaos_test_seed_entropy: int = 20260927
 
     # So et al. UPO method
     #
@@ -761,7 +789,7 @@ def _cao_forward_embed(x, tau, m):
     return np.column_stack([x[j*tau:j*tau+n] for j in range(m)])
 
 
-def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
+def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2, return_diagnostics=False):
     """
     Cao (1997) E1/E2 embedding-dimension estimator.
 
@@ -769,6 +797,11 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
     dimension saturation; E2 is retained as the deterministic/stochastic
     diagnostic.  The So/Rosenstein reconstruction elsewhere remains the
     backward delay-coordinate representation.
+
+    return_diagnostics (PROJECT, Phase 3 A5; default False = unchanged 3-tuple):
+    also return a dict that says WHY E(m) is undefined where it is, so that
+    "E1 undefined" can be told apart from "E1 did not plateau".  It does not
+    change the chosen dimension.
     """
     x = _as_1d(x)
     tau = int(tau)
@@ -777,15 +810,24 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
 
     E = np.full(max_dim + 1, np.nan, dtype=float)
     Estar = np.full(max_dim + 1, np.nan, dtype=float)
+    # per-m reason E(m) is undefined: None (defined), "too_few_vectors",
+    # "all_neighbours_duplicate" (every nearest neighbour at distance <= 1e-15)
+    # or "no_finite_neighbour"; plus the number of reference points skipped
+    # because their nearest neighbour is an exact duplicate.
+    e_reason = [None] * (max_dim + 1)
+    n_dup = [0] * (max_dim + 1)
+    n_ref = [0] * (max_dim + 1)
 
     for m in range(1, max_dim + 1):
         Xm = _cao_forward_embed(x, tau, m)
         Xm1 = _cao_forward_embed(x, tau, m + 1)
         n = min(len(Xm), len(Xm1))
         if n < max(30, 3*m):
+            e_reason[m-1] = "too_few_vectors"
             continue
         Xm = Xm[:n]
         Xm1 = Xm1[:n]
+        n_ref[m-1] = n
 
         ratios, star = [], []
         for i in range(n):
@@ -794,6 +836,8 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
             dist[lo:hi] = np.inf
             j = int(np.argmin(dist))
             if not np.isfinite(dist[j]) or dist[j] <= 1e-15:
+                if np.isfinite(dist[j]):
+                    n_dup[m-1] += 1
                 continue
 
             # a(i,m) in Cao: nearest-neighbor distance ratio after adding
@@ -807,6 +851,8 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
         if ratios:
             E[m-1] = float(np.mean(ratios))
             Estar[m-1] = float(np.mean(star))
+        else:
+            e_reason[m-1] = "all_neighbours_duplicate" if n_dup[m-1] > 0 else "no_finite_neighbour"
 
     E1 = E[1:] / E[:-1]
     E2 = Estar[1:] / Estar[:-1]
@@ -826,7 +872,26 @@ def cao_method(x, tau, max_dim=12, tol=0.05, theiler=2):
         else:
             stable_run = 0
 
-    return int(chosen), E1, E2
+    if not return_diagnostics:
+        return int(chosen), E1, E2
+    # E1[k] = E[k+1] / E[k] uses E at dimensions k+1 and k+2 (1-based m).  E is
+    # computed for m = 1..max_dim only, so E1[max_dim - 1] is NaN by
+    # construction and is excluded; E1[:max_dim - 1] are the ratios the plateau
+    # search can use.
+    undefined_reasons = sorted({r for r in e_reason[:max_dim] if r is not None})
+    e1_nan = [bool(not np.isfinite(v)) for v in E1[:max_dim - 1]]
+    diag = {
+        "provenance": "PROJECT diagnostic (Phase 3 A5); does not affect the chosen dimension",
+        "not_saturated": bool(chosen > max_dim),
+        "e1_undefined": bool(any(e1_nan)),
+        "e1_undefined_count": int(sum(e1_nan)),
+        "e1_undefined_duplicate_vectors": bool("all_neighbours_duplicate" in undefined_reasons),
+        "e1_undefined_too_few_vectors": bool("too_few_vectors" in undefined_reasons),
+        "e_undefined_reason_by_m": {m + 1: e_reason[m] for m in range(max_dim) if e_reason[m] is not None},
+        "duplicate_neighbour_count_by_m": {m + 1: int(n_dup[m]) for m in range(max_dim + 1) if n_ref[m] > 0},
+        "reference_count_by_m": {m + 1: int(n_ref[m]) for m in range(max_dim + 1) if n_ref[m] > 0},
+    }
+    return int(chosen), E1, E2, diag
 
 
 def takens_embed(x, tau=None, m=None, config=CFG):
@@ -2110,6 +2175,107 @@ def assess_so_significance(result, x, config=CFG, rng=None, embedding_dimension=
     return result
 
 
+def iaaft_surrogate(x, rng, max_iter=200):
+    """Iterative AAFT surrogate (Schreiber & Schmitz 1996): exact amplitude
+    distribution, power spectrum matched iteratively; stops when the rank
+    order no longer changes.  PROJECT (Phase 3 B5); used only by
+    lle_chaos_test."""
+    x = np.asarray(x, dtype=float)
+    n = len(x)
+    amp = np.abs(np.fft.rfft(x))
+    sx = np.sort(x)
+    s = rng.permutation(x)
+    prev = None
+    for _ in range(max_iter):
+        ph = np.angle(np.fft.rfft(s))
+        s_spec = np.fft.irfft(amp * np.exp(1j * ph), n=n)
+        rank = np.argsort(np.argsort(s_spec, kind="stable"), kind="stable")
+        s = sx[rank]
+        if prev is not None and np.array_equal(rank, prev):
+            break
+        prev = rank
+    return s
+
+
+def _nn_divergence_curve(X, theiler, max_iter=40):
+    """Vectorized Rosenstein mean log nearest-neighbour divergence curve.
+
+    Same neighbour choice (Euclidean argmin with Theiler exclusion), 1e-15
+    floor and count rule (>= max(10, n/4) finite terms) as rosenstein_lle;
+    equal to its mean_log_divergence to ~1e-15 (tests/test_phase3_estimators.py).
+    """
+    X = np.asarray(X, dtype=float)
+    n = len(X)
+    D = np.sqrt(np.maximum(((X[:, None, :] - X[None, :, :]) ** 2).sum(-1), 0.0))
+    idx = np.arange(n)
+    D[np.abs(idx[:, None] - idx[None, :]) <= int(theiler)] = np.inf
+    nb = np.argsort(D, axis=1, kind="stable")[:, :1]
+    ok = np.isfinite(np.take_along_axis(D, nb, axis=1))
+    logd = np.full((n, max_iter), np.nan)
+    for k in range(max_iter):
+        i = idx[:, None]
+        ii, jj = i + k, nb + k
+        valid = ok & (ii < n) & (jj < n)
+        d = np.full((n, 1), np.nan)
+        vi = np.nonzero(valid)
+        d[vi] = np.linalg.norm(X[ii[vi]] - X[jj[vi]], axis=1)
+        dd = d[:, 0]
+        good = np.isfinite(dd) & (dd > 1e-15)
+        logd[good, k] = np.log(dd[good])
+    with np.errstate(invalid="ignore"), warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        y = np.nanmean(logd, axis=0)
+    counts = np.sum(np.isfinite(logd), axis=0)
+    y[~(np.isfinite(y) & (counts >= max(10, int(0.25 * n))))] = np.nan
+    return y
+
+
+def _lle_chaos_statistic(x, m, theiler, k0, k1):
+    y = _nn_divergence_curve(_embed_backward(np.asarray(x, dtype=float), 1, int(m)), theiler)
+    ks = np.arange(int(k0), int(k1) + 1)
+    yy = y[ks]
+    return float(np.polyfit(ks, yy, 1)[0]) if np.all(np.isfinite(yy)) else np.nan
+
+
+def lle_chaos_test(x, config=CFG):
+    """
+    PROJECT chaos test (Phase 3 winner C1; experiments/phase3_lle/PREREGISTRATION.md,
+    docs/PHASE3_LLE_VALIDATION.md).  Opt-in via PipelineConfig.lle_chaos_test.
+
+    Statistic: slope over steps lle_chaos_test_fit_first..fit_last of the
+    Rosenstein divergence curve of the tau = 1, m = lle_chaos_test_m embedding
+    (Theiler = mean period).  It is also the LLE estimate (per sample).
+    Null: lle_chaos_test_surrogates IAAFT surrogates from an RNG seeded by the
+    window's own data, so windows do not share surrogate streams.
+    p = (1 + #{surrogate >= observed or undefined}) / (n + 1); detected <=>
+    p <= lle_chaos_test_alpha (size exactly 0.05 with 99 surrogates).
+    """
+    import zlib
+    x = _as_1d(x)
+    m, k0, k1 = config.lle_chaos_test_m, config.lle_chaos_test_fit_first, config.lle_chaos_test_fit_last
+    th = _mean_period_beats(x)
+    out = {"provenance": "PROJECT (Phase 3 C1): tau 1 Rosenstein + IAAFT surrogate test",
+           "tau": 1, "m": int(m), "theiler": int(th), "fit_steps": [int(k0), int(k1)],
+           "n_surrogates": int(config.lle_chaos_test_surrogates), "alpha": float(config.lle_chaos_test_alpha)}
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        obs = _lle_chaos_statistic(x, m, th, k0, k1)
+        if not np.isfinite(obs):
+            out.update(lle=np.nan, p=np.nan, detected=False, status="lle undefined (no finite divergence fit)")
+            return out
+        h = zlib.crc32(np.ascontiguousarray(np.asarray(x, dtype=float)).tobytes())
+        rng = np.random.default_rng(np.random.SeedSequence([int(config.lle_chaos_test_seed_entropy), int(h), 2]))
+        sur = np.asarray([_lle_chaos_statistic(iaaft_surrogate(x, rng), m, th, k0, k1)
+                          for _ in range(int(config.lle_chaos_test_surrogates))], dtype=float)
+    fin = np.isfinite(sur)
+    exceed = int(np.sum(~fin) + np.sum(sur[fin] >= obs))
+    p = float((1 + exceed) / (len(sur) + 1))
+    out.update({"lle": float(obs), "p": p, "surrogate_lle": sur,
+                "surrogate_median": float(np.median(sur[fin])) if fin.any() else np.nan,
+                "detected": bool(p <= config.lle_chaos_test_alpha), "status": "ok"})
+    return out
+
+
 def run_surrogate_analysis(rr, tau, m, real_lle, lle_theiler, config=CFG):
     """Optional fixed-parameter AAFT surrogate test for the LLE.
 
@@ -2203,6 +2369,17 @@ def _empty_upo_analysis(map_info, config, status, tau, m, n_points=0, embedded=N
     }
 
 
+def _attach_cao_diagnostics(out, cao_diag):
+    """Opt-in (upo_report_cao_diagnostics) Cao fields; never changes a status."""
+    d = cao_diag or {}
+    out["cao_e1_undefined"] = bool(d.get("e1_undefined", False))
+    out["cao_e1_undefined_duplicate_vectors"] = bool(d.get("e1_undefined_duplicate_vectors", False))
+    out["cao_e1_undefined_too_few_vectors"] = bool(d.get("e1_undefined_too_few_vectors", False))
+    out["cao_not_saturated"] = bool(d.get("not_saturated", False))
+    out["cao_diagnostics"] = cao_diag
+    return out
+
+
 def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
     """
     UPO analysis of a scalar series.
@@ -2221,19 +2398,33 @@ def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
         return _empty_upo_analysis(None, config, "nonfinite_input", None, None)
     if xs.size == 0 or float(np.ptp(xs)) <= 1e-12:
         return _empty_upo_analysis(None, config, "constant_data", None, None)
+    cao_diag = None
     if config.upo_map_mode == "one_sample":
         tau_u = 1
-        m_u, _, _ = cao_method(xs, 1, config.cao_max_dim, config.cao_tol, config.cao_theiler)
+        if config.upo_report_cao_diagnostics:
+            m_u, _, _, cao_diag = cao_method(xs, 1, config.cao_max_dim, config.cao_tol,
+                                             config.cao_theiler, return_diagnostics=True)
+        else:
+            m_u, _, _ = cao_method(xs, 1, config.cao_max_dim, config.cao_tol, config.cao_theiler)
     else:
         if lle_tau is None:
             mi = time_delayed_mutual_information(xs, config.tdmi_max_tau, config.tdmi_bins)
             lle_tau = find_optimal_tau(mi, config.tdmi_smooth_window)
         tau_u = int(lle_tau)
-        m_u = int(lle_m) if lle_m is not None else \
-            cao_method(xs, tau_u, config.cao_max_dim, config.cao_tol, config.cao_theiler)[0]
+        if config.upo_report_cao_diagnostics:
+            # diagnostics describe Cao at tau_u even when lle_m is reused
+            m_c, _, _, cao_diag = cao_method(xs, tau_u, config.cao_max_dim, config.cao_tol,
+                                             config.cao_theiler, return_diagnostics=True)
+            m_u = int(lle_m) if lle_m is not None else m_c
+        else:
+            m_u = int(lle_m) if lle_m is not None else \
+                cao_method(xs, tau_u, config.cao_max_dim, config.cao_tol, config.cao_theiler)[0]
     map_info = resolve_upo_map(config.upo_map_mode, tau_u)
     if m_u > config.cao_max_dim:
-        return _empty_upo_analysis(map_info, config, "embedding_not_saturated", tau_u, int(m_u))
+        out = _empty_upo_analysis(map_info, config, "embedding_not_saturated", tau_u, int(m_u))
+        if config.upo_report_cao_diagnostics:
+            _attach_cao_diagnostics(out, cao_diag)
+        return out
     emb = _embed_backward(xs, tau_u, m_u)
     if rng is None:
         rng = np.random.default_rng(config.random_seed)
@@ -2253,6 +2444,8 @@ def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
                               _aggregate_upo_status([r["status"] for r in periods.values()]),
                               tau_u, int(m_u), n_points=len(emb), embedded=emb)
     out["periods"] = periods
+    if config.upo_report_cao_diagnostics:
+        _attach_cao_diagnostics(out, cao_diag)
     d = emb.shape[1]
     source = [c for r in periods.values() for c in r[LEVEL_A_FIELD]]
     out[LEVEL_A_FIELD] = source
@@ -2348,15 +2541,22 @@ def analyze_segment(rr_intervals, config=CFG):
         "stationarity_warning": stationarity_diagnostics(rr_dynamics)["stationarity_warning"],
     }
     embedded, tau, m, mi, e1, e2 = takens_embed(rr_dynamics, config=config)
-    if len(embedded) < 50:
+    lle_embedding_too_short = len(embedded) < 50
+    if lle_embedding_too_short and not config.keep_upo_on_short_lle_embedding:
         raise ValueError("Insufficient embedded points after reconstruction.")
 
     lle_theiler = config.lle_theiler_beats if config.lle_theiler_beats is not None else _mean_period_beats(rr_dynamics)
-    lle, lle_diag = rosenstein_lle(embedded, theiler=lle_theiler, max_iter=config.lle_max_iter,
-                                    min_fit_points=config.lle_min_fit_points,
-                                    max_fit_fraction=config.lle_max_fit_fraction,
-                                    min_r2=config.lle_min_r2,
-                                    require_valid_fit=config.lle_require_valid_fit)
+    if lle_embedding_too_short:
+        # Opt-in path (keep_upo_on_short_lle_embedding): only the LLE fails.
+        lle, lle_diag = np.nan, {"reason": "insufficient embedded points after reconstruction",
+                                 "valid_fit": False, "valid_fit_quality": False,
+                                 "n_embedded_points": int(len(embedded))}
+    else:
+        lle, lle_diag = rosenstein_lle(embedded, theiler=lle_theiler, max_iter=config.lle_max_iter,
+                                        min_fit_points=config.lle_min_fit_points,
+                                        max_fit_fraction=config.lle_max_fit_fraction,
+                                        min_r2=config.lle_min_r2,
+                                        require_valid_fit=config.lle_require_valid_fit)
 
     # UPO analysis: separate from the LLE.  In one_sample mode it uses its own
     # lag-1 embedding (Cao at lag 1); tau_step reuses tau, m and the embedding.
@@ -2373,7 +2573,7 @@ def analyze_segment(rr_intervals, config=CFG):
         surrogate = run_surrogate_analysis(rr_dynamics, tau, m, lle,
                                            lle_theiler, config=config)
 
-    return {
+    out = {
         "rr_raw": rr, "rr_corrected": rr_corrected, "rr_dynamics": rr_dynamics,
         "used_corrected_rr_for_dynamics": bool(config.use_corrected_rr_for_dynamics),
         "rr_artifact_mask": artifact_mask,
@@ -2392,6 +2592,11 @@ def analyze_segment(rr_intervals, config=CFG):
         "upo_significance_status": upo["significance_status"],
         "surrogate_analysis": surrogate,
     }
+    if config.keep_upo_on_short_lle_embedding:
+        out["lle_embedding_too_short"] = bool(lle_embedding_too_short)
+    if config.lle_chaos_test:
+        out["lle_chaos_test"] = lle_chaos_test(rr_dynamics, config=config)
+    return out
 
 
 def analyze_ecg_record(raw_ecg, fs, config=CFG):
