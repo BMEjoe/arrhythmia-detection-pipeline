@@ -41,9 +41,9 @@ a pull request. Commit and push after every step.
 ## Status
 | Step | State | Commit |
 |---|---|---|
-| Scaffold (config, systems incl. two_tone, detector, runner, methods) | done | (this commit) |
+| Scaffold (config, systems incl. two_tone, detector, runner, methods) | done | 1695cfb |
 | Dev exploration at 256 (5 run configs) | running: results/dev/explore.jsonl, log /tmp/claude-0/p4_explore.log | |
-| m-sensitivity check | pending | |
+| m-sensitivity check | done (results/tables/m_sensitivity.md) | (this commit) |
 | Candidates + budget + PREREGISTRATION.md | pending | |
 | Test run + decide | pending | |
 | Adopt winner (opt-in) | pending | |
@@ -57,3 +57,7 @@ a pull request. Commit and push after every step.
   AR1 11/100 -> 2, keeps clean chaos; Henon 30 dB stays 11/30 (power problem).
 - detector.run with a fixed m equal to Cao's m reproduces run_upo_analysis
   bitwise (checked on 3 windows).
+- m-sensitivity (Phase 3 test seeds, 256): m=2 reproduces stored C1 700/700.
+  Detections/100 m=2/3/4: WN 4/7/9, AR1 3/1/1, sinusoid 0/0/0, logistic,
+  henon, logistic@20, henon@20 all 100/100/100. Clean bias logistic
+  -0.001/-0.009/-0.034, henon -0.005/-0.005/-0.008.
