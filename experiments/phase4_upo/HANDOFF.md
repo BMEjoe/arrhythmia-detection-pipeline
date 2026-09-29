@@ -47,8 +47,8 @@ a pull request. Commit and push after every step.
 | m-sensitivity check | done (results/tables/m_sensitivity.md) | (this commit) |
 | Candidates + budget + PREREGISTRATION.md | done: pushed before any test run; 150 test seeds (2000-2149), 50 surrogates | a6fe566 |
 | Test run + decide | done: all 3 pass; WINNER c2_m2M15_mediangate (293/300 vs C3 289, C1 99; baseline 110, fails) | c897263 |
-| Adopt winner (opt-in) | done: fp.phase4_upo_config(), upo_fixed_dimension, upo_instability_gate* | (this commit) |
-| docs/PHASE4_UPO_VALIDATION.md | pending | |
+| Adopt winner (opt-in) | done: fp.phase4_upo_config(), upo_fixed_dimension, upo_instability_gate* | 02a58ed |
+| docs/PHASE4_UPO_VALIDATION.md | done | (this commit) |
 
 ## Notes
 - Timing (single process, 50 surrogates, production run): 3-5 s per 256
@@ -86,3 +86,4 @@ a pull request. Commit and push after every step.
   fp.run_upo_analysis(x, fp.phase4_upo_config()). tests/test_phase4_upo_gate.py (10).
   Ground rules: pytest 377 + 1 pre-existing failure; AVX-512 off 378/378;
   same-env 44/44; --replicate 13/44 identical. NEXT: docs/PHASE4_UPO_VALIDATION.md.
+- ALL PHASE 4 STEPS DONE. Nothing left to resume.
