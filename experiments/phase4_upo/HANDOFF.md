@@ -45,8 +45,8 @@ a pull request. Commit and push after every step.
 | Dev exploration at 256 (5 run configs) | done: results/dev/explore.jsonl; summary via explore_summary | 7b8f6e1 |
 | Dev 512 for shortlisted runs (cao:7, 2:15, 2:7; 50 surr) | done: results/dev/dev512.jsonl | (this commit) |
 | m-sensitivity check | done (results/tables/m_sensitivity.md) | (this commit) |
-| Candidates + budget + PREREGISTRATION.md | done: pushed before any test run; 150 test seeds (2000-2149), 50 surrogates | (this commit) |
-| Test run + decide | pending | |
+| Candidates + budget + PREREGISTRATION.md | done: pushed before any test run; 150 test seeds (2000-2149), 50 surrogates | a6fe566 |
+| Test run + decide | done: all 3 pass; WINNER c2_m2M15_mediangate (293/300 vs C3 289, C1 99; baseline 110, fails) | (this commit) |
 | Adopt winner (opt-in) | pending | |
 | docs/PHASE4_UPO_VALIDATION.md | pending | |
 
@@ -75,3 +75,10 @@ a pull request. Commit and push after every step.
   run was resumed (same command; runner skips finished task ids). If `uptime`
   shows a fresh boot and no `run_phase4` process exists, relaunch:
   `PYTHONDONTWRITEBYTECODE=1 nohup /root/venv313/bin/python -m experiments.phase4_upo.run_phase4 --phase test --methods all --workers 4 > /tmp/claude-0/p4_test.log 2>&1 &`
+- Test run complete: 4,200 unique windows, 0 duplicates / torn lines. Container
+  restarts killed the run twice (at 63 and 104 windows); it only survives
+  while a turn is active, so long runs must be babysat in-turn.
+  Tables: results/test/tables/test_summary.{md,csv}, test_primary.md.
+  NEXT: adopt C2 as opt-in (upo_fixed_dimension=2, so_jacobian_neighbors=15,
+  instability gate median delta 0.2), tests reproducing stored C2 results,
+  groundrule_check.sh, then docs/PHASE4_UPO_VALIDATION.md.
