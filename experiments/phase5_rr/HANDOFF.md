@@ -35,4 +35,11 @@ helpers + tests; 6 docs/PHASE5_RR_STRESS_TEST.md.
 ## Status
 | Step | State | Commit |
 |---|---|---|
-| 0 equivalence check (70 windows) | done: 0 differences (decisions and p identical) | (this commit) |
+| 0 equivalence check (70 windows) | done: 0 differences (decisions and p identical) | cdd6a57 |
+| 1 generators + realism check (no detector run) | done: config.py, systems.py, realism.py, README.md, plots/ | (this commit) |
+
+## Notes
+- Generators FROZEN at the Step 1 commit (before any detector run on Phase 5
+  signals and before PREREGISTRATION.md). NEXT: runner (run_phase5.py with the
+  Phase 3 guard), analysis.py, decide.py; dev runtime measurement; then
+  PREREGISTRATION.md (push before any test seed).
