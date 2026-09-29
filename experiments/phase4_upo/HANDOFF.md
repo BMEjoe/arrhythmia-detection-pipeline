@@ -46,8 +46,8 @@ a pull request. Commit and push after every step.
 | Dev 512 for shortlisted runs (cao:7, 2:15, 2:7; 50 surr) | done: results/dev/dev512.jsonl | (this commit) |
 | m-sensitivity check | done (results/tables/m_sensitivity.md) | (this commit) |
 | Candidates + budget + PREREGISTRATION.md | done: pushed before any test run; 150 test seeds (2000-2149), 50 surrogates | a6fe566 |
-| Test run + decide | done: all 3 pass; WINNER c2_m2M15_mediangate (293/300 vs C3 289, C1 99; baseline 110, fails) | (this commit) |
-| Adopt winner (opt-in) | pending | |
+| Test run + decide | done: all 3 pass; WINNER c2_m2M15_mediangate (293/300 vs C3 289, C1 99; baseline 110, fails) | c897263 |
+| Adopt winner (opt-in) | done: fp.phase4_upo_config(), upo_fixed_dimension, upo_instability_gate* | (this commit) |
 | docs/PHASE4_UPO_VALIDATION.md | pending | |
 
 ## Notes
@@ -82,3 +82,7 @@ a pull request. Commit and push after every step.
   NEXT: adopt C2 as opt-in (upo_fixed_dimension=2, so_jacobian_neighbors=15,
   instability gate median delta 0.2), tests reproducing stored C2 results,
   groundrule_check.sh, then docs/PHASE4_UPO_VALIDATION.md.
+- Adoption: 140/140 sampled stored C2 test results reproduced exactly by
+  fp.run_upo_analysis(x, fp.phase4_upo_config()). tests/test_phase4_upo_gate.py (10).
+  Ground rules: pytest 377 + 1 pre-existing failure; AVX-512 off 378/378;
+  same-env 44/44; --replicate 13/44 identical. NEXT: docs/PHASE4_UPO_VALIDATION.md.
