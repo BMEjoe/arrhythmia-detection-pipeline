@@ -38,7 +38,8 @@ helpers + tests; 6 docs/PHASE5_RR_STRESS_TEST.md.
 | 0 equivalence check (70 windows) | done: 0 differences (decisions and p identical) | cdd6a57 |
 | 1 generators + realism check (no detector run) | done: config.py, systems.py, realism.py, README.md, plots/ | 5a7bbfa |
 | runner / analysis / decide + dev runtime (seeds 0-9) + m-path check | done: 2.07 s wall per window (4 workers); 48/48 path check | 1affece |
-| 2 PREREGISTRATION.md (N1-N6 300 seeds 3000-3299, others 200) | done, pushed before any test window | (this commit) |
+| 2 PREREGISTRATION.md (N1-N6 300 seeds 3000-3299, others 200) | done, pushed before any test window | 03787bf |
+| 4 test run + decide | done: 5,400 windows, 11,421 s; **PASS** (AND N1-N6: 1,1,0,0,1,0 /300; limit 21) | (this commit) |
 
 ## Notes
 - Generators FROZEN at the Step 1 commit 5a7bbfa. PREREGISTRATION.md pushed:
@@ -48,3 +49,11 @@ helpers + tests; 6 docs/PHASE5_RR_STRESS_TEST.md.
   (resumable; log /tmp/claude-0/p5_m4.log), then Step 4
   `PYTHONDONTWRITEBYTECODE=1 nohup /root/venv313/bin/python -m experiments.phase5_rr.run_phase5 --phase test --workers 4 > /tmp/claude-0/p5_test.log 2>&1 &`
   (resumable; ~3.1 h), then `analysis --phase test --file test`, `decide --phase test --file test`.
+- Test result: PASS. 3 analyze_segment errors (P1 seeds 3008, 3154; P4 henon 30 dB 3014):
+  ValueError 'Insufficient embedded points' (production LLE embedding < 50
+  points; both components would have detected). LLE alone: N5 warped 53/300,
+  S2 ectopic 194-197/200; AND on S2 1/2/7 of 200. Tables:
+  results/test/tables/test_{summary,primary}.md.
+- NEXT: Step 3 running (phase4_m_check, resumable, log /tmp/claude-0/p5_m4.log);
+  Step 5 PASS branch: combined_chaos_config() / combined_chaos_detected() in
+  final_pipeline.py + tests + groundrule_check.sh; Step 6 report.
