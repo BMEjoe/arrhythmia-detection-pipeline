@@ -160,3 +160,14 @@ ground rules.
   correction: 6 × 400 + 31 × 300 = **11,700** windows, not 13,200 as written
   in Section 2. The seeds, conditions, methods, rule and budget calculation
   are unchanged. The Section 5 estimate already used these counts.
+- **2026-09-30, during the test run (after 10,972 of 11,700 windows were
+  written).** The runner stopped with a JSON serialization error. An
+  annotation-edited bigeminy window is exactly constant, so the recorded
+  diagnostic `trend_ratio` is infinite, and records are written with
+  `allow_nan=False`.
+  - Fix (`run_phase6.py`, one line): a non-finite `trend_ratio` is recorded as
+    null.
+  - No decision, method, seed, condition or rule changed. For such a window
+    every method's analysis ends in `constant_data`, which is not detected.
+  - The run was resumed with the same command; finished windows are skipped.
+  - The fix was made before any test result was tabulated or inspected.

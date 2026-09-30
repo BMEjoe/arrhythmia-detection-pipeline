@@ -62,7 +62,7 @@ def execute(args):
     t0 = time.perf_counter()
     rr = S.generate(task["condition"], task["seed"])
     ratio = fp.linear_trend_ratio(rr)
-    rec = {"task": task, "data_seed": S.data_seed(task["condition"], task["seed"]), "trend_ratio": ratio,
+    rec = {"task": task, "data_seed": S.data_seed(task["condition"], task["seed"]), "trend_ratio": ratio if np.isfinite(ratio) else None,
            "methods": {}, "runtime_s": {}, "computed_as": {}}
     cache = {}
     with warnings.catch_warnings():
