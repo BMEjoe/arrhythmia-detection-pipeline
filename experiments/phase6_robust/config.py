@@ -61,8 +61,8 @@ TREND_POSITIVES = ("P3_henon_rr_trend", "P3_logistic_rr_trend")
 PARTB_CONDITIONS = tuple(PARTB)
 
 TEST_SEED_START = 4000
-N_TEST_SEEDS = None                # fixed in PREREGISTRATION.md
-N_TEST_SEEDS_BY_GROUP = None       # fixed in PREREGISTRATION.md
+N_TEST_SEEDS = 300                 # fixed in PREREGISTRATION.md Section 5: 4000-4299
+N_TEST_SEEDS_BY_GROUP = {"null": 400}   # N1-N6: 4000-4399
 DEV_SEEDS_NULL = range(100)
 DEV_SEEDS_OTHER = range(30)
 

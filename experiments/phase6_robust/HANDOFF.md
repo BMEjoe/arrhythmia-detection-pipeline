@@ -42,12 +42,16 @@ analyze_segment on raw RR. Phase 5 generators, seed scheme, 256 intervals,
 | Part A crash-fix check | done: 3 crashed windows no longer error (all AND-detected); N1-N6 0/1800 decision differences | f574f98 |
 | Part B generators (systems.py, config.py, README.md) | written, smoke-tested | 7026a12 |
 | final_pipeline.py rr_detrend option (none/linear/moving_median/smoothness_priors) + tests/test_phase6_detrend.py | done; groundrule_check passes | f574f98 |
-| C2 dev tuning (8 configs; results/dev/tables/tuning.md); gate option rr_detrend_min_trend_sd; combined_chaos_detected fix (UPO failure status -> not detected, was ValueError; found on edited bigeminy = constant_data) | done; groundrule_check passes (393+1; 394/394; 44/44; 13/44) | (this commit) |
-| Candidates D1 linear gate 0.5, D2 linear gate 0.7, D3 smoothness priors lambda 300 gate 0.7 (methods.PREREGISTERED); runner exact-sharing shortcut verified 39/39 dev windows (results/dev/shortcut_check.json) | done | (this commit) |
-| Dev runtime (seeds 0-4, 37 conditions, 4 methods): 201 s / 185 windows | done | (this commit) |
+| C2 dev tuning (8 configs; results/dev/tables/tuning.md); gate option rr_detrend_min_trend_sd; combined_chaos_detected fix (UPO failure status -> not detected, was ValueError; found on edited bigeminy = constant_data) | done; groundrule_check passes (393+1; 394/394; 44/44; 13/44) | 7b4f1c2 |
+| Candidates D1 linear gate 0.5, D2 linear gate 0.7, D3 smoothness priors lambda 300 gate 0.7 (methods.PREREGISTERED); runner exact-sharing shortcut verified 39/39 dev windows (results/dev/shortcut_check.json) | done | 7b4f1c2 |
+| Dev runtime (seeds 0-4, 37 conditions, 4 methods): 201 s / 185 windows | done | 7b4f1c2 |
+| C3 PREREGISTRATION.md | done, pushed before any test window | (this commit) |
 | C1 diagnosis (diagnose_trend.py, dev 0-29) | done: So-mode drifts by ~1.1x the trend change; peak height 0.83 -> 0.18 (Henon); linear detrend restores Level B 30/30 | 7026a12 |
 | runner / analysis / decide / methods | written | 7026a12 |
 
 ## Notes
-- NEXT: PREREGISTRATION.md (N1-N6 400 test seeds 4000-4399, others 300
-  4000-4299; all 37 conditions; 4 methods) -> commit + push -> test run.
+- PREREGISTRATION.md pushed: do NOT edit methods.py, systems.py, config.py,
+  decide.py, analysis.py, run_phase6.py or final_pipeline.py until the test
+  evaluation is done (amendments only).
+- NEXT: test run `PYTHONDONTWRITEBYTECODE=1 nohup /root/venv313/bin/python -m experiments.phase6_robust.run_phase6 --phase test --workers 4 > /tmp/claude-0/p6_test.log 2>&1 &`
+  (resumable; ~3.6 h; 13,200 windows), then analysis/decide --phase test --file test.

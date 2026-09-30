@@ -44,7 +44,7 @@ from experiments.phase6_robust import systems as S  # noqa: E402
 HERE = pathlib.Path(__file__).resolve().parent
 RESULTS = HERE / "results"
 PREREG = HERE / "PREREGISTRATION.md"
-TEST_CONDITIONS = None     # fixed with PREREGISTRATION.md (list of condition names)
+TEST_CONDITIONS = tuple(C.CONDITIONS)     # all 37 conditions (PREREGISTRATION.md Section 2)
 
 
 def method_config(name):
