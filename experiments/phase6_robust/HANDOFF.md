@@ -39,14 +39,15 @@ analyze_segment on raw RR. Phase 5 generators, seed scheme, 256 intervals,
 ## Status
 | Step | State | Commit |
 |---|---|---|
-| Part A crash-fix check | done: 3 crashed windows no longer error (all AND-detected); N1-N6 0/1800 decision differences | (this commit) |
+| Part A crash-fix check | done: 3 crashed windows no longer error (all AND-detected); N1-N6 0/1800 decision differences | f574f98 |
 | Part B generators (systems.py, config.py, README.md) | written, smoke-tested | 7026a12 |
-| final_pipeline.py rr_detrend option (none/linear/moving_median/smoothness_priors) + tests/test_phase6_detrend.py | done; groundrule_check passes (391+1 pre-existing; 392/392 AVX-512 off; 44/44; 13/44 identical) | (this commit) |
+| final_pipeline.py rr_detrend option (none/linear/moving_median/smoothness_priors) + tests/test_phase6_detrend.py | done; groundrule_check passes | f574f98 |
+| C2 dev tuning (8 configs; results/dev/tables/tuning.md); gate option rr_detrend_min_trend_sd; combined_chaos_detected fix (UPO failure status -> not detected, was ValueError; found on edited bigeminy = constant_data) | done; groundrule_check passes (393+1; 394/394; 44/44; 13/44) | (this commit) |
+| Candidates D1 linear gate 0.5, D2 linear gate 0.7, D3 smoothness priors lambda 300 gate 0.7 (methods.PREREGISTERED); runner exact-sharing shortcut verified 39/39 dev windows (results/dev/shortcut_check.json) | done | (this commit) |
+| Dev runtime (seeds 0-4, 37 conditions, 4 methods): 201 s / 185 windows | done | (this commit) |
 | C1 diagnosis (diagnose_trend.py, dev 0-29) | done: So-mode drifts by ~1.1x the trend change; peak height 0.83 -> 0.18 (Henon); linear detrend restores Level B 30/30 | 7026a12 |
 | runner / analysis / decide / methods | written | 7026a12 |
 
 ## Notes
-- NEXT: C2 dev tuning: run_phase6 --phase dev --tag tuning with TUNING methods
-  on P3, P1, P2, P4, G1 (dev 0-29) and N1-N6, S2 (dev 0-49); choose <= 3
-  candidates -> methods.PREREGISTERED; Part B dev baseline run; runtime budget;
-  PREREGISTRATION.md.
+- NEXT: PREREGISTRATION.md (N1-N6 400 test seeds 4000-4399, others 300
+  4000-4299; all 37 conditions; 4 methods) -> commit + push -> test run.

@@ -51,3 +51,13 @@ def test_analyze_segment_uses_detrended_series():
     assert out["rr_detrend"]["method"] == "linear"
     assert np.allclose(out["rr_dynamics"], fp.detrend_rr(X + TREND, cfg))
     assert np.array_equal(out["rr_raw"], X + TREND)
+
+
+def test_min_trend_gate():
+    cfg = replace(fp.CFG, rr_detrend="linear", rr_detrend_min_trend_sd=0.5)
+    assert np.array_equal(fp.detrend_rr(X, cfg), X)                    # stationary: ratio << 0.5
+    assert fp.linear_trend_ratio(X + 3 * TREND) >= 0.5
+    y = fp.detrend_rr(X + 3 * TREND, cfg)
+    assert np.allclose(y, fp.detrend_rr(X + 3 * TREND, replace(cfg, rr_detrend_min_trend_sd=0.0)))
+    out = fp.analyze_segment(X, replace(cfg, lle_chaos_test=False))
+    assert out["rr_detrend"]["applied"] is False and np.array_equal(out["rr_dynamics"], X)

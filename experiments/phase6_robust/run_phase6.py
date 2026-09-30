@@ -34,6 +34,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+import final_pipeline as fp  # noqa: E402
 from experiments.phase3_lle import run_phase3 as R3  # noqa: E402
 from experiments.phase6_robust import config as C  # noqa: E402
 from experiments.phase6_robust import detector as D  # noqa: E402
@@ -53,15 +54,27 @@ def method_config(name):
 
 
 def execute(args):
-    task, methods = args
+    """Runs every method on one window.  Unless shortcut is False, methods with the same
+    effective configuration on this window (methods.effective_key: a gated detrend below its
+    gate is BASELINE-K exactly; two linear detrends above their gates are identical) share one
+    analyze_segment call; rec["computed_as"] records the sharing."""
+    task, methods, shortcut = args
     t0 = time.perf_counter()
     rr = S.generate(task["condition"], task["seed"])
-    rec = {"task": task, "data_seed": S.data_seed(task["condition"], task["seed"]), "methods": {}, "runtime_s": {}}
+    ratio = fp.linear_trend_ratio(rr)
+    rec = {"task": task, "data_seed": S.data_seed(task["condition"], task["seed"]), "trend_ratio": ratio,
+           "methods": {}, "runtime_s": {}, "computed_as": {}}
+    cache = {}
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         for name in methods:
+            cfg = method_config(name)
+            key = MM.effective_key(cfg, ratio) if shortcut else (name,)
             t = time.perf_counter()
-            rec["methods"][name] = D.decide(rr, method_config(name))
+            if key not in cache:
+                cache[key] = (name, D.decide(rr, cfg))
+            rec["methods"][name] = cache[key][1]
+            rec["computed_as"][name] = cache[key][0]
             rec["runtime_s"][name] = time.perf_counter() - t
     rec["runtime_s"]["total"] = time.perf_counter() - t0
     return rec
@@ -93,9 +106,10 @@ def main(argv=None):
     ap.add_argument("--conditions", default=None)
     ap.add_argument("--seeds", default=None, help="dev only: a-b (default: config dev seeds)")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--no-shortcut", action="store_true", help="dev only: run every method in full")
     a = ap.parse_args(argv)
     if a.phase == "test":
-        if a.seeds or a.methods or a.conditions:
+        if a.seeds or a.methods or a.conditions or a.no_shortcut:
             raise SystemExit("--phase test runs the preregistered methods, conditions and seeds only")
         methods = list(MM.PREREGISTERED)
         R3.PREREG = PREREG
@@ -129,7 +143,8 @@ def main(argv=None):
     print(f"{len(todo)} windows to run; methods = {methods}", flush=True)
     t0 = time.time()
     with mp.get_context("fork").Pool(a.workers) as pool, open(out_path, "a") as fh:
-        for k, rec in enumerate(pool.imap_unordered(execute, [(t, methods) for t in todo], chunksize=1), 1):
+        for k, rec in enumerate(pool.imap_unordered(execute, [(t, methods, not a.no_shortcut) for t in todo],
+                                                          chunksize=1), 1):
             fh.write(json.dumps(rec, allow_nan=False, default=str) + "\n")
             fh.flush()
             if k % 25 == 0 or k == len(todo):

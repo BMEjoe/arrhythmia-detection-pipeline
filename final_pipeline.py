@@ -193,9 +193,13 @@ class PipelineConfig:
     #                       beats (odd; edges by reflection)
     #   "smoothness_priors" Tarvainen et al. (2002) smoothness-priors detrend with
     #                       regularization parameter rr_detrend_lambda (beat index)
+    #   rr_detrend_min_trend_sd > 0 applies the chosen detrend only when the
+    #   least-squares linear trend's total change across the window is at least
+    #   this multiple of the SD of the linearly detrended residual (0 = always).
     rr_detrend: str = "none"
     rr_detrend_window: int = 51
     rr_detrend_lambda: float = 300.0
+    rr_detrend_min_trend_sd: float = 0.0
 
     # So et al. UPO method
     #
@@ -2481,12 +2485,19 @@ def combined_chaos_config(config=None):
 def combined_chaos_detected(segment_result):
     """AND decision of the Phase 5 combined detector on an analyze_segment result
     produced with combined_chaos_config(): lle_chaos_test detected AND the UPO
-    instability gate detected.  Raises ValueError if either component is missing
-    (the result was not produced with that configuration)."""
+    instability gate detected.  A UPO analysis that ended in a failure status
+    (UPO_FAILURE_STATUSES, e.g. "constant_data"; the gate fields are then absent)
+    counts as not detected (Phase 6 fix).  Raises ValueError if lle_chaos_test is
+    missing, or if the UPO analysis succeeded without the gate (the result was not
+    produced with that configuration)."""
     lc = segment_result.get("lle_chaos_test")
     upo = segment_result.get("upo") or {}
-    if lc is None or "instability_gate_detected" not in upo:
-        raise ValueError("segment_result lacks lle_chaos_test or the UPO instability gate; "
+    if lc is None:
+        raise ValueError("segment_result lacks lle_chaos_test; run analyze_segment with combined_chaos_config()")
+    if "instability_gate_detected" not in upo:
+        if upo.get("status") in UPO_FAILURE_STATUSES:
+            return False
+        raise ValueError("segment_result lacks the UPO instability gate; "
                          "run analyze_segment with combined_chaos_config()")
     return bool(lc["detected"]) and bool(upo["instability_gate_detected"])
 
@@ -2644,14 +2655,28 @@ def stationarity_diagnostics(rr, n_blocks=5):
 RR_DETREND_METHODS = ("none", "linear", "moving_median", "smoothness_priors")
 
 
+def linear_trend_ratio(x):
+    """|total change of the least-squares line across the window| / SD of the residual."""
+    x = _as_1d(x)
+    k = np.arange(len(x), dtype=float)
+    coef = np.polyfit(k, x, 1)
+    resid = x - np.polyval(coef, k)
+    sd = float(np.std(resid))
+    return float(abs(coef[0]) * (len(x) - 1) / sd) if sd > 0 else float("inf")
+
+
 def detrend_rr(x, config=CFG):
     """PROJECT option (Phase 6, Part C): remove a slow trend from an RR series and add
-    the window mean back.  config.rr_detrend selects the method (RR_DETREND_METHODS)."""
+    the window mean back.  config.rr_detrend selects the method (RR_DETREND_METHODS);
+    with rr_detrend_min_trend_sd > 0 the series is returned unchanged unless
+    linear_trend_ratio(x) >= rr_detrend_min_trend_sd."""
     x = _as_1d(x)
     method = config.rr_detrend
     if method not in RR_DETREND_METHODS:
         raise ValueError(f"rr_detrend must be one of {RR_DETREND_METHODS}, got {method!r}")
     if method == "none":
+        return x
+    if config.rr_detrend_min_trend_sd > 0 and linear_trend_ratio(x) < config.rr_detrend_min_trend_sd:
         return x
     k = np.arange(len(x), dtype=float)
     if method == "linear":
@@ -2681,6 +2706,7 @@ def analyze_segment(rr_intervals, config=CFG):
     rr_corrected, artifact_mask, _ = correct_rr_intervals(rr, config)
     rr_dynamics = rr_corrected if config.use_corrected_rr_for_dynamics else rr
     if config.rr_detrend != "none":                     # PROJECT option (Phase 6)
+        detrend_ratio = linear_trend_ratio(rr_dynamics)
         rr_dynamics = detrend_rr(rr_dynamics, config)
     raw_stationarity = stationarity_diagnostics(rr)
     corrected_stationarity = stationarity_diagnostics(rr_corrected)
@@ -2747,7 +2773,10 @@ def analyze_segment(rr_intervals, config=CFG):
         out["lle_chaos_test"] = lle_chaos_test(rr_dynamics, config=config)
     if config.rr_detrend != "none":
         out["rr_detrend"] = {"method": config.rr_detrend, "window": int(config.rr_detrend_window),
-                             "lambda": float(config.rr_detrend_lambda)}
+                             "lambda": float(config.rr_detrend_lambda),
+                             "min_trend_sd": float(config.rr_detrend_min_trend_sd),
+                             "linear_trend_ratio": detrend_ratio,
+                             "applied": bool(detrend_ratio >= config.rr_detrend_min_trend_sd)}
     return out
 
 
