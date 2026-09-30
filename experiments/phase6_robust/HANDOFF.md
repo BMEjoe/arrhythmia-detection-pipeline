@@ -63,3 +63,5 @@ analyze_segment on raw RR. Phase 5 generators, seed scheme, 256 intervals,
   -> rr_detrend='linear', rr_detrend_min_trend_sd=0.7; tested config =
   combined_chaos_config(replace(CFG, keep_upo_on_short_lle_embedding=True), detrend=True);
   tests + adoption check + groundrule_check.sh; then docs/PHASE6_ROBUSTNESS.md.
+| D docs/PHASE6_ROBUSTNESS.md | done | (this commit) |
+- ALL PHASE 6 STEPS DONE. Nothing left to resume.
