@@ -115,8 +115,8 @@ PASS_CONDITIONS = tuple(c for c, v in CONDITIONS.items() if v[0] == "null")   # 
 DEV_SEEDS_NULL = range(100)
 DEV_SEEDS_OTHER = range(30)
 TEST_SEED_START = 3000
-N_TEST_SEEDS = None          # fixed in PREREGISTRATION.md (runtime budget)
-N_TEST_SEEDS_BY_GROUP = None # optional per-group override, fixed in PREREGISTRATION.md
+N_TEST_SEEDS = 200           # fixed in PREREGISTRATION.md Section 5 (runtime budget)
+N_TEST_SEEDS_BY_GROUP = {"null": 300}   # N1-N6: 300 test seeds (3000-3299); others 200 (3000-3199)
 
 
 def group(condition):

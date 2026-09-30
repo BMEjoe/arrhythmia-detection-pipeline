@@ -36,10 +36,15 @@ helpers + tests; 6 docs/PHASE5_RR_STRESS_TEST.md.
 | Step | State | Commit |
 |---|---|---|
 | 0 equivalence check (70 windows) | done: 0 differences (decisions and p identical) | cdd6a57 |
-| 1 generators + realism check (no detector run) | done: config.py, systems.py, realism.py, README.md, plots/ | (this commit) |
+| 1 generators + realism check (no detector run) | done: config.py, systems.py, realism.py, README.md, plots/ | 5a7bbfa |
+| runner / analysis / decide + dev runtime (seeds 0-9) + m-path check | done: 2.07 s wall per window (4 workers); 48/48 path check | 1affece |
+| 2 PREREGISTRATION.md (N1-N6 300 seeds 3000-3299, others 200) | done, pushed before any test window | (this commit) |
 
 ## Notes
-- Generators FROZEN at the Step 1 commit (before any detector run on Phase 5
-  signals and before PREREGISTRATION.md). NEXT: runner (run_phase5.py with the
-  Phase 3 guard), analysis.py, decide.py; dev runtime measurement; then
-  PREREGISTRATION.md (push before any test seed).
+- Generators FROZEN at the Step 1 commit 5a7bbfa. PREREGISTRATION.md pushed:
+  do NOT edit config.py, systems.py, detector.py, analysis.py, decide.py,
+  run_phase5.py or the rule; amendments only, dated.
+- NEXT: Step 3 `python -m experiments.phase5_rr.phase4_m_check --workers 4`
+  (resumable; log /tmp/claude-0/p5_m4.log), then Step 4
+  `PYTHONDONTWRITEBYTECODE=1 nohup /root/venv313/bin/python -m experiments.phase5_rr.run_phase5 --phase test --workers 4 > /tmp/claude-0/p5_test.log 2>&1 &`
+  (resumable; ~3.1 h), then `analysis --phase test --file test`, `decide --phase test --file test`.
