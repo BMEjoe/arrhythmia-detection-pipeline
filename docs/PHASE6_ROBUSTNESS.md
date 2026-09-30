@@ -328,7 +328,7 @@ series describes the sinus-rhythm dynamics between ectopic beats, not the
 arrhythmic beat sequence itself. If the aim is to ask whether the *arrhythmic
 sequence* is chaotic, raw RR is the object. In that case:
 - AND detections must be compared against the ectopy-only false-positive rates
-  in Section 3.1, up to 3.7 % (upper 95 % bound 6.5 %) for the patterns
+  in Section 3.1, up to 3.7 % (upper 95 % bound 6.4 %) for the patterns
   tested;
 - they cannot be compared against zero.
 
