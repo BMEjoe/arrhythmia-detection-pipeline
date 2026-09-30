@@ -156,4 +156,7 @@ ground rules.
 
 ## 7. Amendments
 
-(none)
+- **2026-09-30, before any test window was generated.** Arithmetic
+  correction: 6 × 400 + 31 × 300 = **11,700** windows, not 13,200 as written
+  in Section 2. The seeds, conditions, methods, rule and budget calculation
+  are unchanged. The Section 5 estimate already used these counts.
