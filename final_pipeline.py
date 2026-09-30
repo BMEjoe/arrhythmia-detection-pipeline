@@ -183,6 +183,19 @@ class PipelineConfig:
     upo_instability_gate: bool = False
     upo_instability_gate_delta: float = 0.2
     upo_instability_gate_aggregate: str = "median"   # "median" or "trim10" (10 % trimmed mean)
+    # PROJECT option (Phase 6, Part C; experiments/phase6_robust), default "none" =
+    # previous behaviour.  Detrends the RR series used for the dynamics
+    # (rr_dynamics) inside analyze_segment BEFORE the LLE, the UPO analysis and
+    # lle_chaos_test, so every surrogate is generated from the detrended series.
+    # The window mean is added back (the series stays in seconds).
+    #   "linear"            subtract the least-squares straight line (beat index)
+    #   "moving_median"     subtract a centred running median of rr_detrend_window
+    #                       beats (odd; edges by reflection)
+    #   "smoothness_priors" Tarvainen et al. (2002) smoothness-priors detrend with
+    #                       regularization parameter rr_detrend_lambda (beat index)
+    rr_detrend: str = "none"
+    rr_detrend_window: int = 51
+    rr_detrend_lambda: float = 300.0
 
     # So et al. UPO method
     #
@@ -2628,6 +2641,38 @@ def stationarity_diagnostics(rr, n_blocks=5):
             "stationarity_warning": bool(mean_cv > 0.05 or std_cv > 0.20)}
 
 
+RR_DETREND_METHODS = ("none", "linear", "moving_median", "smoothness_priors")
+
+
+def detrend_rr(x, config=CFG):
+    """PROJECT option (Phase 6, Part C): remove a slow trend from an RR series and add
+    the window mean back.  config.rr_detrend selects the method (RR_DETREND_METHODS)."""
+    x = _as_1d(x)
+    method = config.rr_detrend
+    if method not in RR_DETREND_METHODS:
+        raise ValueError(f"rr_detrend must be one of {RR_DETREND_METHODS}, got {method!r}")
+    if method == "none":
+        return x
+    k = np.arange(len(x), dtype=float)
+    if method == "linear":
+        trend = np.polyval(np.polyfit(k, x, 1), k)
+    elif method == "moving_median":
+        w = int(config.rr_detrend_window)
+        if w < 3 or w % 2 == 0:
+            raise ValueError("rr_detrend_window must be an odd integer >= 3")
+        from scipy.ndimage import median_filter
+        trend = median_filter(x, size=w, mode="reflect")
+    else:
+        from scipy import sparse
+        from scipy.sparse.linalg import spsolve
+        n = len(x)
+        lam = float(config.rr_detrend_lambda)
+        d2 = sparse.diags([np.ones(n - 2), -2 * np.ones(n - 2), np.ones(n - 2)], [0, 1, 2], shape=(n - 2, n))
+        a = (sparse.identity(n) + lam * lam * (d2.T @ d2)).tocsc()
+        trend = spsolve(a, x)
+    return x - trend + float(np.mean(trend))
+
+
 def analyze_segment(rr_intervals, config=CFG):
     rr = _as_1d(rr_intervals)
     if len(rr) < 100:
@@ -2635,6 +2680,8 @@ def analyze_segment(rr_intervals, config=CFG):
 
     rr_corrected, artifact_mask, _ = correct_rr_intervals(rr, config)
     rr_dynamics = rr_corrected if config.use_corrected_rr_for_dynamics else rr
+    if config.rr_detrend != "none":                     # PROJECT option (Phase 6)
+        rr_dynamics = detrend_rr(rr_dynamics, config)
     raw_stationarity = stationarity_diagnostics(rr)
     corrected_stationarity = stationarity_diagnostics(rr_corrected)
     stationarity = {
@@ -2698,6 +2745,9 @@ def analyze_segment(rr_intervals, config=CFG):
         out["lle_embedding_too_short"] = bool(lle_embedding_too_short)
     if config.lle_chaos_test:
         out["lle_chaos_test"] = lle_chaos_test(rr_dynamics, config=config)
+    if config.rr_detrend != "none":
+        out["rr_detrend"] = {"method": config.rr_detrend, "window": int(config.rr_detrend_window),
+                             "lambda": float(config.rr_detrend_lambda)}
     return out
 
 
