@@ -55,3 +55,5 @@ analyze_segment on raw RR. Phase 5 generators, seed scheme, 256 intervals,
   evaluation is done (amendments only).
 - NEXT: test run `PYTHONDONTWRITEBYTECODE=1 nohup /root/venv313/bin/python -m experiments.phase6_robust.run_phase6 --phase test --workers 4 > /tmp/claude-0/p6_test.log 2>&1 &`
   (resumable; ~3.6 h; 13,200 windows), then analysis/decide --phase test --file test.
+- Test run started after 97a302b. Container restart at 5,990/11,700 windows
+  (all lines intact); resumed with the same command (log /tmp/claude-0/p6_test2.log).
