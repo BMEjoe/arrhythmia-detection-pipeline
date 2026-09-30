@@ -168,6 +168,21 @@ class PipelineConfig:
     lle_chaos_test_surrogates: int = 99
     lle_chaos_test_alpha: float = 0.05
     lle_chaos_test_seed_entropy: int = 20260927
+    # PROJECT options (Phase 4 winner C2, experiments/phase4_upo/PREREGISTRATION.md);
+    # all default off = previous behaviour.  phase4_upo_config() sets the
+    # preregistered combination (fixed m = 2, so_jacobian_neighbors = 15,
+    # significance on, median instability gate at delta 0.2).
+    #   upo_fixed_dimension: lag-1 embedding dimension for the one_sample UPO map
+    #       instead of Cao at lag 1 (None = Cao, production).
+    #   upo_instability_gate: adds "instability_gated_uop_candidates" (Level-B
+    #       period-1 peaks whose hybrid PRL/PRE source-stability leading modulus,
+    #       from a ROBUST aggregate of the member Jacobians, is >= 1 + delta) and
+    #       "instability_gate_detected" to run_upo_analysis output.  Level A/B/C
+    #       and every existing field are unchanged.
+    upo_fixed_dimension: Optional[int] = None
+    upo_instability_gate: bool = False
+    upo_instability_gate_delta: float = 0.2
+    upo_instability_gate_aggregate: str = "median"   # "median" or "trim10" (10 % trimmed mean)
 
     # So et al. UPO method
     #
@@ -2380,6 +2395,89 @@ def _attach_cao_diagnostics(out, cao_diag):
     return out
 
 
+def robust_source_stability(jacobians, member_indices, aggregate="median"):
+    """
+    PROJECT (Phase 4): hybrid PRL/PRE period-1 stability with a ROBUST aggregate
+    of the member Jacobians instead of source_period1_stability's arithmetic
+    mean, which a single ill-conditioned member can dominate (Phase 2E report
+    5.3).  aggregate: "median" (element-wise) or "trim10" (10 % trimmed mean per
+    element).  Returns None when no member has a Jacobian.
+    """
+    Js = [jacobians[i] for i in np.unique(np.asarray(member_indices, dtype=int)) if jacobians[i] is not None]
+    if not Js:
+        return None
+    A = np.asarray(Js, dtype=float)
+    if aggregate == "median":
+        S = np.median(A, axis=0)
+    elif aggregate == "trim10":
+        from scipy.stats import trim_mean
+        S = trim_mean(A, 0.1, axis=0)
+    else:
+        raise ValueError(f"unknown aggregate {aggregate!r}")
+    lead = float(np.max(np.abs(np.linalg.eigvals(S)))) if np.all(np.isfinite(S)) else np.nan
+    return {"provenance": "PROJECT (Phase 4): robust hybrid PRL/PRE stability", "aggregate": aggregate,
+            "mean_S": S, "leading_modulus": lead, "n_points_averaged": int(len(Js))}
+
+
+def _attach_instability_gate(out, p1, config):
+    """Opt-in P1-a instability gate on Level-B period-1 peaks (Phase 4 C2/C3)."""
+    out["instability_gate"] = {"aggregate": config.upo_instability_gate_aggregate,
+                               "delta": float(config.upo_instability_gate_delta),
+                               "provenance": "PROJECT (Phase 4 P1-a gate)"}
+    level_b = out.get(LEVEL_B_FIELD)
+    if level_b is None or p1 is None or p1.get("jacobians") is None:
+        out["instability_gated_uop_candidates"] = None
+        out["instability_gate_detected"] = False
+        return out
+    gated = []
+    for peak in level_b:
+        if peak.get("period", 1) != 1:
+            continue
+        st = robust_source_stability(p1["jacobians"], peak["source_member_indices"],
+                                     config.upo_instability_gate_aggregate)
+        lead = None if st is None else st["leading_modulus"]
+        if lead is not None and np.isfinite(lead) and lead >= 1.0 + config.upo_instability_gate_delta:
+            entry = dict(peak)
+            entry["robust_source_stability"] = st
+            gated.append(entry)
+    out["instability_gated_uop_candidates"] = gated
+    out["instability_gate_detected"] = bool(gated)
+    return out
+
+
+def phase4_upo_config(config=None):
+    """The preregistered Phase 4 winner C2 (experiments/phase4_upo/PREREGISTRATION.md):
+    fixed lag-1 dimension 2, 15 Jacobian neighbours, surrogate significance on,
+    median instability gate at delta 0.2.  Detection = result["instability_gate_detected"]."""
+    base = CFG if config is None else config
+    return replace(base, upo_fixed_dimension=2, so_jacobian_neighbors=15, so_assess_significance=True,
+                   upo_instability_gate=True, upo_instability_gate_delta=0.2,
+                   upo_instability_gate_aggregate="median")
+
+
+def combined_chaos_config(config=None):
+    """The combined chaos detector evaluated in Phase 5 (experiments/phase5_rr/PREREGISTRATION.md,
+    docs/PHASE5_RR_STRESS_TEST.md): the Phase 4 UPO winner C2 plus the Phase 3
+    lle_chaos_test, i.e. phase4_upo_config(replace(config, lle_chaos_test=True)).
+    Use with analyze_segment on raw RR (use_corrected_rr_for_dynamics False, as tested);
+    the decision is combined_chaos_detected(result)."""
+    base = CFG if config is None else config
+    return phase4_upo_config(replace(base, lle_chaos_test=True))
+
+
+def combined_chaos_detected(segment_result):
+    """AND decision of the Phase 5 combined detector on an analyze_segment result
+    produced with combined_chaos_config(): lle_chaos_test detected AND the UPO
+    instability gate detected.  Raises ValueError if either component is missing
+    (the result was not produced with that configuration)."""
+    lc = segment_result.get("lle_chaos_test")
+    upo = segment_result.get("upo") or {}
+    if lc is None or "instability_gate_detected" not in upo:
+        raise ValueError("segment_result lacks lle_chaos_test or the UPO instability gate; "
+                         "run analyze_segment with combined_chaos_config()")
+    return bool(lc["detected"]) and bool(upo["instability_gate_detected"])
+
+
 def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
     """
     UPO analysis of a scalar series.
@@ -2404,8 +2502,10 @@ def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
         if config.upo_report_cao_diagnostics:
             m_u, _, _, cao_diag = cao_method(xs, 1, config.cao_max_dim, config.cao_tol,
                                              config.cao_theiler, return_diagnostics=True)
-        else:
+        elif config.upo_fixed_dimension is None:
             m_u, _, _ = cao_method(xs, 1, config.cao_max_dim, config.cao_tol, config.cao_theiler)
+        if config.upo_fixed_dimension is not None:          # PROJECT option (Phase 4)
+            m_u = int(config.upo_fixed_dimension)
     else:
         if lle_tau is None:
             mi = time_delayed_mutual_information(xs, config.tdmi_max_tau, config.tdmi_bins)
@@ -2464,6 +2564,8 @@ def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
         out[LEVEL_B_FIELD] = [c for r in periods.values() for c in r[LEVEL_B_FIELD]]
         p1 = periods.get(1)
         out["source_rJ"] = p1["significance"]["rJ"] if p1 is not None else np.nan
+    if config.upo_instability_gate:
+        _attach_instability_gate(out, periods.get(1), config)
     out["verification_assessed"] = bool(periods) and all(r["verification_assessed"] for r in periods.values())
     if out["verification_assessed"]:
         out[LEVEL_C_PASS_FIELD] = [c for r in periods.values() for c in r[LEVEL_C_PASS_FIELD]]

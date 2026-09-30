@@ -1,0 +1,2 @@
+method,window,condition,N,det_k,det,levelC_k,and_k,or_k,lle_k,loc_median,loc_n,status,runtime_median
+baseline,256,white_noise,36,3,"3/36 = 0.083 [0.029, 0.218]",0,0,3,0,,0,ok: 32; embedding_not_saturated: 4,5.66581065449995
