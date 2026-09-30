@@ -1,0 +1,894 @@
+{
+ "n": 111,
+ "n_differences": 0,
+ "rows": [
+  {
+   "condition": "N1_linear_rr",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N1_linear_rr",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N1_linear_rr",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N2_power_law",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N2_power_law",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N2_power_law",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N3_linear_rr_trend",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N3_linear_rr_trend",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N3_linear_rr_trend",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N4_linear_rr_step",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N4_linear_rr_step",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N4_linear_rr_step",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N5_linear_rr_warped",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N5_linear_rr_warped",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N5_linear_rr_warped",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N6_noisy_rsa",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N6_noisy_rsa",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "N6_noisy_rsa",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S1_setar",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S1_setar",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S1_setar",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_2pct",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_2pct",
+   "seed": 4001,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_2pct",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_5pct",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_5pct",
+   "seed": 4001,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_5pct",
+   "seed": 4002,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_10pct",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_10pct",
+   "seed": 4001,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_10pct",
+   "seed": 4002,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S3_linear_rr_unq",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S3_linear_rr_unq",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S3_linear_rr_unq",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S3_linear_rr_trend_unq",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S3_linear_rr_trend_unq",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S3_linear_rr_trend_unq",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S3_linear_rr_step_unq",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S3_linear_rr_step_unq",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S3_linear_rr_step_unq",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "P1_henon_rr",
+   "seed": 4000,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P1_henon_rr",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P1_henon_rr",
+   "seed": 4002,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P2_logistic_rr",
+   "seed": 4000,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P2_logistic_rr",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P2_logistic_rr",
+   "seed": 4002,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P3_henon_rr_trend",
+   "seed": 4000,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P3_henon_rr_trend",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P3_henon_rr_trend",
+   "seed": 4002,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P3_logistic_rr_trend",
+   "seed": 4000,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P3_logistic_rr_trend",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P3_logistic_rr_trend",
+   "seed": 4002,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "P4_henon_rr_30dB",
+   "seed": 4000,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_henon_rr_30dB",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_henon_rr_30dB",
+   "seed": 4002,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_henon_rr_20dB",
+   "seed": 4000,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_henon_rr_20dB",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_henon_rr_20dB",
+   "seed": 4002,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_logistic_rr_30dB",
+   "seed": 4000,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_logistic_rr_30dB",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_logistic_rr_30dB",
+   "seed": 4002,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_logistic_rr_20dB",
+   "seed": 4000,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_logistic_rr_20dB",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "P4_logistic_rr_20dB",
+   "seed": 4002,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "G1_lorenz_maxima",
+   "seed": 4000,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "G1_lorenz_maxima",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "G1_lorenz_maxima",
+   "seed": 4002,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "G2_rossler_flow",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "G2_rossler_flow",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "G2_rossler_flow",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "G3_mackey_glass",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "G3_mackey_glass",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "G3_mackey_glass",
+   "seed": 4002,
+   "lle": false,
+   "upo": true,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E1_bigeminy",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E1_bigeminy",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E1_bigeminy",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E2_trigeminy",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E2_trigeminy",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E2_trigeminy",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E3_couplets_5pct",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E3_couplets_5pct",
+   "seed": 4001,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E3_couplets_5pct",
+   "seed": 4002,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E3_couplets_10pct",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E3_couplets_10pct",
+   "seed": 4001,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E3_couplets_10pct",
+   "seed": 4002,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E4_runs",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E4_runs",
+   "seed": 4001,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E4_runs",
+   "seed": 4002,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E5_atrial_5pct",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E5_atrial_5pct",
+   "seed": 4001,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E5_atrial_5pct",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E5_atrial_10pct",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E5_atrial_10pct",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E5_atrial_10pct",
+   "seed": 4002,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E6_ectopic10_trend",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E6_ectopic10_trend",
+   "seed": 4001,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E6_ectopic10_trend",
+   "seed": 4002,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_5pct_edited",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_5pct_edited",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_5pct_edited",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_10pct_edited",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_10pct_edited",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "S2_ectopic_10pct_edited",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E1_bigeminy_edited",
+   "seed": 4000,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E1_bigeminy_edited",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E1_bigeminy_edited",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E2_trigeminy_edited",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E2_trigeminy_edited",
+   "seed": 4001,
+   "lle": true,
+   "upo": true,
+   "and": true,
+   "same": true
+  },
+  {
+   "condition": "E2_trigeminy_edited",
+   "seed": 4002,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E3_couplets_10pct_edited",
+   "seed": 4000,
+   "lle": true,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E3_couplets_10pct_edited",
+   "seed": 4001,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  },
+  {
+   "condition": "E3_couplets_10pct_edited",
+   "seed": 4002,
+   "lle": false,
+   "upo": false,
+   "and": false,
+   "same": true
+  }
+ ]
+}

@@ -2472,14 +2472,24 @@ def phase4_upo_config(config=None):
                    upo_instability_gate_aggregate="median")
 
 
-def combined_chaos_config(config=None):
+PHASE6_DETREND = {"rr_detrend": "linear", "rr_detrend_min_trend_sd": 0.7}
+
+
+def combined_chaos_config(config=None, detrend=False):
     """The combined chaos detector evaluated in Phase 5 (experiments/phase5_rr/PREREGISTRATION.md,
     docs/PHASE5_RR_STRESS_TEST.md): the Phase 4 UPO winner C2 plus the Phase 3
     lle_chaos_test, i.e. phase4_upo_config(replace(config, lle_chaos_test=True)).
     Use with analyze_segment on raw RR (use_corrected_rr_for_dynamics False, as tested);
-    the decision is combined_chaos_detected(result)."""
+    the decision is combined_chaos_detected(result).
+
+    detrend=True (opt-in; default False = unchanged) adds the Phase 6 winner D2
+    (experiments/phase6_robust/PREREGISTRATION.md, docs/PHASE6_ROBUSTNESS.md): linear
+    detrend of the RR series applied only when the fitted trend change is at least
+    0.7 residual SD (PHASE6_DETREND).  The Phase 6 tested configuration is
+    combined_chaos_config(replace(CFG, keep_upo_on_short_lle_embedding=True), detrend=True)."""
     base = CFG if config is None else config
-    return phase4_upo_config(replace(base, lle_chaos_test=True))
+    cfg = phase4_upo_config(replace(base, lle_chaos_test=True))
+    return replace(cfg, **PHASE6_DETREND) if detrend else cfg
 
 
 def combined_chaos_detected(segment_result):

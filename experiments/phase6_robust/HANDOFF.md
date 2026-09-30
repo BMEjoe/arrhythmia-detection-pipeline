@@ -46,7 +46,8 @@ analyze_segment on raw RR. Phase 5 generators, seed scheme, 256 intervals,
 | Candidates D1 linear gate 0.5, D2 linear gate 0.7, D3 smoothness priors lambda 300 gate 0.7 (methods.PREREGISTERED); runner exact-sharing shortcut verified 39/39 dev windows (results/dev/shortcut_check.json) | done | 7b4f1c2 |
 | Dev runtime (seeds 0-4, 37 conditions, 4 methods): 201 s / 185 windows | done | 7b4f1c2 |
 | C3 PREREGISTRATION.md (+ amendment: window count 11,700) | done, pushed before any test window | 3325e16, 97a302b |
-| C4 test run + decide | done: 11,700 windows (resumed after a container restart at 5,990 and after a JSON inf crash at 10,972, amendment 2); WINNER d2_linear_g07 (P3 571/600; D1 fails G1 279 vs 294; D3 passes 539) | (this commit) |
+| C4 test run + decide | done: 11,700 windows (resumed after a container restart at 5,990 and after a JSON inf crash at 10,972, amendment 2); WINNER d2_linear_g07 (P3 571/600; D1 fails G1 279 vs 294; D3 passes 539) | 37b1391 |
+| C5 adopt D2: combined_chaos_config(config=None, detrend=False), PHASE6_DETREND; tests/test_phase6_combined_detrend.py; adoption_check 111/111; groundrule_check passes (400+1; 401/401; 44/44; 13/44) | done | (this commit) |
 | C1 diagnosis (diagnose_trend.py, dev 0-29) | done: So-mode drifts by ~1.1x the trend change; peak height 0.83 -> 0.18 (Henon); linear detrend restores Level B 30/30 | 7026a12 |
 | runner / analysis / decide / methods | written | 7026a12 |
 
