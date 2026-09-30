@@ -2455,6 +2455,29 @@ def phase4_upo_config(config=None):
                    upo_instability_gate_aggregate="median")
 
 
+def combined_chaos_config(config=None):
+    """The combined chaos detector evaluated in Phase 5 (experiments/phase5_rr/PREREGISTRATION.md,
+    docs/PHASE5_RR_STRESS_TEST.md): the Phase 4 UPO winner C2 plus the Phase 3
+    lle_chaos_test, i.e. phase4_upo_config(replace(config, lle_chaos_test=True)).
+    Use with analyze_segment on raw RR (use_corrected_rr_for_dynamics False, as tested);
+    the decision is combined_chaos_detected(result)."""
+    base = CFG if config is None else config
+    return phase4_upo_config(replace(base, lle_chaos_test=True))
+
+
+def combined_chaos_detected(segment_result):
+    """AND decision of the Phase 5 combined detector on an analyze_segment result
+    produced with combined_chaos_config(): lle_chaos_test detected AND the UPO
+    instability gate detected.  Raises ValueError if either component is missing
+    (the result was not produced with that configuration)."""
+    lc = segment_result.get("lle_chaos_test")
+    upo = segment_result.get("upo") or {}
+    if lc is None or "instability_gate_detected" not in upo:
+        raise ValueError("segment_result lacks lle_chaos_test or the UPO instability gate; "
+                         "run analyze_segment with combined_chaos_config()")
+    return bool(lc["detected"]) and bool(upo["instability_gate_detected"])
+
+
 def run_upo_analysis(x, config=CFG, lle_tau=None, lle_m=None, rng=None):
     """
     UPO analysis of a scalar series.

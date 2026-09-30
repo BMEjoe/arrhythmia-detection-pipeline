@@ -39,7 +39,10 @@ helpers + tests; 6 docs/PHASE5_RR_STRESS_TEST.md.
 | 1 generators + realism check (no detector run) | done: config.py, systems.py, realism.py, README.md, plots/ | 5a7bbfa |
 | runner / analysis / decide + dev runtime (seeds 0-9) + m-path check | done: 2.07 s wall per window (4 workers); 48/48 path check | 1affece |
 | 2 PREREGISTRATION.md (N1-N6 300 seeds 3000-3299, others 200) | done, pushed before any test window | 03787bf |
-| 4 test run + decide | done: 5,400 windows, 11,421 s; **PASS** (AND N1-N6: 1,1,0,0,1,0 /300; limit 21) | (this commit) |
+| 4 test run + decide | done: 5,400 windows, 11,421 s; **PASS** (AND N1-N6: 1,1,0,0,1,0 /300; limit 21) | 579c30d |
+| 3 Phase 4 m-check | done: results/phase4_m_check.md | 9c26ac2 |
+| 5 PASS branch: combined_chaos_config() / combined_chaos_detected() + tests | done: groundrule_check.sh passes; adoption_check 120/120 | (this commit) |
+| 6 docs/PHASE5_RR_STRESS_TEST.md | done | (this commit) |
 
 ## Notes
 - Generators FROZEN at the Step 1 commit 5a7bbfa. PREREGISTRATION.md pushed:
@@ -57,3 +60,4 @@ helpers + tests; 6 docs/PHASE5_RR_STRESS_TEST.md.
 - NEXT: Step 3 running (phase4_m_check, resumable, log /tmp/claude-0/p5_m4.log);
   Step 5 PASS branch: combined_chaos_config() / combined_chaos_detected() in
   final_pipeline.py + tests + groundrule_check.sh; Step 6 report.
+- ALL PHASE 5 STEPS DONE. Nothing left to resume.
