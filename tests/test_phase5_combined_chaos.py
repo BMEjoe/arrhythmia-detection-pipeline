@@ -43,6 +43,19 @@ def test_missing_components_raise():
         fp.combined_chaos_detected(fp.analyze_segment(rr, fp.CFG))
     with pytest.raises(ValueError):
         fp.combined_chaos_detected({"lle_chaos_test": {"detected": True}, "upo": {}})
+    with pytest.raises(ValueError):
+        fp.combined_chaos_detected({"lle_chaos_test": {"detected": True}, "upo": {"status": "ok"}})
+
+
+def test_upo_failure_status_counts_as_not_detected():
+    """Phase 6 fix: a constant window ends the UPO analysis with 'constant_data' (no gate fields)."""
+    import numpy as np
+    out = fp.analyze_segment(np.full(256, 0.8), fp.combined_chaos_config())
+    assert out["upo"]["status"] in fp.UPO_FAILURE_STATUSES
+    assert "instability_gate_detected" not in out["upo"]
+    assert fp.combined_chaos_detected(out) is False
+    assert fp.combined_chaos_detected({"lle_chaos_test": {"detected": True},
+                                       "upo": {"status": "no_valid_transforms"}}) is False
 
 
 @pytest.mark.parametrize("condition,seed", [("N1_linear_rr", 3000), ("S2_ectopic_10pct", 3000),

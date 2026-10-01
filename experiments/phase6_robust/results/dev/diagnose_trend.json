@@ -1,0 +1,2342 @@
+[
+ {
+  "system": "henon",
+  "seed": 0,
+  "trend_fraction": -0.06944523472392568,
+  "trend_change_thirds_s": -0.03749994068411259,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7800399201596806,
+   "modes_thirds": [
+    0.8336115830771282,
+    0.8336115830771282,
+    0.8360012615489323
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1909792767167818,
+   "modes_thirds": [
+    0.8612912289626962,
+    0.8269255544968075,
+    0.8019323367034339
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.4532,
+   "modes_thirds": [
+    0.8323280994209169,
+    0.8350067409213249,
+    0.8350067409213249
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 1,
+  "trend_fraction": 0.08385911960696588,
+  "trend_change_thirds_s": 0.05091702522444763,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8262948207171315,
+   "modes_thirds": [
+    0.9321440505437815,
+    0.9321440505437815,
+    0.9321440505437815
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1468155500413565,
+   "modes_thirds": [
+    0.8989345655016414,
+    0.918402769762908,
+    0.963828579705863
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5179425837320574,
+   "modes_thirds": [
+    0.9312254339034636,
+    0.9312254339034636,
+    0.9312254339034636
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 2,
+  "trend_fraction": 0.08875017151805276,
+  "trend_change_thirds_s": 0.045565610707719896,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.9126136812969553,
+   "modes_thirds": [
+    0.7967316508287177,
+    0.7967316508287177,
+    0.7967316508287177
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1920260374288039,
+   "modes_thirds": [
+    0.7686180457643658,
+    0.7865413507259433,
+    0.8116339776721517
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6644188813962714,
+   "modes_thirds": [
+    0.7966395000125317,
+    0.7966395000125317,
+    0.7966395000125317
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 3,
+  "trend_fraction": 0.09549383932558156,
+  "trend_change_thirds_s": 0.04225590655149744,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8844320889594917,
+   "modes_thirds": [
+    0.682298407953295,
+    0.682298407953295,
+    0.682298407953295
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.2641509433962264,
+   "modes_thirds": [
+    0.6648098821387453,
+    0.6598617977112596,
+    0.7142907264136019
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6295409181636726,
+   "modes_thirds": [
+    0.6809842473445844,
+    0.6832607801416475,
+    0.6809842473445844
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 4,
+  "trend_fraction": -0.08066916748298546,
+  "trend_change_thirds_s": -0.04457846866983757,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7285085965613755,
+   "modes_thirds": [
+    0.8518627084669106,
+    0.8518627084669106,
+    0.8518627084669106
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.19299708211754898,
+   "modes_thirds": [
+    0.8367996896709406,
+    0.8593230670283374,
+    0.8367996896709406
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6547714514835605,
+   "modes_thirds": [
+    0.8537490665065163,
+    0.8512399609519276,
+    0.8512399609519276
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 5,
+  "trend_fraction": 0.08401140937149357,
+  "trend_change_thirds_s": 0.0430108993994138,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8463987266215679,
+   "modes_thirds": [
+    0.7974000972858324,
+    0.7951073875483115,
+    0.7951073875483115
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.17291936179387668,
+   "modes_thirds": [
+    0.7745499389229262,
+    0.7785852987229367,
+    0.8068328173230103
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8491620111731844,
+   "modes_thirds": [
+    0.796323634229819,
+    0.796323634229819,
+    0.79379891931485
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 6,
+  "trend_fraction": -0.0921033201076598,
+  "trend_change_thirds_s": -0.055402416352632246,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.9227110582639715,
+   "modes_thirds": [
+    0.9234351862151003,
+    0.9234351862151003,
+    0.9234351862151003
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.19114688128772636,
+   "modes_thirds": [
+    0.95070285666027,
+    0.9081294769377841,
+    0.8769089984746279
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6559778305621536,
+   "modes_thirds": [
+    0.9230164887357208,
+    0.9230164887357208,
+    0.9230164887357208
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 7,
+  "trend_fraction": -0.06961583205812784,
+  "trend_change_thirds_s": -0.04300534229586628,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8574273197929112,
+   "modes_thirds": [
+    0.9559817403525194,
+    0.9559817403525194,
+    0.9559817403525194
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1380718954248366,
+   "modes_thirds": [
+    0.9617881254968674,
+    0.9728554631770971,
+    0.9322752250162547
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5505212510024058,
+   "modes_thirds": [
+    0.953179603117664,
+    0.953179603117664,
+    0.9502859552200718
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 8,
+  "trend_fraction": -0.08354727058337456,
+  "trend_change_thirds_s": -0.04216778086135331,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8297448165869219,
+   "modes_thirds": [
+    0.7843246657391254,
+    0.7818806896500436,
+    0.7818806896500436
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.11774325429272281,
+   "modes_thirds": [
+    0.8124605317062716,
+    0.7591068566421186,
+    0.7524376472590997
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5676646706586826,
+   "modes_thirds": [
+    0.7806766301724197,
+    0.7831342257210459,
+    0.7806766301724197
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 9,
+  "trend_fraction": 0.09860958856235488,
+  "trend_change_thirds_s": 0.05173507630930259,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7724333063864187,
+   "modes_thirds": [
+    0.81788788241214,
+    0.8151859279751978,
+    0.81788788241214
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.13313733725325494,
+   "modes_thirds": [
+    0.7929614032793261,
+    0.8113288713073115,
+    0.8517373009688791
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7915492957746478,
+   "modes_thirds": [
+    0.8133943456566136,
+    0.815986416453521,
+    0.815986416453521
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 10,
+  "trend_fraction": -0.08267877142950067,
+  "trend_change_thirds_s": -0.04506188402920046,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8226385013949781,
+   "modes_thirds": [
+    0.8465374902749494,
+    0.8465374902749494,
+    0.8465374902749494
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1679671457905544,
+   "modes_thirds": [
+    0.8707236763022435,
+    0.8539676000073901,
+    0.8204554474176834
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.4729458917835671,
+   "modes_thirds": [
+    0.8414432427536273,
+    0.8443281843180875,
+    0.8472131258825477
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 11,
+  "trend_fraction": 0.08308947491249107,
+  "trend_change_thirds_s": 0.04740220000892538,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8194499800717417,
+   "modes_thirds": [
+    0.8773934363821991,
+    0.8773934363821991,
+    0.8773934363821991
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.15096668037844507,
+   "modes_thirds": [
+    0.8502922123021774,
+    0.8949267072244411,
+    0.8949267072244411
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5876984126984127,
+   "modes_thirds": [
+    0.8773754196146064,
+    0.8773754196146064,
+    0.8773754196146064
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 12,
+  "trend_fraction": 0.06708135076851315,
+  "trend_change_thirds_s": 0.03400479134033727,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8298887122416534,
+   "modes_thirds": [
+    0.7795005638324798,
+    0.7795005638324798,
+    0.7795005638324798
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.23731587561374795,
+   "modes_thirds": [
+    0.757163904121266,
+    0.7546359225558744,
+    0.8051955538637068
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6245530393325387,
+   "modes_thirds": [
+    0.7779086444427584,
+    0.7799335859092427,
+    0.7779086444427584
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 13,
+  "trend_fraction": 0.08329921887505587,
+  "trend_change_thirds_s": 0.04824376678437542,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8406026962727994,
+   "modes_thirds": [
+    0.8974481629629825,
+    0.8974481629629825,
+    0.8974481629629825
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.17336683417085427,
+   "modes_thirds": [
+    0.8599503752102788,
+    0.9094131422072482,
+    0.9382664229554805
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8755502200880352,
+   "modes_thirds": [
+    0.8967039158813896,
+    0.8967039158813896,
+    0.8987679707794203
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 14,
+  "trend_fraction": 0.05750211319786919,
+  "trend_change_thirds_s": 0.028652303189278125,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8980485862206292,
+   "modes_thirds": [
+    0.7679687625629361,
+    0.7679687625629361,
+    0.7679687625629361
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.34313330648409185,
+   "modes_thirds": [
+    0.7626115588639928,
+    0.7730316838608057,
+    0.7730316838608057
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7651033386327504,
+   "modes_thirds": [
+    0.768660502771608,
+    0.768660502771608,
+    0.768660502771608
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 15,
+  "trend_fraction": 0.05718192375573974,
+  "trend_change_thirds_s": 0.027935480116998486,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7681508223024468,
+   "modes_thirds": [
+    0.764561483304276,
+    0.7676128869504808,
+    0.7676128869504808
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1678616617460987,
+   "modes_thirds": [
+    0.7569840796951203,
+    0.7610874879071134,
+    0.7446738550591405
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5348088531187123,
+   "modes_thirds": [
+    0.7617671829440116,
+    0.7651620715965624,
+    0.7685569602491134
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 16,
+  "trend_fraction": 0.06784532735506305,
+  "trend_change_thirds_s": 0.032802634366888815,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7853130016051364,
+   "modes_thirds": [
+    0.7453210131877404,
+    0.7453210131877404,
+    0.7453210131877404
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.10451505016722408,
+   "modes_thirds": [
+    0.7245438719655407,
+    0.7398410755619687,
+    0.7704354827548247
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.46637132501006845,
+   "modes_thirds": [
+    0.745789728311547,
+    0.747835590778889,
+    0.7437438658442052
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 17,
+  "trend_fraction": -0.09747963257877784,
+  "trend_change_thirds_s": -0.04386740578858607,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.928373565492679,
+   "modes_thirds": [
+    0.6948451127062711,
+    0.6948451127062711,
+    0.6948451127062711
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.36323411102172165,
+   "modes_thirds": [
+    0.7225901385471943,
+    0.6883054282957398,
+    0.6883054282957398
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6691699604743083,
+   "modes_thirds": [
+    0.694482660565912,
+    0.694482660565912,
+    0.6964077855940785
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 18,
+  "trend_fraction": 0.08924307864535908,
+  "trend_change_thirds_s": 0.04410437687885066,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.9371541501976285,
+   "modes_thirds": [
+    0.7585928987977724,
+    0.7585928987977724,
+    0.7613306618291824
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.21454399357171555,
+   "modes_thirds": [
+    0.7363085298383172,
+    0.764413570113701,
+    0.7603985643600748
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7044100119189511,
+   "modes_thirds": [
+    0.7576937223486335,
+    0.7587458372899518,
+    0.7592718947606111
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 19,
+  "trend_fraction": -0.0920987383136281,
+  "trend_change_thirds_s": -0.0461312366690904,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8573127229488704,
+   "modes_thirds": [
+    0.769952491759205,
+    0.769952491759205,
+    0.769952491759205
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1441879303361685,
+   "modes_thirds": [
+    0.7830496889436488,
+    0.7549250996458005,
+    0.73191407203847
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6574257425742575,
+   "modes_thirds": [
+    0.7687367635016584,
+    0.7687367635016584,
+    0.7704882358211811
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 20,
+  "trend_fraction": 0.07696499991500164,
+  "trend_change_thirds_s": 0.043179423996339825,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6096108022239873,
+   "modes_thirds": [
+    0.8694480675939666,
+    0.8694480675939666,
+    0.8694480675939666
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.33636739760033096,
+   "modes_thirds": [
+    0.8523376911465521,
+    0.8603894668715641,
+    0.8925965697716121
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8626439063120286,
+   "modes_thirds": [
+    0.8686701637742211,
+    0.8715446234789419,
+    0.8686701637742211
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 21,
+  "trend_fraction": 0.07459985351342534,
+  "trend_change_thirds_s": 0.033411141616376275,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8244638602065131,
+   "modes_thirds": [
+    0.7025635820857055,
+    0.7025635820857055,
+    0.7055889886689937
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1942064463484292,
+   "modes_thirds": [
+    0.6822683775101801,
+    0.6980957418335784,
+    0.7218367883186756
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.4596322941646683,
+   "modes_thirds": [
+    0.7015396209875883,
+    0.7015396209875883,
+    0.7080202999193559
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 22,
+  "trend_fraction": -0.08067984166907792,
+  "trend_change_thirds_s": -0.03657912680675239,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8210399032648126,
+   "modes_thirds": [
+    0.7115628599169855,
+    0.7115628599169855,
+    0.7115628599169855
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.11860854987426656,
+   "modes_thirds": [
+    0.7329387963879106,
+    0.6564137412244893,
+    0.6861734848991532
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6061216270640355,
+   "modes_thirds": [
+    0.713663060655346,
+    0.713663060655346,
+    0.7105992861870797
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 23,
+  "trend_fraction": -0.06461251914375774,
+  "trend_change_thirds_s": -0.03311792954837383,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8910179640718563,
+   "modes_thirds": [
+    0.7967595727855266,
+    0.7956201819974176,
+    0.7956201819974176
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.24529844644317253,
+   "modes_thirds": [
+    0.818807511868888,
+    0.7797756127899762,
+    0.7797756127899762
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.9156386788698766,
+   "modes_thirds": [
+    0.7952839170096169,
+    0.7952839170096169,
+    0.7963892250603544
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 24,
+  "trend_fraction": 0.07556254188151966,
+  "trend_change_thirds_s": 0.03655205264082625,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8663208300079809,
+   "modes_thirds": [
+    0.7465739052018578,
+    0.7465739052018578,
+    0.7465739052018578
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.14332784184514002,
+   "modes_thirds": [
+    0.7314685482652883,
+    0.7437948233266134,
+    0.7715289422145948
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6630867143993636,
+   "modes_thirds": [
+    0.748934694501721,
+    0.748934694501721,
+    0.748934694501721
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 25,
+  "trend_fraction": -0.08183861527651093,
+  "trend_change_thirds_s": -0.03679990396581584,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8177438779606584,
+   "modes_thirds": [
+    0.7090046086413953,
+    0.7059266661791979,
+    0.7059266661791979
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.18849706129303107,
+   "modes_thirds": [
+    0.6949034835181798,
+    0.6990821263375643,
+    0.6740102694212575
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5464041783848935,
+   "modes_thirds": [
+    0.7068200934778746,
+    0.7068200934778746,
+    0.7035504985108545
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 26,
+  "trend_fraction": -0.08029186468635574,
+  "trend_change_thirds_s": -0.041086061546426196,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8027722772277228,
+   "modes_thirds": [
+    0.7919558477805407,
+    0.7919558477805407,
+    0.7919558477805407
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.2225819506272764,
+   "modes_thirds": [
+    0.8175432290134639,
+    0.8004537554349636,
+    0.7548818258922962
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6958762886597938,
+   "modes_thirds": [
+    0.7905179391457435,
+    0.7905179391457435,
+    0.7905179391457435
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 27,
+  "trend_fraction": -0.08516585529512782,
+  "trend_change_thirds_s": -0.05194450953051376,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7682198327359617,
+   "modes_thirds": [
+    0.9329041715450404,
+    0.9329041715450404,
+    0.933897032336315
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.14867042707493958,
+   "modes_thirds": [
+    0.968770957073591,
+    0.9319738067117367,
+    0.8902703696349683
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.48698438125750904,
+   "modes_thirds": [
+    0.9345198385592943,
+    0.9326370422138024,
+    0.9335784403865484
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 28,
+  "trend_fraction": -0.068571971135169,
+  "trend_change_thirds_s": -0.03387752365025169,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8502396166134185,
+   "modes_thirds": [
+    0.7689533673265292,
+    0.7689533673265292,
+    0.7689533673265292
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.39755102040816326,
+   "modes_thirds": [
+    0.7748418246701347,
+    0.7715149712642615,
+    0.7548807042348945
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8431137724550898,
+   "modes_thirds": [
+    0.7682136183040694,
+    0.7682136183040694,
+    0.7682136183040694
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "henon",
+  "seed": 29,
+  "trend_fraction": 0.0823827330886323,
+  "trend_change_thirds_s": 0.049393878938482266,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8853629512098373,
+   "modes_thirds": [
+    0.9233092072436897,
+    0.9212626324933935,
+    0.9212626324933935
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.13741386299148764,
+   "modes_thirds": [
+    0.8983601925118827,
+    0.9373899294882303,
+    0.9503998418136794
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6667987321711569,
+   "modes_thirds": [
+    0.9210255698915351,
+    0.9230960047576755,
+    0.9230960047576755
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 0,
+  "trend_fraction": 0.061859630421040326,
+  "trend_change_thirds_s": 0.034469953248054956,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.3938605619146722,
+   "modes_thirds": [
+    0.7756169876053106,
+    0.8699722044520597,
+    0.7756169876053106
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.2015663643858203,
+   "modes_thirds": [
+    0.7642429032120088,
+    0.8616322020286429,
+    0.7910249603865832
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5759017043202537,
+   "modes_thirds": [
+    0.7786577658179605,
+    0.7770048665536955,
+    0.7786577658179605
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 1,
+  "trend_fraction": -0.07985121710572964,
+  "trend_change_thirds_s": -0.04589168083212071,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.4058880308880309,
+   "modes_thirds": [
+    0.9021822480210013,
+    0.7896327142789747,
+    0.7873357850189333
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.15842787682333873,
+   "modes_thirds": [
+    0.8088131043544485,
+    0.7437802181360137,
+    0.762907537612024
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.3871763255240444,
+   "modes_thirds": [
+    0.7940765398611266,
+    0.7940765398611266,
+    0.7940765398611266
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 2,
+  "trend_fraction": -0.07337042191001936,
+  "trend_change_thirds_s": -0.03724203638499922,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.5804916732751785,
+   "modes_thirds": [
+    0.6912423853691338,
+    0.7918462369009776,
+    0.6912423853691338
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.13952519783423573,
+   "modes_thirds": [
+    0.8003068291176205,
+    0.6981210899080839,
+    0.6800883124005186
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.35299038059389376,
+   "modes_thirds": [
+    0.6943726472424817,
+    0.6921298568816902,
+    0.7930554231173094
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 3,
+  "trend_fraction": -0.08916806298630148,
+  "trend_change_thirds_s": -0.05319380088317852,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.3918385256691531,
+   "modes_thirds": [
+    0.8315698517151955,
+    0.8315698517151955,
+    0.8315698517151955
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.09173179761415055,
+   "modes_thirds": [
+    0.8677334649447641,
+    0.911708501573885,
+    0.901560416197934
+   ],
+   "status": "no_peaks"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.27249357326478146,
+   "modes_thirds": [
+    0.8323471272490047,
+    0.9279349139130371,
+    0.8368989266139586
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 4,
+  "trend_fraction": -0.09223968758300685,
+  "trend_change_thirds_s": -0.05096069931432432,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.5369840621168778,
+   "modes_thirds": [
+    0.7524643305952672,
+    0.7524643305952672,
+    0.861697519670815
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.125,
+   "modes_thirds": [
+    0.7810070124064168,
+    0.7405245877780764,
+    0.8248629724204521
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.20411591768164636,
+   "modes_thirds": [
+    0.7489256984650678,
+    0.7516024884897566,
+    0.8586740894773053
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 5,
+  "trend_fraction": 0.06631267726261063,
+  "trend_change_thirds_s": 0.03398168373171653,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.6752411575562701,
+   "modes_thirds": [
+    0.8003452266839397,
+    0.8003452266839397,
+    0.8003452266839397
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.12867647058823528,
+   "modes_thirds": [
+    0.776296924042666,
+    0.7098917075517289,
+    0.815536370150947
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.2841726618705036,
+   "modes_thirds": [
+    0.80434178562436,
+    0.7023921164599527,
+    0.7023921164599527
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 6,
+  "trend_fraction": -0.05630360133511423,
+  "trend_change_thirds_s": -0.031039737554078774,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.34050796383986226,
+   "modes_thirds": [
+    0.852454038052262,
+    0.852454038052262,
+    0.852454038052262
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.16589668206635869,
+   "modes_thirds": [
+    0.866590666735059,
+    0.857146978642317,
+    0.7556273316453407
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.36151718688265505,
+   "modes_thirds": [
+    0.7724414464199063,
+    0.7724414464199063,
+    0.7724414464199063
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 7,
+  "trend_fraction": -0.051682870668925046,
+  "trend_change_thirds_s": -0.0234539528527709,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.6987761547572049,
+   "modes_thirds": [
+    0.613802664100345,
+    0.613802664100345,
+    0.7158210584347487
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.24154589371980675,
+   "modes_thirds": [
+    0.6287038604185569,
+    0.6162246047686819,
+    0.7085710965777563
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.21832993890020366,
+   "modes_thirds": [
+    0.6323870431955148,
+    0.6160012539235178,
+    0.7072935084389292
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 8,
+  "trend_fraction": -0.07150070875250705,
+  "trend_change_thirds_s": -0.04448530835608015,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.5885148514851485,
+   "modes_thirds": [
+    0.8577930232410897,
+    0.8577930232410897,
+    0.8577930232410897
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.09240658899156287,
+   "modes_thirds": [
+    0.8930918649051028,
+    0.8562683789274216,
+    0.929915350882784
+   ],
+   "status": "no_peaks"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.42578591325109433,
+   "modes_thirds": [
+    0.8583255014821952,
+    0.8583255014821952,
+    0.9664695020565148
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 9,
+  "trend_fraction": -0.05868006476211383,
+  "trend_change_thirds_s": -0.030024424243162318,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.7183881426586383,
+   "modes_thirds": [
+    0.7054394088961937,
+    0.7054394088961937,
+    0.7054394088961937
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.2398286937901499,
+   "modes_thirds": [
+    0.7083234300370063,
+    0.7083234300370063,
+    0.6848099076726517
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.3909713825070536,
+   "modes_thirds": [
+    0.7084177907322942,
+    0.7060993163522291,
+    0.7060993163522291
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 10,
+  "trend_fraction": 0.09459807230489523,
+  "trend_change_thirds_s": 0.04895249333538027,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.804989816700611,
+   "modes_thirds": [
+    0.8206411201070749,
+    0.8206411201070749,
+    0.8206411201070749
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.21137890161991307,
+   "modes_thirds": [
+    0.6790986886245765,
+    0.8148553177055571,
+    0.7174646924952885
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.4899009900990099,
+   "modes_thirds": [
+    0.7005005412275647,
+    0.7026381729864322,
+    0.7069134365041674
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 11,
+  "trend_fraction": 0.05259514186155431,
+  "trend_change_thirds_s": 0.02666717462672601,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.5999147848317,
+   "modes_thirds": [
+    0.6795445192536929,
+    0.6795445192536929,
+    0.7939561296914703
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.30669456066945605,
+   "modes_thirds": [
+    0.6726569116154285,
+    0.669765236147229,
+    0.8085656586208065
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.5431411530815109,
+   "modes_thirds": [
+    0.678798162558846,
+    0.678798162558846,
+    0.7940268073751855
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 12,
+  "trend_fraction": 0.07064136441987125,
+  "trend_change_thirds_s": 0.03828451876483462,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.606657290201594,
+   "modes_thirds": [
+    0.7609899115425838,
+    0.8359993701605762,
+    0.8375953160886186
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.26850740296118447,
+   "modes_thirds": [
+    0.7332556851070768,
+    0.8454642765793761,
+    0.7747240776077091
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.5447731755424063,
+   "modes_thirds": [
+    0.7598465592751995,
+    0.8355747315080275,
+    0.7598465592751995
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 13,
+  "trend_fraction": -0.08544338704833684,
+  "trend_change_thirds_s": -0.04047461101535385,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7620059498512537,
+   "modes_thirds": [
+    0.6578381516124376,
+    0.6578381516124376,
+    0.6578381516124376
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.21536575398447078,
+   "modes_thirds": [
+    0.6860051044740704,
+    0.6677575350445482,
+    0.7068594695363816
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5337837837837838,
+   "modes_thirds": [
+    0.6624262715743692,
+    0.6624262715743692,
+    0.7366579528166393
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 14,
+  "trend_fraction": -0.07871279823737093,
+  "trend_change_thirds_s": -0.036964922025770855,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.6569637259292431,
+   "modes_thirds": [
+    0.6364616839227517,
+    0.6364616839227517,
+    0.6345081224014879
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.15821256038647344,
+   "modes_thirds": [
+    0.6586128705289027,
+    0.7487646766080752,
+    0.624805943249213
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.6374454581515272,
+   "modes_thirds": [
+    0.6361764890891293,
+    0.6361764890891293,
+    0.6361764890891293
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 15,
+  "trend_fraction": -0.0558649357878489,
+  "trend_change_thirds_s": -0.028969754151057753,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.7374501992031872,
+   "modes_thirds": [
+    0.6955389611087275,
+    0.6955389611087275,
+    0.6955389611087275
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.19879518072289157,
+   "modes_thirds": [
+    0.7049441058681913,
+    0.681300705211711,
+    0.6880559625421339
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7141153081510935,
+   "modes_thirds": [
+    0.695549103967154,
+    0.695549103967154,
+    0.695549103967154
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 16,
+  "trend_fraction": -0.09921105092926041,
+  "trend_change_thirds_s": -0.056608220284608636,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.4490934449093445,
+   "modes_thirds": [
+    0.8880752367536165,
+    0.8880752367536165,
+    0.7881275209109633
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.11538461538461539,
+   "modes_thirds": [
+    0.9129668523965162,
+    0.8975153147409629,
+    0.7584514758409835
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.248107653490328,
+   "modes_thirds": [
+    0.8864110861444965,
+    0.8818280983780323,
+    0.7901683430487496
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 17,
+  "trend_fraction": -0.09881703775628992,
+  "trend_change_thirds_s": -0.043722606824468026,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.788931788931789,
+   "modes_thirds": [
+    0.585170479685631,
+    0.585170479685631,
+    0.7045659412560799
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.14936170212765956,
+   "modes_thirds": [
+    0.6126822430292402,
+    0.59579978022617,
+    0.6970945570445912
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.48963182395260263,
+   "modes_thirds": [
+    0.5921744470723229,
+    0.5896059095979875,
+    0.7026215584687425
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 18,
+  "trend_fraction": 0.05683052230733224,
+  "trend_change_thirds_s": 0.02909699437816147,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.385790995456423,
+   "modes_thirds": [
+    0.7923097578302398,
+    0.7907281140008227,
+    0.7907281140008227
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.22671203743088048,
+   "modes_thirds": [
+    0.7843973115770407,
+    0.7801379935101787,
+    0.7354151538081266
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.45009940357852884,
+   "modes_thirds": [
+    0.7908307408390165,
+    0.7095142200366348,
+    0.792425182423377
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 19,
+  "trend_fraction": 0.07151847105327157,
+  "trend_change_thirds_s": 0.033112498584747116,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.8215200683176772,
+   "modes_thirds": [
+    0.6275934057584096,
+    0.7288148825835943,
+    0.6275934057584096
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.37191420477539455,
+   "modes_thirds": [
+    0.6059388644502253,
+    0.6088814508370726,
+    0.7412978382452047
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.3192389006342495,
+   "modes_thirds": [
+    0.6326088805024248,
+    0.6349050960060414,
+    0.6303126649988082
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 20,
+  "trend_fraction": 0.0983536345881871,
+  "trend_change_thirds_s": 0.05872991124894795,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.534994068801898,
+   "modes_thirds": [
+    0.8081428364427474,
+    0.9328670220029047,
+    0.9328670220029047
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.18639901679639492,
+   "modes_thirds": [
+    0.7818259288211099,
+    0.936026635232415,
+    0.8450877570924146
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.2792181890706023,
+   "modes_thirds": [
+    0.8077343678326072,
+    0.9322315831696548,
+    0.9269338293255251
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 21,
+  "trend_fraction": -0.08184587330066675,
+  "trend_change_thirds_s": -0.0489065590069052,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.3579989577905159,
+   "modes_thirds": [
+    0.8463961694890133,
+    0.9232800443107547,
+    0.9215715137591605
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.11179110567115463,
+   "modes_thirds": [
+    0.8702219549701182,
+    0.8360812148898882,
+    0.8844472633368807
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.22094995759117897,
+   "modes_thirds": [
+    0.8472708059219225,
+    0.8455022567251527,
+    0.9233184213830272
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 22,
+  "trend_fraction": 0.07607932538076949,
+  "trend_change_thirds_s": 0.03641425430175307,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.43700604370060436,
+   "modes_thirds": [
+    0.7596393147118248,
+    0.7596393147118248,
+    0.6406561643164579
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.14730290456431536,
+   "modes_thirds": [
+    0.7464838373006774,
+    0.7684404357194051,
+    0.6680674143766496
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.15602263540824576,
+   "modes_thirds": [
+    0.6348839904797968,
+    0.7692667710842657,
+    0.6597696905917355
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 23,
+  "trend_fraction": 0.05369972262450708,
+  "trend_change_thirds_s": 0.030042554570870714,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5259331071255453,
+   "modes_thirds": [
+    0.8689095019082844,
+    0.8689095019082844,
+    0.7792981351170157
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.13382737576285963,
+   "modes_thirds": [
+    0.772315147513446,
+    0.7808167401219503,
+    0.800653789541794
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5977742448330684,
+   "modes_thirds": [
+    0.7801396822210882,
+    0.7801396822210882,
+    0.7801396822210882
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 24,
+  "trend_fraction": 0.07659339978306916,
+  "trend_change_thirds_s": 0.045718052622361394,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.4388456252863033,
+   "modes_thirds": [
+    0.9384122236369519,
+    0.8138053203912505,
+    0.8138053203912505
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.12680710450227178,
+   "modes_thirds": [
+    0.7995631394389389,
+    0.9367691079138154,
+    0.8366458336213379
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.6121139189731247,
+   "modes_thirds": [
+    0.8151044988041087,
+    0.8175779907849035,
+    0.8151044988041087
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 25,
+  "trend_fraction": 0.06112159794595193,
+  "trend_change_thirds_s": 0.03837052248116435,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.5923532579429187,
+   "modes_thirds": [
+    0.9684812795983153,
+    0.96679662742304,
+    0.96679662742304
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.11665292662819456,
+   "modes_thirds": [
+    0.8635893391770855,
+    0.8898695166647095,
+    0.9137605871080041
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.2576860841423948,
+   "modes_thirds": [
+    0.8993137185364038,
+    0.8907033936934121,
+    0.8907033936934121
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 26,
+  "trend_fraction": 0.07232102080515619,
+  "trend_change_thirds_s": 0.04468866899270711,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.6435523114355232,
+   "modes_thirds": [
+    0.8549566432290812,
+    0.8549566432290812,
+    0.9646593263024137
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1473941368078176,
+   "modes_thirds": [
+    0.8264542379791007,
+    0.8434788693220767,
+    0.9864857726030755
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.39728759473474273,
+   "modes_thirds": [
+    0.8656525584649983,
+    0.8656525584649983,
+    0.8534938756886015
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 27,
+  "trend_fraction": 0.0878794650651002,
+  "trend_change_thirds_s": 0.04417697861721373,
+  "clean": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.4746954076850984,
+   "modes_thirds": [
+    0.6915094867560988,
+    0.7829428229207358,
+    0.6915094867560988
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.20799347471451876,
+   "modes_thirds": [
+    0.7600539641305641,
+    0.7942339426018739,
+    0.7970822741411496
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 2,
+   "gate": true,
+   "peak_height": 0.48186528497409326,
+   "modes_thirds": [
+    0.6927383054964118,
+    0.7797981622894619,
+    0.6927383054964118
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 28,
+  "trend_fraction": -0.06886714384344719,
+  "trend_change_thirds_s": -0.03737066976483272,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.7473684210526316,
+   "modes_thirds": [
+    0.7354982346146333,
+    0.7354982346146333,
+    0.7354982346146333
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.1525496974935177,
+   "modes_thirds": [
+    0.7643283291150962,
+    0.722138327262416,
+    0.7151066602869693
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.43732478974769723,
+   "modes_thirds": [
+    0.7340358086293453,
+    0.7364511292119165,
+    0.7364511292119165
+   ],
+   "status": "ok"
+  }
+ },
+ {
+  "system": "logistic",
+  "seed": 29,
+  "trend_fraction": 0.05466320352836383,
+  "trend_change_thirds_s": 0.034336443779626996,
+  "clean": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.40886454183266935,
+   "modes_thirds": [
+    0.8901012742869707,
+    0.8901012742869707,
+    0.9679224014969992
+   ],
+   "status": "ok"
+  },
+  "trend": {
+   "level_b": 0,
+   "gate": false,
+   "peak_height": 0.15502183406113537,
+   "modes_thirds": [
+    0.8695490762680398,
+    0.8872341855222285,
+    0.9832390643306819
+   ],
+   "status": "ok"
+  },
+  "trend_linear_detrended": {
+   "level_b": 1,
+   "gate": true,
+   "peak_height": 0.3275862068965517,
+   "modes_thirds": [
+    0.8909446392966454,
+    0.8909446392966454,
+    0.8926586054455447
+   ],
+   "status": "ok"
+  }
+ }
+]
