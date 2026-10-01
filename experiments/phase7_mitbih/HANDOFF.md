@@ -46,3 +46,8 @@ decision = combined_chaos_detected(analyze_segment(rr, DETECTOR)).
 - Peak cache: mitdb_data/_phase7_peaks/ (gitignored); committed copy
   results/qc/detected_peaks.npz.
 | 2a code before preregistration: detector.py (frozen DETECTOR, lle_z, upo_score), run_phase7.py (guarded; --phase synthetic code check), analysis.py (Q1-Q3, secondary, sensitivity); tests test_phase7_detector.py (5), test_phase7_analysis.py (7); synthetic check results/synthetic_check (72 Phase 5 windows, 53 s) | done | (this commit) |
+| 2 PREREGISTRATION.md committed and pushed alone | done | fb212da |
+
+- Step 3 command (resumable): `OMP_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 /root/venv313/bin/python -m experiments.phase7_mitbih.run_phase7 --phase test --workers 4 > /tmp/claude-0/p7_run.log 2>&1`
+  then `python -m experiments.phase7_mitbih.analysis`. Do NOT edit data.py, detector.py,
+  run_phase7.py, analysis.py or final_pipeline.py (amendments only).
