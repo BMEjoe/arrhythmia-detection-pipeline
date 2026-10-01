@@ -222,3 +222,32 @@ def _nlpred_ep_scan(rr):
 
 
 METHODS["nlpred_ep_scan"] = _nlpred_ep_scan
+
+
+# ============================================================================ Phase 8 CANDIDATES
+# Frozen with PREREGISTRATION.md.  Window length is part of each candidate (LENGTH).
+# Thresholds Z_C2, Z_C3 were calibrated on DEVELOPMENT nulls only (calibrate.py,
+# results/dev/calibration.json) before the preregistration.
+Z_C2 = None   # set from calibration (nlp_iaaft512)
+Z_C3 = None   # set from calibration (nlp_ep256)
+CANDIDATES = ("c1_frozen512", "c2_nlp_iaaft512", "c3_nlp_ep256", "c4_titration256")
+LENGTH = {"c1_frozen512": 512, "c2_nlp_iaaft512": 512, "c3_nlp_ep256": 256, "c4_titration256": 256,
+          "baseline_frozen256": 256}
+
+
+def _c2(rr):
+    out = _nlpred_scan(rr)
+    out["zmax"] = float(max(out[f"np_m{m}_z"] for m in (2, 3, 4, 5)))
+    out["detected"] = bool(out["zmax"] >= Z_C2)
+    return out
+
+
+def _c3(rr):
+    out = _nlpred_ep_scan(rr)
+    out["zmax"] = float(max(out[f"np_m{m}_z"] for m in (2, 3, 4, 5)))
+    out["detected"] = bool(out["zmax"] >= Z_C3)
+    return out
+
+
+METHODS.update({"c1_frozen512": _frozen, "c2_nlp_iaaft512": _c2, "c3_nlp_ep256": _c3,
+                "c4_titration256": _titration, "baseline_frozen256": _frozen})
