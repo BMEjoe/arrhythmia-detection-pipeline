@@ -1,0 +1,1473 @@
+{
+ "raw": {
+  "n_errors": 0,
+  "errors_by_label": {},
+  "error_messages": {},
+  "upo_score_inconsistent": 0,
+  "Q1": {
+   "decision": "and_detected",
+   "n_windows": 305,
+   "n_abnormal": 94,
+   "n_normal": 211,
+   "n_subjects": 43,
+   "n_subjects_with_abnormal": 19,
+   "TP": 0,
+   "FN": 94,
+   "FP": 0,
+   "TN": 211,
+   "point": {
+    "rate_abnormal": 0.0,
+    "rate_normal": 0.0,
+    "difference": 0.0,
+    "sensitivity": 0.0,
+    "specificity": 1.0,
+    "PPV": null,
+    "NPV": 0.6918032786885245,
+    "balanced_accuracy": 0.5
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.0,
+     0.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.0,
+     0.0
+    ],
+    "sensitivity": [
+     0.0,
+     0.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     null,
+     null
+    ],
+    "NPV": [
+     0.5622851182633791,
+     0.8178574496809032
+    ],
+    "balanced_accuracy": [
+     0.5,
+     0.5
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 10000,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.0,
+    0.03926207629154474
+   ],
+   "wilson_normal": [
+    0.0,
+    0.017880435376768655
+   ],
+   "Q1_supported": false,
+   "Q1_opposite_direction": false
+  },
+  "Q2": {
+   "rate_abnormal": 0.0,
+   "ci95_cluster": [
+    0.0,
+    0.0
+   ],
+   "wilson95_ignoring_clustering": [
+    0.0,
+    0.03926207629154474
+   ],
+   "phase6_ectopy_only_max_rate": 0.037,
+   "phase6_ectopy_only_upper_bound": 0.064,
+   "exceeds_ectopy_only_expectation": false
+  },
+  "classification_lle_detected": {
+   "decision": "lle_detected",
+   "n_windows": 305,
+   "n_abnormal": 94,
+   "n_normal": 211,
+   "n_subjects": 43,
+   "n_subjects_with_abnormal": 19,
+   "TP": 47,
+   "FN": 47,
+   "FP": 27,
+   "TN": 184,
+   "point": {
+    "rate_abnormal": 0.5,
+    "rate_normal": 0.12796208530805686,
+    "difference": 0.37203791469194314,
+    "sensitivity": 0.5,
+    "specificity": 0.8720379146919431,
+    "PPV": 0.6351351351351351,
+    "NPV": 0.7965367965367965,
+    "balanced_accuracy": 0.6860189573459716
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.321420380078637,
+     0.6708860759493671
+    ],
+    "rate_normal": [
+     0.07691441441441442,
+     0.18229166666666666
+    ],
+    "difference": [
+     0.1937561116422702,
+     0.5477643067536292
+    ],
+    "sensitivity": [
+     0.321420380078637,
+     0.6708860759493671
+    ],
+    "specificity": [
+     0.8177083333333334,
+     0.9230855855855855
+    ],
+    "PPV": [
+     0.41379310344827586,
+     0.8
+    ],
+    "NPV": [
+     0.6778179134243147,
+     0.8987917510121457
+    ],
+    "balanced_accuracy": [
+     0.5968780558211351,
+     0.7738821533768147
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.4009266984859888,
+    0.5990733015140113
+   ],
+   "wilson_normal": [
+    0.08945357183157303,
+    0.17977499856725482
+   ]
+  },
+  "classification_upo_detected": {
+   "decision": "upo_detected",
+   "n_windows": 305,
+   "n_abnormal": 94,
+   "n_normal": 211,
+   "n_subjects": 43,
+   "n_subjects_with_abnormal": 19,
+   "TP": 3,
+   "FN": 91,
+   "FP": 4,
+   "TN": 207,
+   "point": {
+    "rate_abnormal": 0.031914893617021274,
+    "rate_normal": 0.018957345971563982,
+    "difference": 0.012957547645457292,
+    "sensitivity": 0.031914893617021274,
+    "specificity": 0.981042654028436,
+    "PPV": 0.42857142857142855,
+    "NPV": 0.6946308724832215,
+    "balanced_accuracy": 0.5064787738227287
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.0,
+     0.08
+    ],
+    "rate_normal": [
+     0.004310344827586207,
+     0.038836299892125115
+    ],
+    "difference": [
+     -0.02809045169441812,
+     0.06517431972789112
+    ],
+    "sensitivity": [
+     0.0,
+     0.08
+    ],
+    "specificity": [
+     0.9611637001078749,
+     0.9956896551724138
+    ],
+    "PPV": [
+     0.0,
+     0.8571428571428571
+    ],
+    "NPV": [
+     0.5601271946799902,
+     0.8188732000993049
+    ],
+    "balanced_accuracy": [
+     0.485954774152791,
+     0.5325871598639456
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 16,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.010912627468307706,
+    0.08967314608122352
+   ],
+   "wilson_normal": [
+    0.0073962259551081135,
+    0.04772097016566931
+   ]
+  },
+  "classification_or_detected": {
+   "decision": "or_detected",
+   "n_windows": 305,
+   "n_abnormal": 94,
+   "n_normal": 211,
+   "n_subjects": 43,
+   "n_subjects_with_abnormal": 19,
+   "TP": 50,
+   "FN": 44,
+   "FP": 31,
+   "TN": 180,
+   "point": {
+    "rate_abnormal": 0.5319148936170213,
+    "rate_normal": 0.14691943127962084,
+    "difference": 0.38499546233740045,
+    "sensitivity": 0.5319148936170213,
+    "specificity": 0.8530805687203792,
+    "PPV": 0.6172839506172839,
+    "NPV": 0.8035714285714286,
+    "balanced_accuracy": 0.6924977311687002
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3411697860962567,
+     0.7108500669344041
+    ],
+    "rate_normal": [
+     0.09478548266400598,
+     0.2016815739171205
+    ],
+    "difference": [
+     0.19351964153156923,
+     0.5702314625330942
+    ],
+    "sensitivity": [
+     0.3411697860962567,
+     0.7108500669344041
+    ],
+    "specificity": [
+     0.7983184260828795,
+     0.905214517335994
+    ],
+    "PPV": [
+     0.4,
+     0.7777777777777778
+    ],
+    "NPV": [
+     0.6833258928571428,
+     0.9058309153257715
+    ],
+    "balanced_accuracy": [
+     0.5967598207657846,
+     0.7851157312665472
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.4317826374815637,
+    0.6295410597764227
+   ],
+   "wilson_normal": [
+    0.10547404941472421,
+    0.20099128172811243
+   ]
+  },
+  "Q3": {
+   "n_windows": 305,
+   "n_abnormal": 94,
+   "n_normal": 211,
+   "n_subjects": 43,
+   "excluded_windows": 0,
+   "excluded_by_label": {},
+   "C": 1.0,
+   "bootstrap_valid": 10000,
+   "models": {
+    "M0": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50"
+     ],
+     "auc": 0.8117878390642331,
+     "ci95_cluster": [
+      0.617515529663456,
+      0.948556951169046
+     ],
+     "delong_ci95": [
+      0.7459142077237626,
+      0.8776614704047037
+     ],
+     "n_oof_missing": 0
+    },
+    "M1": {
+     "features": [
+      "lle_z"
+     ],
+     "auc": 0.684934960169406,
+     "ci95_cluster": [
+      0.5654715400081441,
+      0.7966329334260368
+     ],
+     "delong_ci95": [
+      0.6177293896828705,
+      0.7521405306559416
+     ],
+     "n_oof_missing": 0
+    },
+    "M2": {
+     "features": [
+      "upo_score"
+     ],
+     "auc": 0.1930019159019865,
+     "ci95_cluster": [
+      0.11520265979944058,
+      0.2904391453164173
+     ],
+     "delong_ci95": [
+      0.12476473453312246,
+      0.26123909727085054
+     ],
+     "n_oof_missing": 0
+    },
+    "M3": {
+     "features": [
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 0.6751537763436523,
+     "ci95_cluster": [
+      0.552928053259759,
+      0.791001196116287
+     ],
+     "delong_ci95": [
+      0.6069599487241091,
+      0.7433476039631954
+     ],
+     "n_oof_missing": 0
+    },
+    "M4": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50",
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 0.8211152566300294,
+     "ci95_cluster": [
+      0.6331067000737876,
+      0.9507433966800393
+     ],
+     "delong_ci95": [
+      0.757697190880464,
+      0.8845333223795947
+     ],
+     "n_oof_missing": 0
+    }
+   },
+   "differences": {
+    "M3-M1": {
+     "difference": -0.00978118382575377,
+     "ci95_cluster_paired": [
+      -0.022217763305600654,
+      0.0015433673455017864
+     ],
+     "delong_z": -2.2855725696588878,
+     "delong_p_two_sided": 0.022279276433451276
+    },
+    "M3-M2": {
+     "difference": 0.48215186044166575,
+     "ci95_cluster_paired": [
+      0.3597957623184896,
+      0.6052926250628456
+     ],
+     "delong_z": 11.02611252823598,
+     "delong_p_two_sided": 2.8596049099633024e-28
+    },
+    "M4-M0": {
+     "difference": 0.009327417565796248,
+     "ci95_cluster_paired": [
+      -0.009854638097247303,
+      0.02837937339402311
+     ],
+     "delong_z": 1.3678294810054612,
+     "delong_p_two_sided": 0.17136545737968967
+    }
+   }
+  },
+  "tol75_Q1_descriptive": {
+   "decision": "and_detected",
+   "n_windows": 224,
+   "n_abnormal": 37,
+   "n_normal": 187,
+   "n_subjects": 37,
+   "n_subjects_with_abnormal": 10,
+   "TP": 0,
+   "FN": 37,
+   "FP": 0,
+   "TN": 187,
+   "point": {
+    "rate_abnormal": 0.0,
+    "rate_normal": 0.0,
+    "difference": 0.0,
+    "sensitivity": 0.0,
+    "specificity": 1.0,
+    "PPV": null,
+    "NPV": 0.8348214285714286,
+    "balanced_accuracy": 0.5
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.0,
+     0.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.0,
+     0.0
+    ],
+    "sensitivity": [
+     0.0,
+     0.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     null,
+     null
+    ],
+    "NPV": [
+     0.7241307170682442,
+     0.929298491523161
+    ],
+    "balanced_accuracy": [
+     0.5,
+     0.5
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 10000,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.0,
+    0.09405782583720251
+   ],
+   "wilson_normal": [
+    0.0,
+    0.020129058142986548
+   ]
+  },
+  "no_missed_beat_Q1_descriptive": {
+   "decision": "and_detected",
+   "n_windows": 266,
+   "n_abnormal": 73,
+   "n_normal": 193,
+   "n_subjects": 42,
+   "n_subjects_with_abnormal": 15,
+   "TP": 0,
+   "FN": 73,
+   "FP": 0,
+   "TN": 193,
+   "point": {
+    "rate_abnormal": 0.0,
+    "rate_normal": 0.0,
+    "difference": 0.0,
+    "sensitivity": 0.0,
+    "specificity": 1.0,
+    "PPV": null,
+    "NPV": 0.7255639097744361,
+    "balanced_accuracy": 0.5
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.0,
+     0.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.0,
+     0.0
+    ],
+    "sensitivity": [
+     0.0,
+     0.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     null,
+     null
+    ],
+    "NPV": [
+     0.5888844086021505,
+     0.8503649635036497
+    ],
+    "balanced_accuracy": [
+     0.5,
+     0.5
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 10000,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.0,
+    0.0499920079557311
+   ],
+   "wilson_normal": [
+    0.0,
+    0.01951549660172641
+   ]
+  }
+ },
+ "annotation": {
+  "n_errors": 0,
+  "errors_by_label": {},
+  "error_messages": {},
+  "upo_score_inconsistent": 0,
+  "Q1": {
+   "decision": "and_detected",
+   "n_windows": 368,
+   "n_abnormal": 120,
+   "n_normal": 248,
+   "n_subjects": 43,
+   "n_subjects_with_abnormal": 19,
+   "TP": 6,
+   "FN": 114,
+   "FP": 0,
+   "TN": 248,
+   "point": {
+    "rate_abnormal": 0.05,
+    "rate_normal": 0.0,
+    "difference": 0.05,
+    "sensitivity": 0.05,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 0.6850828729281768,
+    "balanced_accuracy": 0.525
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.018518518518518517,
+     0.08333333333333333
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.018518518518518517,
+     0.08333333333333333
+    ],
+    "sensitivity": [
+     0.018518518518518517,
+     0.08333333333333333
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     0.5612231328701693,
+     0.8060941828254847
+    ],
+    "balanced_accuracy": [
+     0.5092592592592593,
+     0.5416666666666666
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 18,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.023114364414465793,
+    0.10480288536236734
+   ],
+   "wilson_normal": [
+    0.0,
+    0.01525348065676972
+   ],
+   "Q1_supported": true,
+   "Q1_opposite_direction": false
+  },
+  "Q2": {
+   "rate_abnormal": 0.05,
+   "ci95_cluster": [
+    0.018518518518518517,
+    0.08333333333333333
+   ],
+   "wilson95_ignoring_clustering": [
+    0.023114364414465793,
+    0.10480288536236734
+   ],
+   "phase6_ectopy_only_max_rate": 0.037,
+   "phase6_ectopy_only_upper_bound": 0.064,
+   "exceeds_ectopy_only_expectation": false
+  },
+  "classification_lle_detected": {
+   "decision": "lle_detected",
+   "n_windows": 368,
+   "n_abnormal": 120,
+   "n_normal": 248,
+   "n_subjects": 43,
+   "n_subjects_with_abnormal": 19,
+   "TP": 56,
+   "FN": 64,
+   "FP": 34,
+   "TN": 214,
+   "point": {
+    "rate_abnormal": 0.4666666666666667,
+    "rate_normal": 0.13709677419354838,
+    "difference": 0.3295698924731183,
+    "sensitivity": 0.4666666666666667,
+    "specificity": 0.8629032258064516,
+    "PPV": 0.6222222222222222,
+    "NPV": 0.7697841726618705,
+    "balanced_accuracy": 0.6647849462365591
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.32142857142857145,
+     0.6050420168067226
+    ],
+    "rate_normal": [
+     0.08695274758454107,
+     0.19249087115284294
+    ],
+    "difference": [
+     0.17817499034636855,
+     0.4758738664236614
+    ],
+    "sensitivity": [
+     0.32142857142857145,
+     0.6050420168067226
+    ],
+    "specificity": [
+     0.807509128847157,
+     0.9130472524154589
+    ],
+    "PPV": [
+     0.42306338028169016,
+     0.7738095238095238
+    ],
+    "NPV": [
+     0.6519962962962963,
+     0.8708516843232947
+    ],
+    "balanced_accuracy": [
+     0.5890874951731843,
+     0.7379369332118308
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.37982917045799003,
+    0.555572107303257
+   ],
+   "wilson_normal": [
+    0.09979368430632737,
+    0.18547093875100548
+   ]
+  },
+  "classification_upo_detected": {
+   "decision": "upo_detected",
+   "n_windows": 368,
+   "n_abnormal": 120,
+   "n_normal": 248,
+   "n_subjects": 43,
+   "n_subjects_with_abnormal": 19,
+   "TP": 10,
+   "FN": 110,
+   "FP": 3,
+   "TN": 245,
+   "point": {
+    "rate_abnormal": 0.08333333333333333,
+    "rate_normal": 0.012096774193548387,
+    "difference": 0.07123655913978494,
+    "sensitivity": 0.08333333333333333,
+    "specificity": 0.9879032258064516,
+    "PPV": 0.7692307692307693,
+    "NPV": 0.6901408450704225,
+    "balanced_accuracy": 0.5356182795698924
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.02857142857142857,
+     0.14062789351851848
+    ],
+    "rate_normal": [
+     0.0,
+     0.027522935779816515
+    ],
+    "difference": [
+     0.012247529139938896,
+     0.13246901041004375
+    ],
+    "sensitivity": [
+     0.02857142857142857,
+     0.14062789351851848
+    ],
+    "specificity": [
+     0.9724770642201834,
+     1.0
+    ],
+    "PPV": [
+     0.4,
+     1.0
+    ],
+    "NPV": [
+     0.5626697423398329,
+     0.8083910439989586
+    ],
+    "balanced_accuracy": [
+     0.5061237645699695,
+     0.5662345052050218
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.045893650374929706,
+    0.14662232164065653
+   ],
+   "wilson_normal": [
+    0.004122365520547381,
+    0.03495562770097791
+   ]
+  },
+  "classification_or_detected": {
+   "decision": "or_detected",
+   "n_windows": 368,
+   "n_abnormal": 120,
+   "n_normal": 248,
+   "n_subjects": 43,
+   "n_subjects_with_abnormal": 19,
+   "TP": 60,
+   "FN": 60,
+   "FP": 37,
+   "TN": 211,
+   "point": {
+    "rate_abnormal": 0.5,
+    "rate_normal": 0.14919354838709678,
+    "difference": 0.35080645161290325,
+    "sensitivity": 0.5,
+    "specificity": 0.8508064516129032,
+    "PPV": 0.6185567010309279,
+    "NPV": 0.7785977859778598,
+    "balanced_accuracy": 0.6754032258064516
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3406534954407295,
+     0.6456733923884513
+    ],
+    "rate_normal": [
+     0.0963302752293578,
+     0.2076271186440678
+    ],
+    "difference": [
+     0.18848440097174277,
+     0.5047350394945888
+    ],
+    "sensitivity": [
+     0.3406534954407295,
+     0.6456733923884513
+    ],
+    "specificity": [
+     0.7923728813559322,
+     0.9036697247706422
+    ],
+    "PPV": [
+     0.42304687500000004,
+     0.7664294403892943
+    ],
+    "NPV": [
+     0.6619191200258816,
+     0.8776978417266187
+    ],
+    "balanced_accuracy": [
+     0.5942422004858714,
+     0.7523675197472943
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.41193870541108385,
+    0.5880612945889161
+   ],
+   "wilson_normal": [
+    0.11021814864096952,
+    0.198870986981119
+   ]
+  },
+  "Q3": {
+   "n_windows": 368,
+   "n_abnormal": 120,
+   "n_normal": 248,
+   "n_subjects": 43,
+   "excluded_windows": 0,
+   "excluded_by_label": {},
+   "C": 1.0,
+   "bootstrap_valid": 10000,
+   "models": {
+    "M0": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50"
+     ],
+     "auc": 0.839146505376344,
+     "ci95_cluster": [
+      0.67110025410218,
+      0.9564419196762532
+     ],
+     "delong_ci95": [
+      0.78368862936662,
+      0.8946043813860681
+     ],
+     "n_oof_missing": 0
+    },
+    "M1": {
+     "features": [
+      "lle_z"
+     ],
+     "auc": 0.692741935483871,
+     "ci95_cluster": [
+      0.5950037919854274,
+      0.7871515333052168
+     ],
+     "delong_ci95": [
+      0.6320448806079142,
+      0.7534389903598278
+     ],
+     "n_oof_missing": 0
+    },
+    "M2": {
+     "features": [
+      "upo_score"
+     ],
+     "auc": 0.27710013440860215,
+     "ci95_cluster": [
+      0.17707264062875333,
+      0.38374827500101577
+     ],
+     "delong_ci95": [
+      0.20598924220756176,
+      0.34821102660964254
+     ],
+     "n_oof_missing": 0
+    },
+    "M3": {
+     "features": [
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 0.6941868279569892,
+     "ci95_cluster": [
+      0.5954783846900349,
+      0.7895764656078101
+     ],
+     "delong_ci95": [
+      0.633718228026119,
+      0.7546554278878593
+     ],
+     "n_oof_missing": 0
+    },
+    "M4": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50",
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 0.846135752688172,
+     "ci95_cluster": [
+      0.6832153649960541,
+      0.9564798028448165
+     ],
+     "delong_ci95": [
+      0.7926088480390983,
+      0.8996626573372457
+     ],
+     "n_oof_missing": 0
+    }
+   },
+   "differences": {
+    "M3-M1": {
+     "difference": 0.0014448924731181867,
+     "ci95_cluster_paired": [
+      -0.019668444792540866,
+      0.02220671596472279
+     ],
+     "delong_z": 0.18314191361098925,
+     "delong_p_two_sided": 0.854686669590087
+    },
+    "M3-M2": {
+     "difference": 0.417086693548387,
+     "ci95_cluster_paired": [
+      0.2831543091574079,
+      0.5370205945032334
+     ],
+     "delong_z": 9.963645154391237,
+     "delong_p_two_sided": 2.1985085709500762e-23
+    },
+    "M4-M0": {
+     "difference": 0.006989247311827929,
+     "ci95_cluster_paired": [
+      -0.004802802851570945,
+      0.01963816008662328
+     ],
+     "delong_z": 1.567232486754981,
+     "delong_p_two_sided": 0.1170603595129024
+    }
+   }
+  }
+ },
+ "edited": {
+  "n_errors": 0,
+  "errors_by_label": {},
+  "error_messages": {},
+  "upo_score_inconsistent": 0,
+  "Q1": {
+   "decision": "and_detected",
+   "n_windows": 218,
+   "n_abnormal": 7,
+   "n_normal": 211,
+   "n_subjects": 38,
+   "n_subjects_with_abnormal": 7,
+   "TP": 0,
+   "FN": 7,
+   "FP": 0,
+   "TN": 211,
+   "point": {
+    "rate_abnormal": 0.0,
+    "rate_normal": 0.0,
+    "difference": 0.0,
+    "sensitivity": 0.0,
+    "specificity": 1.0,
+    "PPV": null,
+    "NPV": 0.9678899082568807,
+    "balanced_accuracy": 0.5
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.0,
+     0.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.0,
+     0.0
+    ],
+    "sensitivity": [
+     0.0,
+     0.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     null,
+     null
+    ],
+    "NPV": [
+     0.9427261150881058,
+     0.9875518672199171
+    ],
+    "balanced_accuracy": [
+     0.5,
+     0.5
+    ]
+   },
+   "bootstrap_valid": 9992,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 9992,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    5.551115123125783e-17,
+    0.35433043506668743
+   ],
+   "wilson_normal": [
+    0.0,
+    0.017880435376768655
+   ],
+   "Q1_supported": false,
+   "Q1_opposite_direction": false
+  },
+  "classification_lle_detected": {
+   "decision": "lle_detected",
+   "n_windows": 218,
+   "n_abnormal": 7,
+   "n_normal": 211,
+   "n_subjects": 38,
+   "n_subjects_with_abnormal": 7,
+   "TP": 1,
+   "FN": 6,
+   "FP": 17,
+   "TN": 194,
+   "point": {
+    "rate_abnormal": 0.14285714285714285,
+    "rate_normal": 0.08056872037914692,
+    "difference": 0.06228842247799593,
+    "sensitivity": 0.14285714285714285,
+    "specificity": 0.919431279620853,
+    "PPV": 0.05555555555555555,
+    "NPV": 0.97,
+    "balanced_accuracy": 0.5311442112389979
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.0,
+     0.5
+    ],
+    "rate_normal": [
+     0.04411764705882353,
+     0.12122797007734247
+    ],
+    "difference": [
+     -0.10849056603773585,
+     0.4079695804591202
+    ],
+    "sensitivity": [
+     0.0,
+     0.5
+    ],
+    "specificity": [
+     0.8787720299226576,
+     0.9558823529411765
+    ],
+    "PPV": [
+     0.0,
+     0.17647058823529413
+    ],
+    "NPV": [
+     0.9432843252108716,
+     0.9902912621359223
+    ],
+    "balanced_accuracy": [
+     0.44575471698113206,
+     0.7039847902295602
+    ]
+   },
+   "bootstrap_valid": 9996,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.02567962434474355,
+    0.5131278292743189
+   ],
+   "wilson_normal": [
+    0.050909480653573175,
+    0.12522718788523277
+   ]
+  },
+  "classification_upo_detected": {
+   "decision": "upo_detected",
+   "n_windows": 218,
+   "n_abnormal": 7,
+   "n_normal": 211,
+   "n_subjects": 38,
+   "n_subjects_with_abnormal": 7,
+   "TP": 1,
+   "FN": 6,
+   "FP": 5,
+   "TN": 206,
+   "point": {
+    "rate_abnormal": 0.14285714285714285,
+    "rate_normal": 0.023696682464454975,
+    "difference": 0.11916046039268788,
+    "sensitivity": 0.14285714285714285,
+    "specificity": 0.976303317535545,
+    "PPV": 0.16666666666666666,
+    "NPV": 0.9716981132075472,
+    "balanced_accuracy": 0.559580230196344
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.0,
+     0.5
+    ],
+    "rate_normal": [
+     0.004464285714285714,
+     0.05069124423963134
+    ],
+    "difference": [
+     -0.04285714285714286,
+     0.4723756906077348
+    ],
+    "sensitivity": [
+     0.0,
+     0.5
+    ],
+    "specificity": [
+     0.9493087557603687,
+     0.9955357142857143
+    ],
+    "PPV": [
+     0.0,
+     0.6
+    ],
+    "NPV": [
+     0.9479768786127167,
+     0.9907407407407407
+    ],
+    "balanced_accuracy": [
+     0.4785714285714286,
+     0.7361878453038674
+    ]
+   },
+   "bootstrap_valid": 9996,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 44,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.02567962434474355,
+    0.5131278292743189
+   ],
+   "wilson_normal": [
+    0.010163306452086473,
+    0.05426307985469314
+   ]
+  },
+  "classification_or_detected": {
+   "decision": "or_detected",
+   "n_windows": 218,
+   "n_abnormal": 7,
+   "n_normal": 211,
+   "n_subjects": 38,
+   "n_subjects_with_abnormal": 7,
+   "TP": 2,
+   "FN": 5,
+   "FP": 22,
+   "TN": 189,
+   "point": {
+    "rate_abnormal": 0.2857142857142857,
+    "rate_normal": 0.10426540284360189,
+    "difference": 0.1814488828706838,
+    "sensitivity": 0.2857142857142857,
+    "specificity": 0.8957345971563981,
+    "PPV": 0.08333333333333333,
+    "NPV": 0.9742268041237113,
+    "balanced_accuracy": 0.5907244414353419
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.0,
+     0.6666666666666666
+    ],
+    "rate_normal": [
+     0.05940028934400289,
+     0.15731050019962356
+    ],
+    "difference": [
+     -0.11061946902654868,
+     0.5624787523372429
+    ],
+    "sensitivity": [
+     0.0,
+     0.6666666666666666
+    ],
+    "specificity": [
+     0.8426894998003764,
+     0.9405997106559971
+    ],
+    "PPV": [
+     0.0,
+     0.2
+    ],
+    "NPV": [
+     0.9497452345526516,
+     0.9940476190476191
+    ],
+    "balanced_accuracy": [
+     0.44469026548672563,
+     0.7812393761686214
+    ]
+   },
+   "bootstrap_valid": 9996,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.08221892400405678,
+    0.6410655481673808
+   ],
+   "wilson_normal": [
+    0.0698684735693954,
+    0.1528141458994215
+   ]
+  },
+  "Q3": {
+   "n_windows": 218,
+   "n_abnormal": 7,
+   "n_normal": 211,
+   "n_subjects": 38,
+   "excluded_windows": 0,
+   "excluded_by_label": {},
+   "C": 1.0,
+   "bootstrap_valid": 9997,
+   "models": {
+    "M0": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50"
+     ],
+     "auc": 0.22951929587000677,
+     "ci95_cluster": [
+      0.11925434315830569,
+      0.3775465136721681
+     ],
+     "delong_ci95": [
+      0.12332101671724417,
+      0.3357175750227694
+     ],
+     "n_oof_missing": 0
+    },
+    "M1": {
+     "features": [
+      "lle_z"
+     ],
+     "auc": 0.1137440758293839,
+     "ci95_cluster": [
+      0.023853724957930193,
+      0.193466513836581
+     ],
+     "delong_ci95": [
+      0.023391940558192728,
+      0.20409621110057508
+     ],
+     "n_oof_missing": 0
+    },
+    "M2": {
+     "features": [
+      "upo_score"
+     ],
+     "auc": 0.5792146242383209,
+     "ci95_cluster": [
+      0.28581124757595344,
+      0.8382561043285239
+     ],
+     "delong_ci95": [
+      0.2961849534313814,
+      0.8622442950452605
+     ],
+     "n_oof_missing": 0
+    },
+    "M3": {
+     "features": [
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 0.3764387271496276,
+     "ci95_cluster": [
+      0.09333862175575625,
+      0.6365987042682928
+     ],
+     "delong_ci95": [
+      0.10300094712029062,
+      0.6498765071789646
+     ],
+     "n_oof_missing": 0
+    },
+    "M4": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50",
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 0.4380501015572106,
+     "ci95_cluster": [
+      0.20597110560357856,
+      0.675362030411449
+     ],
+     "delong_ci95": [
+      0.19867394712929218,
+      0.677426255985129
+     ],
+     "n_oof_missing": 0
+    }
+   },
+   "differences": {
+    "M3-M1": {
+     "difference": 0.2626946513202437,
+     "ci95_cluster_paired": [
+      0.010016639923931779,
+      0.5335071770334928
+     ],
+     "delong_z": 2.003653916539802,
+     "delong_p_two_sided": 0.045107145971236995
+    },
+    "M3-M2": {
+     "difference": -0.2027758970886933,
+     "ci95_cluster_paired": [
+      -0.4574330658467076,
+      0.006412795125666402
+     ],
+     "delong_z": -1.6625477728099036,
+     "delong_p_two_sided": 0.09640299297935437
+    },
+    "M4-M0": {
+     "difference": 0.2085308056872038,
+     "ci95_cluster_paired": [
+      -0.0330503144654088,
+      0.46093869731800774
+     ],
+     "delong_z": 1.7107953320625915,
+     "delong_p_two_sided": 0.0871189016015716
+    }
+   }
+  }
+ }
+}
