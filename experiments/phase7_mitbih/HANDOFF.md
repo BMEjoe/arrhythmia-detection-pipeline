@@ -38,3 +38,10 @@ decision = combined_chaos_detected(analyze_segment(rr, DETECTOR)).
 | Step | State | Commit |
 |---|---|---|
 | 0 data: 48 records x (hea, dat, atr), mitdb 1.0.0, 144/144 SHA-256 match PhysioNet SHA256SUMS.txt; DATA_MANIFEST.json; mitdb_data/ gitignored | done | (this commit) |
+| 1 QC (qc.py, qc_tables.py, data.py, tests/test_phase7_mitbih_helpers.py 43 tests): Se/PPV 75 ms 0.9787/0.9734, 150 ms 0.9965/0.9911; late PVC fiducial (~100 ms) -> decision: label transfer at 150 ms (EC57), beat annotations only; 305 windows (211 N / 94 A), 43 subjects, 19 with abnormal; 75 ms arm 224 (187/37); annotation-time 368 (248/120); NN>=0.80: 211 N / 7 A; Q stays abnormal; paced records 0 windows | done | (this commit) |
+
+## Notes
+- NO detector output on MIT-BIH exists yet. Next: PREREGISTRATION.md (commit and
+  push alone), then runner with the Phase 3 guard.
+- Peak cache: mitdb_data/_phase7_peaks/ (gitignored); committed copy
+  results/qc/detected_peaks.npz.

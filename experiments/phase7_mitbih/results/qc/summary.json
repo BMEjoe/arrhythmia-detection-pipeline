@@ -1,0 +1,25 @@
+{
+ "tol_75": {
+  "TP": 107157,
+  "FP": 2931,
+  "FN": 2337,
+  "sensitivity": 0.9786563647323141,
+  "PPV": 0.9733758447787225
+ },
+ "tol_150": {
+  "TP": 109112,
+  "FP": 976,
+  "FN": 382,
+  "sensitivity": 0.9965112243593256,
+  "PPV": 0.9911343652350847
+ },
+ "n_candidate_windows": 403,
+ "n_windows": 305,
+ "n_normal": 211,
+ "n_abnormal": 94,
+ "n_subjects_with_windows": 43,
+ "n_subjects_with_abnormal_windows": 19,
+ "n_windows_tol75": 224,
+ "n_windows_annotation_times": 368,
+ "n_abnormal_annotation_times": 120
+}
