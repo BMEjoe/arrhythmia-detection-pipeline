@@ -48,6 +48,12 @@ decision = combined_chaos_detected(analyze_segment(rr, DETECTOR)).
 | 2a code before preregistration: detector.py (frozen DETECTOR, lle_z, upo_score), run_phase7.py (guarded; --phase synthetic code check), analysis.py (Q1-Q3, secondary, sensitivity); tests test_phase7_detector.py (5), test_phase7_analysis.py (7); synthetic check results/synthetic_check (72 Phase 5 windows, 53 s) | done | (this commit) |
 | 2 PREREGISTRATION.md committed and pushed alone | done | fb212da |
 
+| 3 run: 891 windows, 630 s, 0 errors, 0 inconsistencies | done | e2e6964 |
+| 4 preregistered analyses: raw AND 0/94 A, 0/211 N (Q1 no, Q2 no); annotation arm 6/120 vs 0/248 (Q1 rule met, Q2 no); Q3 M3-M1 -0.010, M4-M0 +0.009 (both CI include 0) | done | 57d31bf |
+| 4b EXPLORATORY: pooled LOSO AUC artifact (intercept-only 0.03); fit-free AUC lle_z 0.73, upo 0.49, RMSSD 0.87; raw vs annotation pairs | done | 39ba5d3 |
+| 5 docs/PHASE7_MITBIH_RESULTS.md | done | (this commit) |
+
+- ALL PHASE 7 STEPS DONE. Nothing left to resume.
 - Step 3 command (resumable): `OMP_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 /root/venv313/bin/python -m experiments.phase7_mitbih.run_phase7 --phase test --workers 4 > /tmp/claude-0/p7_run.log 2>&1`
   then `python -m experiments.phase7_mitbih.analysis`. Do NOT edit data.py, detector.py,
   run_phase7.py, analysis.py or final_pipeline.py (amendments only).
