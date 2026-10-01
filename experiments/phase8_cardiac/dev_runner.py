@@ -80,13 +80,14 @@ def main(argv=None):
     ap.add_argument("--regimes", default="")
     ap.add_argument("--tag", required=True)
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--outdir", default=str(HERE / "results" / "dev"))
     a = ap.parse_args(argv)
     seeds = _range(a.seeds)
     assert max(seeds) < 1000, "development seeds are 0-999"
     T = tasks(a.method.split(","), [int(x) for x in a.lengths.split(",")], seeds,
               [v for v in a.variants.split(",") if v], [c for c in a.conditions.split(",") if c],
               set(a.regimes.split(",")) if a.regimes else None)
-    out = HERE / "results" / "dev" / f"{a.tag}.jsonl"
+    out = pathlib.Path(a.outdir) / f"{a.tag}.jsonl"
     out.parent.mkdir(parents=True, exist_ok=True)
     done = set()
     if out.exists():
