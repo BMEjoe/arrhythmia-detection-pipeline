@@ -31,6 +31,14 @@ to the results. Everything chosen afterwards is labelled **EXPLORATORY**.
 - The LLE component alone separates the labels (50 % vs 13 %), as Phases 5–6
   predicted from ectopy alone. The UPO score carries no label information on raw RR.
 - Standard HRV separates the labels better than either chaos score.
+- **EXPLORATORY verification (Section 12).**
+  - A code audit of 10 windows reproduced every stored value bit for bit.
+  - Chaotic spike-ins built on every real window's scale were detected in 99–100 %
+    of windows.
+  - Inserting each window's real ectopy lowered power in abnormal windows to
+    55–79 %, and the measured R-peak jitter added no further loss.
+  - So the null is not a code-path failure, and neither ectopy nor jitter blinds
+    the detector.
 
 ## 2. Data and quality control (`QC.md`, `results/qc/`; no detector output used)
 
@@ -484,7 +492,146 @@ score is the component most sensitive to R-peak timing.**
   and m = 2 were fixed in advance without validation on RR data.
 - **One machine, one run; no amendment.** The run was not interrupted.
 
-## 12. Reproducibility
+## 12. EXPLORATORY verification of the null result (code audit and spike-in positive controls)
+
+This analysis was requested and designed **after** the preregistered results were
+seen. Nothing in it is confirmatory, and the preregistered results and the
+detector are unchanged.
+- Code: `audit.py`, `spike_in.py`.
+- Results: `results/spike_in/` (`audit.json`, `spike_in.jsonl`, `spike_in.md`,
+  `rates.csv`, `abnormal_by_fraction.csv`, `v_offsets_samples.npy`).
+
+### 12.1 Code audit of the real-data path (EXPLORATORY)
+
+**Sample.** Five normal and five abnormal primary windows were drawn with a fixed
+seed:
+- normal: 116/4, 105/0, 105/2, 234/2, 109/0;
+- abnormal: 233/1, 114/1, 221/5, 214/1, 221/4.
+
+**What was recomputed**, outside the Phase 7 data layer where possible:
+
+| check | result |
+|---|---|
+| ECG read with `wfdb.rdrecord` equals the pipeline loader | 10/10 |
+| fresh `detect_r_peaks` equals the committed peaks | 10/10 |
+| RR computed by hand as `diff(peaks / fs)`: units are seconds (window means 0.58–1.12 s) | 10/10 |
+| exactly 256 intervals, summing to (t1 − t0) / fs | 10/10 |
+| SHA-256 equals the stored run input | 10/10 |
+| labels from an independent nearest-unused matcher (150 ms) equal the stored label and abnormal fraction | 10/10 |
+| least-squares trend ratio (np.linalg.lstsq) equals the stored ratio; applied ⇔ ratio ≥ 0.7 | 10/10 (ratios 0.01–1.86; applied in 234/2 and 109/0) |
+| `analyze_segment`'s `rr_dynamics` equals the hand-detrended series x − trend + mean(trend) when applied, and x otherwise | 10/10 |
+| the config reports a linear detrend with gate 0.7 | 10/10 |
+| fresh `detector.evaluate` reproduces every stored decision, p-value, statistic, `lle_z` and `upo_score` **bit for bit** | 10/10 |
+
+**No discrepancy was found in the code path.**
+
+**Finding (Monte Carlo sensitivity, not a bug).** The audit's first version
+computed RR as `diff(peaks) / fs`. That is algebraically identical to the
+pipeline's `diff(peaks / fs)` but differs in the last bit: up to 2e-13 s in
+247–253 of 256 intervals.
+- The 10 decisions (AND, LLE, UPO) were unchanged.
+- But `lle_chaos_test` seeds its IAAFT surrogate RNG with a CRC of the data
+  bytes, so the p-values moved by up to 0.5 (116/4: 0.77 → 0.27).
+- The UPO score also moved, by up to 0.49 (233/1: 0.80 → 0.31).
+- So the continuous scores carry substantial Monte Carlo noise at 99 and 50
+  surrogates. Window-level differences of a few detections between arms (for
+  example raw vs annotation times, Section 9) are within what re-drawing the
+  surrogates alone can produce.
+
+### 12.2 Spike-in positive controls (EXPLORATORY)
+
+For each of the 305 primary windows, chaotic RR was built to that window's own
+mean and SD:
+
+| variant | construction |
+|---|---|
+| **(a) clean** | Hénon x (a = 1.4, b = 0.3) or logistic r = 4 (Phase 2E generators), standardized, rescaled to the window's mean and SD, quantized to 1/360 s. In 11 windows with long pauses the SD was reduced so that no interval falls below 0.25 s |
+| **(c) + ectopy** | the window's real abnormal beats inserted at their real positions with the Phase 6 Part B model: **ventricular** groups get a premature interval c·x (c ~ U(0.6, 0.8)), an absolute cycle 0.40–0.55 s inside runs of ≥ 3, and a full compensatory pause (2 pauses floored at 0.25 s); **supraventricular** groups get a premature interval and a post-ectopic interval d·x (d ~ U(1.0, 1.1)) |
+| **(d) + jitter** | (c) plus, at every V/E/F beat, a timing offset drawn from the 7,761 measured detected − annotated offsets of V/E/F beats matched at 150 ms (median +2.8 ms; 17.9 % above +75 ms). The interval ending at the beat gets +offset and the next one −offset |
+
+Variants (b)–(d) reuse (a)'s realization. The frozen DETECTOR ran on all 1,830
+series in 1,331 s with 0 errors.
+
+**Detection rates** (Wilson 95 %; `results/spike_in/rates.csv`):
+
+| system | variant | label | AND | LLE alone | UPO alone |
+|---|---|---|---|---|---|
+| Hénon | (a) clean | normal (211) | 210/211 (99.5 %) | 211/211 | 210/211 |
+| Hénon | (a) clean | abnormal (94) | 94/94 (100 %) | 94/94 | 94/94 |
+| Hénon | (c) + ectopy | normal | 205/211 (97.2 %) | 210/211 | 206/211 |
+| Hénon | (c) + ectopy | abnormal | **52/94 (55.3 %; 45.3–65.0)** | 93/94 | 53/94 |
+| Hénon | (d) + jitter | normal | 208/211 (98.6 %) | 210/211 | 208/211 |
+| Hénon | (d) + jitter | abnormal | **53/94 (56.4 %; 46.3–66.0)** | 90/94 | 54/94 |
+| logistic | (b) clean | normal | 208/211 (98.6 %) | 211/211 | 208/211 |
+| logistic | (b) clean | abnormal | 94/94 (100 %) | 94/94 | 94/94 |
+| logistic | (c) + ectopy | normal | 204/211 (96.7 %) | 211/211 | 204/211 |
+| logistic | (c) + ectopy | abnormal | **74/94 (78.7 %; 69.4–85.8)** | 93/94 | 74/94 |
+| logistic | (d) + jitter | normal | 201/211 (95.3 %) | 211/211 | 201/211 |
+| logistic | (d) + jitter | abnormal | **79/94 (84.0 %; 75.3–90.1)** | 91/94 | 80/94 |
+
+**Abnormal windows by abnormal fraction**, AND detections for (c) / (d):
+
+| abnormal fraction | windows | Hénon (c) / (d) | logistic (c) / (d) |
+|---|---:|---|---|
+| 0.10–0.20 | 37 | 26 / 26 | 35 / 34 |
+| 0.20–0.30 | 28 | 16 / 18 | 25 / 27 |
+| 0.30–0.50 | 21 | 8 / 7 | 9 / 12 |
+| > 0.50 | 8 | 2 / 2 | 5 / 6 |
+
+By beat type, (c) gives Hénon 46/83 ventricular and 6/11 supraventricular; logistic
+64/83 and 10/11.
+
+### 12.3 Interpretation (EXPLORATORY)
+
+1. **The real-data code path works.**
+   - Clean chaotic spike-ins built on every real window's scale are detected in
+     99.5–100 % (Hénon) and 98.6–100 % (logistic) of windows.
+   - Those are the Phase 5–6 rates: P1 Hénon 99–100 %, P2 logistic 97–98 %.
+   - Combined with the audit, the 0/305 primary result is not caused by units, the
+     window cutting, detrending, configuration or bookkeeping.
+2. **Ectopy is the real-data feature that costs power, but it does not blind the
+   detector.**
+   - Inserting the windows' real ectopic beats lowers AND power in abnormal
+     windows to 55 % (Hénon) and 79 % (logistic).
+   - The loss is entirely in the UPO component; LLE alone stays at 96–100 %.
+   - It grows with the ectopic burden: Hénon falls from 70 % at 10–20 % abnormal
+     beats to 25 % above 50 %.
+   - In normal windows, which carry few ectopic beats, power stays at 96–98 %.
+   - This is consistent with Phase 6's observation that the UPO gate supplies the
+     specificity: ectopic intervals break the map's fixed-point structure that the
+     So transform needs.
+3. **R-peak timing jitter at the measured level does not blind the detector.**
+   - Adding the measured V/E/F fiducial offsets changes AND power by at most about
+     5 points: Hénon 55.3 → 56.4 %, logistic 78.7 → 84.0 %; normal windows 97.2 →
+     98.6 % and 96.7 → 95.3 %. These are all within the Wilson intervals.
+   - Detection does not collapse at (d).
+4. **What this implies for the null result.**
+   - If the abnormal windows' underlying dynamics were low-dimensional, map-like
+     chaos of Hénon or logistic strength, the detector would have been expected to
+     fire in about 55–84 % of them, even with their real ectopy and timing errors.
+   - If the normal windows' dynamics were, it would have fired in about 95 % of
+     them.
+   - It fired in 0/94 (Wilson ≤ 3.9 %) and 0/211 (≤ 1.8 %).
+   - The null is therefore not explained by a broken code path or by ectopy or
+     jitter alone. The real RR windows simply do not contain the strongly
+     deterministic, noise-free map-like structure that the detector can see.
+5. **Limits of this check.**
+   - The spike-ins are noise-free, strongly chaotic one- and two-dimensional maps
+     that replace the real RR dynamics entirely. They show the detector can see
+     such chaos through real scale, ectopy and timing, not that it would see weaker,
+     noisier or higher-dimensional physiological chaos.
+   - It cannot see continuous-flow chaos (Phase 5: Rössler and Mackey–Glass 0 %).
+   - The jitter model perturbs only ectopic V/E/F beats. Normal-beat timing jitter,
+     missed and extra beats, and noise were not added.
+   - The ectopy model (coupling 0.6–0.8, exact compensatory pause, reset model) is
+     Phase 6's idealization, and the timing of ectopic beats relative to the chaotic
+     base is arbitrary.
+   - The raw vs annotation-time difference in the real data (Section 9: 0 vs 6
+     abnormal detections) is not reproduced by the measured V jitter in the
+     spike-ins. Given the Monte Carlo sensitivity in Section 12.1, part of it may be
+     surrogate-draw variability rather than a timing effect.
+
+## 13. Reproducibility
 
 ```bash
 uv venv -p python3.13 /root/venv313 && uv pip install -p /root/venv313/bin/python -r requirements.txt wfdb
@@ -497,6 +644,8 @@ python -m experiments.phase7_mitbih.run_phase7 --phase synthetic                
 python -m experiments.phase7_mitbih.run_phase7 --phase test --workers 4                    # guarded
 python -m experiments.phase7_mitbih.analysis                                               # preregistered
 python -m experiments.phase7_mitbih.exploratory                                            # EXPLORATORY
+python -m experiments.phase7_mitbih.audit                                                  # EXPLORATORY audit
+python -m experiments.phase7_mitbih.spike_in && python -m experiments.phase7_mitbih.spike_in --summary   # EXPLORATORY
 python -m pytest tests
 ```
 
