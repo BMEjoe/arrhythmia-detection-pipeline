@@ -57,3 +57,4 @@ decision = combined_chaos_detected(analyze_segment(rr, DETECTOR)).
 - Step 3 command (resumable): `OMP_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 /root/venv313/bin/python -m experiments.phase7_mitbih.run_phase7 --phase test --workers 4 > /tmp/claude-0/p7_run.log 2>&1`
   then `python -m experiments.phase7_mitbih.analysis`. Do NOT edit data.py, detector.py,
   run_phase7.py, analysis.py or final_pipeline.py (amendments only).
+| EXPLORATORY verification (user follow-up): audit.py (10 windows, 0 discrepancies; ulp-level input changes move lle_p up to 0.5 but no decision), spike_in.py (1,830 runs: clean 99-100 %, + real ectopy abnormal 55 % Henon / 79 % logistic, + measured V jitter 56 % / 84 %); report Section 12 | done | 06d705f |
