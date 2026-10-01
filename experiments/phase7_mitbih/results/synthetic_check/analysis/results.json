@@ -1,0 +1,1473 @@
+{
+ "raw": {
+  "n_errors": 0,
+  "errors_by_label": {},
+  "error_messages": {},
+  "upo_score_inconsistent": 0,
+  "Q1": {
+   "decision": "and_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 5,
+   "FN": 7,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 0.4166666666666667,
+    "rate_normal": 0.0,
+    "difference": 0.4166666666666667,
+    "sensitivity": 0.4166666666666667,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 0.631578947368421,
+    "balanced_accuracy": 0.7083333333333334
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "sensitivity": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     0.6,
+     0.7058823529411765
+    ],
+    "balanced_accuracy": [
+     0.6666666666666666,
+     0.7916666666666667
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ],
+   "Q1_supported": true,
+   "Q1_opposite_direction": false
+  },
+  "Q2": {
+   "rate_abnormal": 0.4166666666666667,
+   "ci95_cluster": [
+    0.3333333333333333,
+    0.5833333333333334
+   ],
+   "wilson95_ignoring_clustering": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "phase6_ectopy_only_max_rate": 0.037,
+   "phase6_ectopy_only_upper_bound": 0.064,
+   "exceeds_ectopy_only_expectation": true
+  },
+  "classification_lle_detected": {
+   "decision": "lle_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 12,
+   "FN": 0,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 1.0,
+    "rate_normal": 0.0,
+    "difference": 1.0,
+    "sensitivity": 1.0,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 1.0,
+    "balanced_accuracy": 1.0
+   },
+   "ci95": {
+    "rate_abnormal": [
+     1.0,
+     1.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     1.0,
+     1.0
+    ],
+    "sensitivity": [
+     1.0,
+     1.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     1.0,
+     1.0
+    ],
+    "balanced_accuracy": [
+     1.0,
+     1.0
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.7575059933447592,
+    1.0
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "classification_upo_detected": {
+   "decision": "upo_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 5,
+   "FN": 7,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 0.4166666666666667,
+    "rate_normal": 0.0,
+    "difference": 0.4166666666666667,
+    "sensitivity": 0.4166666666666667,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 0.631578947368421,
+    "balanced_accuracy": 0.7083333333333334
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "sensitivity": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     0.6,
+     0.7058823529411765
+    ],
+    "balanced_accuracy": [
+     0.6666666666666666,
+     0.7916666666666667
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "classification_or_detected": {
+   "decision": "or_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 12,
+   "FN": 0,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 1.0,
+    "rate_normal": 0.0,
+    "difference": 1.0,
+    "sensitivity": 1.0,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 1.0,
+    "balanced_accuracy": 1.0
+   },
+   "ci95": {
+    "rate_abnormal": [
+     1.0,
+     1.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     1.0,
+     1.0
+    ],
+    "sensitivity": [
+     1.0,
+     1.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     1.0,
+     1.0
+    ],
+    "balanced_accuracy": [
+     1.0,
+     1.0
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.7575059933447592,
+    1.0
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "Q3": {
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "excluded_windows": 0,
+   "excluded_by_label": {},
+   "C": 1.0,
+   "bootstrap_valid": 10000,
+   "models": {
+    "M0": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50"
+     ],
+     "auc": 0.9652777777777779,
+     "ci95_cluster": [
+      0.9166666666666666,
+      1.0
+     ],
+     "delong_ci95": [
+      0.9019669869667768,
+      1.028588568588779
+     ],
+     "n_oof_missing": 0
+    },
+    "M1": {
+     "features": [
+      "lle_z"
+     ],
+     "auc": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ],
+     "delong_ci95": [
+      1.0,
+      1.0
+     ],
+     "n_oof_missing": 0
+    },
+    "M2": {
+     "features": [
+      "upo_score"
+     ],
+     "auc": 0.78125,
+     "ci95_cluster": [
+      0.6875,
+      0.9583333333333334
+     ],
+     "delong_ci95": [
+      0.571773746202689,
+      0.990726253797311
+     ],
+     "n_oof_missing": 0
+    },
+    "M3": {
+     "features": [
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ],
+     "delong_ci95": [
+      1.0,
+      1.0
+     ],
+     "n_oof_missing": 0
+    },
+    "M4": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50",
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ],
+     "delong_ci95": [
+      1.0,
+      1.0
+     ],
+     "n_oof_missing": 0
+    }
+   },
+   "differences": {
+    "M3-M1": {
+     "difference": 0.0,
+     "ci95_cluster_paired": [
+      0.0,
+      0.0
+     ],
+     "delong_z": null,
+     "delong_p_two_sided": null
+    },
+    "M3-M2": {
+     "difference": 0.21875,
+     "ci95_cluster_paired": [
+      0.04166666666666663,
+      0.3125
+     ],
+     "delong_z": 2.046733781170491,
+     "delong_p_two_sided": 0.04068423051779318
+    },
+    "M4-M0": {
+     "difference": 0.0347222222222221,
+     "ci95_cluster_paired": [
+      0.0,
+      0.08333333333333337
+     ],
+     "delong_z": 1.074924269366893,
+     "delong_p_two_sided": 0.2824086352662515
+    }
+   }
+  },
+  "tol75_Q1_descriptive": {
+   "decision": "and_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 5,
+   "FN": 7,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 0.4166666666666667,
+    "rate_normal": 0.0,
+    "difference": 0.4166666666666667,
+    "sensitivity": 0.4166666666666667,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 0.631578947368421,
+    "balanced_accuracy": 0.7083333333333334
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "sensitivity": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     0.6,
+     0.7058823529411765
+    ],
+    "balanced_accuracy": [
+     0.6666666666666666,
+     0.7916666666666667
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "no_missed_beat_Q1_descriptive": {
+   "decision": "and_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 5,
+   "FN": 7,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 0.4166666666666667,
+    "rate_normal": 0.0,
+    "difference": 0.4166666666666667,
+    "sensitivity": 0.4166666666666667,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 0.631578947368421,
+    "balanced_accuracy": 0.7083333333333334
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "sensitivity": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     0.6,
+     0.7058823529411765
+    ],
+    "balanced_accuracy": [
+     0.6666666666666666,
+     0.7916666666666667
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  }
+ },
+ "annotation": {
+  "n_errors": 0,
+  "errors_by_label": {},
+  "error_messages": {},
+  "upo_score_inconsistent": 0,
+  "Q1": {
+   "decision": "and_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 5,
+   "FN": 7,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 0.4166666666666667,
+    "rate_normal": 0.0,
+    "difference": 0.4166666666666667,
+    "sensitivity": 0.4166666666666667,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 0.631578947368421,
+    "balanced_accuracy": 0.7083333333333334
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "sensitivity": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     0.6,
+     0.7058823529411765
+    ],
+    "balanced_accuracy": [
+     0.6666666666666666,
+     0.7916666666666667
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ],
+   "Q1_supported": true,
+   "Q1_opposite_direction": false
+  },
+  "Q2": {
+   "rate_abnormal": 0.4166666666666667,
+   "ci95_cluster": [
+    0.3333333333333333,
+    0.5833333333333334
+   ],
+   "wilson95_ignoring_clustering": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "phase6_ectopy_only_max_rate": 0.037,
+   "phase6_ectopy_only_upper_bound": 0.064,
+   "exceeds_ectopy_only_expectation": true
+  },
+  "classification_lle_detected": {
+   "decision": "lle_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 12,
+   "FN": 0,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 1.0,
+    "rate_normal": 0.0,
+    "difference": 1.0,
+    "sensitivity": 1.0,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 1.0,
+    "balanced_accuracy": 1.0
+   },
+   "ci95": {
+    "rate_abnormal": [
+     1.0,
+     1.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     1.0,
+     1.0
+    ],
+    "sensitivity": [
+     1.0,
+     1.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     1.0,
+     1.0
+    ],
+    "balanced_accuracy": [
+     1.0,
+     1.0
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.7575059933447592,
+    1.0
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "classification_upo_detected": {
+   "decision": "upo_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 5,
+   "FN": 7,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 0.4166666666666667,
+    "rate_normal": 0.0,
+    "difference": 0.4166666666666667,
+    "sensitivity": 0.4166666666666667,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 0.631578947368421,
+    "balanced_accuracy": 0.7083333333333334
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "sensitivity": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     0.6,
+     0.7058823529411765
+    ],
+    "balanced_accuracy": [
+     0.6666666666666666,
+     0.7916666666666667
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "classification_or_detected": {
+   "decision": "or_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 12,
+   "FN": 0,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 1.0,
+    "rate_normal": 0.0,
+    "difference": 1.0,
+    "sensitivity": 1.0,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 1.0,
+    "balanced_accuracy": 1.0
+   },
+   "ci95": {
+    "rate_abnormal": [
+     1.0,
+     1.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     1.0,
+     1.0
+    ],
+    "sensitivity": [
+     1.0,
+     1.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     1.0,
+     1.0
+    ],
+    "balanced_accuracy": [
+     1.0,
+     1.0
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.7575059933447592,
+    1.0
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "Q3": {
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "excluded_windows": 0,
+   "excluded_by_label": {},
+   "C": 1.0,
+   "bootstrap_valid": 10000,
+   "models": {
+    "M0": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50"
+     ],
+     "auc": 0.9652777777777779,
+     "ci95_cluster": [
+      0.9166666666666666,
+      1.0
+     ],
+     "delong_ci95": [
+      0.9019669869667768,
+      1.028588568588779
+     ],
+     "n_oof_missing": 0
+    },
+    "M1": {
+     "features": [
+      "lle_z"
+     ],
+     "auc": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ],
+     "delong_ci95": [
+      1.0,
+      1.0
+     ],
+     "n_oof_missing": 0
+    },
+    "M2": {
+     "features": [
+      "upo_score"
+     ],
+     "auc": 0.78125,
+     "ci95_cluster": [
+      0.6875,
+      0.9583333333333334
+     ],
+     "delong_ci95": [
+      0.571773746202689,
+      0.990726253797311
+     ],
+     "n_oof_missing": 0
+    },
+    "M3": {
+     "features": [
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ],
+     "delong_ci95": [
+      1.0,
+      1.0
+     ],
+     "n_oof_missing": 0
+    },
+    "M4": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50",
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ],
+     "delong_ci95": [
+      1.0,
+      1.0
+     ],
+     "n_oof_missing": 0
+    }
+   },
+   "differences": {
+    "M3-M1": {
+     "difference": 0.0,
+     "ci95_cluster_paired": [
+      0.0,
+      0.0
+     ],
+     "delong_z": null,
+     "delong_p_two_sided": null
+    },
+    "M3-M2": {
+     "difference": 0.21875,
+     "ci95_cluster_paired": [
+      0.04166666666666663,
+      0.3125
+     ],
+     "delong_z": 2.046733781170491,
+     "delong_p_two_sided": 0.04068423051779318
+    },
+    "M4-M0": {
+     "difference": 0.0347222222222221,
+     "ci95_cluster_paired": [
+      0.0,
+      0.08333333333333337
+     ],
+     "delong_z": 1.074924269366893,
+     "delong_p_two_sided": 0.2824086352662515
+    }
+   }
+  }
+ },
+ "edited": {
+  "n_errors": 0,
+  "errors_by_label": {},
+  "error_messages": {},
+  "upo_score_inconsistent": 0,
+  "Q1": {
+   "decision": "and_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 5,
+   "FN": 7,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 0.4166666666666667,
+    "rate_normal": 0.0,
+    "difference": 0.4166666666666667,
+    "sensitivity": 0.4166666666666667,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 0.631578947368421,
+    "balanced_accuracy": 0.7083333333333334
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "sensitivity": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     0.6,
+     0.7058823529411765
+    ],
+    "balanced_accuracy": [
+     0.6666666666666666,
+     0.7916666666666667
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ],
+   "Q1_supported": true,
+   "Q1_opposite_direction": false
+  },
+  "classification_lle_detected": {
+   "decision": "lle_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 12,
+   "FN": 0,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 1.0,
+    "rate_normal": 0.0,
+    "difference": 1.0,
+    "sensitivity": 1.0,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 1.0,
+    "balanced_accuracy": 1.0
+   },
+   "ci95": {
+    "rate_abnormal": [
+     1.0,
+     1.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     1.0,
+     1.0
+    ],
+    "sensitivity": [
+     1.0,
+     1.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     1.0,
+     1.0
+    ],
+    "balanced_accuracy": [
+     1.0,
+     1.0
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.7575059933447592,
+    1.0
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "classification_upo_detected": {
+   "decision": "upo_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 5,
+   "FN": 7,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 0.4166666666666667,
+    "rate_normal": 0.0,
+    "difference": 0.4166666666666667,
+    "sensitivity": 0.4166666666666667,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 0.631578947368421,
+    "balanced_accuracy": 0.7083333333333334
+   },
+   "ci95": {
+    "rate_abnormal": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "sensitivity": [
+     0.3333333333333333,
+     0.5833333333333334
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     0.6,
+     0.7058823529411765
+    ],
+    "balanced_accuracy": [
+     0.6666666666666666,
+     0.7916666666666667
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.19326031365875665,
+    0.6804886874504503
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "classification_or_detected": {
+   "decision": "or_detected",
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "n_subjects_with_abnormal": 4,
+   "TP": 12,
+   "FN": 0,
+   "FP": 0,
+   "TN": 12,
+   "point": {
+    "rate_abnormal": 1.0,
+    "rate_normal": 0.0,
+    "difference": 1.0,
+    "sensitivity": 1.0,
+    "specificity": 1.0,
+    "PPV": 1.0,
+    "NPV": 1.0,
+    "balanced_accuracy": 1.0
+   },
+   "ci95": {
+    "rate_abnormal": [
+     1.0,
+     1.0
+    ],
+    "rate_normal": [
+     0.0,
+     0.0
+    ],
+    "difference": [
+     1.0,
+     1.0
+    ],
+    "sensitivity": [
+     1.0,
+     1.0
+    ],
+    "specificity": [
+     1.0,
+     1.0
+    ],
+    "PPV": [
+     1.0,
+     1.0
+    ],
+    "NPV": [
+     1.0,
+     1.0
+    ],
+    "balanced_accuracy": [
+     1.0,
+     1.0
+    ]
+   },
+   "bootstrap_valid": 10000,
+   "bootstrap_undefined": {
+    "rate_abnormal": 0,
+    "rate_normal": 0,
+    "difference": 0,
+    "sensitivity": 0,
+    "specificity": 0,
+    "PPV": 0,
+    "NPV": 0,
+    "balanced_accuracy": 0
+   },
+   "wilson_abnormal": [
+    0.7575059933447592,
+    1.0
+   ],
+   "wilson_normal": [
+    2.7755575615628914e-17,
+    0.24249400665524085
+   ]
+  },
+  "Q3": {
+   "n_windows": 24,
+   "n_abnormal": 12,
+   "n_normal": 12,
+   "n_subjects": 4,
+   "excluded_windows": 0,
+   "excluded_by_label": {},
+   "C": 1.0,
+   "bootstrap_valid": 10000,
+   "models": {
+    "M0": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50"
+     ],
+     "auc": 0.9652777777777779,
+     "ci95_cluster": [
+      0.9166666666666666,
+      1.0
+     ],
+     "delong_ci95": [
+      0.9019669869667768,
+      1.028588568588779
+     ],
+     "n_oof_missing": 0
+    },
+    "M1": {
+     "features": [
+      "lle_z"
+     ],
+     "auc": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ],
+     "delong_ci95": [
+      1.0,
+      1.0
+     ],
+     "n_oof_missing": 0
+    },
+    "M2": {
+     "features": [
+      "upo_score"
+     ],
+     "auc": 0.78125,
+     "ci95_cluster": [
+      0.6875,
+      0.9583333333333334
+     ],
+     "delong_ci95": [
+      0.571773746202689,
+      0.990726253797311
+     ],
+     "n_oof_missing": 0
+    },
+    "M3": {
+     "features": [
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ],
+     "delong_ci95": [
+      1.0,
+      1.0
+     ],
+     "n_oof_missing": 0
+    },
+    "M4": {
+     "features": [
+      "sdnn_ms",
+      "rmssd_ms",
+      "pnn50",
+      "lle_z",
+      "upo_score"
+     ],
+     "auc": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ],
+     "delong_ci95": [
+      1.0,
+      1.0
+     ],
+     "n_oof_missing": 0
+    }
+   },
+   "differences": {
+    "M3-M1": {
+     "difference": 0.0,
+     "ci95_cluster_paired": [
+      0.0,
+      0.0
+     ],
+     "delong_z": null,
+     "delong_p_two_sided": null
+    },
+    "M3-M2": {
+     "difference": 0.21875,
+     "ci95_cluster_paired": [
+      0.04166666666666663,
+      0.3125
+     ],
+     "delong_z": 2.046733781170491,
+     "delong_p_two_sided": 0.04068423051779318
+    },
+    "M4-M0": {
+     "difference": 0.0347222222222221,
+     "ci95_cluster_paired": [
+      0.0,
+      0.08333333333333337
+     ],
+     "delong_z": 1.074924269366893,
+     "delong_p_two_sided": 0.2824086352662515
+    }
+   }
+  }
+ }
+}
