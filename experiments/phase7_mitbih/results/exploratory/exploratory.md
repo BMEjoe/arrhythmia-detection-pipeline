@@ -1,0 +1,386 @@
+# Phase 7 EXPLORATORY analyses (chosen after the preregistered outputs were seen)
+
+## E1: out-of-fold AUC artifact and fit-free score AUCs
+
+```
+{
+ "E1_raw": {
+  "noise_feature_loso_auc": {
+   "median": 0.15332257739235658,
+   "min": 0.031007361097106,
+   "max": 0.40793586770192597,
+   "n_repeats": 20
+  },
+  "intercept_only_loso_auc": 0.030654431783805593,
+  "corr_subject_abnormal_share_vs_training_prevalence": -0.9208544545666005,
+  "direct_auc_lle_z": {
+   "auc": 0.7270848038721387,
+   "ci95_cluster": [
+    0.6149732347172279,
+    0.8252743858162411
+   ],
+   "n": 305
+  },
+  "direct_auc_upo_score": {
+   "auc": 0.48653826762125635,
+   "ci95_cluster": [
+    0.4113961128943999,
+    0.562597249986322
+   ],
+   "n": 305
+  },
+  "direct_auc_sdnn_ms": {
+   "auc": 0.8208127457900574,
+   "ci95_cluster": [
+    0.6613998291735815,
+    0.943992392721946
+   ],
+   "n": 305
+  },
+  "direct_auc_rmssd_ms": {
+   "auc": 0.8651305838459211,
+   "ci95_cluster": [
+    0.7294840647779672,
+    0.9605013633474794
+   ],
+   "n": 305
+  },
+  "direct_auc_pnn50": {
+   "auc": 0.8242664112130684,
+   "ci95_cluster": [
+    0.696204551368295,
+    0.9247199856082342
+   ],
+   "n": 305
+  },
+  "direct_auc_lle_stat": {
+   "auc": 0.7195220328728447,
+   "ci95_cluster": [
+    0.6091826475191137,
+    0.8136610355267071
+   ],
+   "n": 305
+  },
+  "direct_auc_upo_source_rJ": {
+   "auc": 0.5908036704648584,
+   "ci95_cluster": [
+    0.4963476048873245,
+    0.6789744710789487
+   ],
+   "n": 305
+  },
+  "upo_score_zero_fraction_by_label": {
+   "0": 0.6492890995260664,
+   "1": 0.7021276595744681
+  },
+  "upo_score_median_by_label": {
+   "0": 0.0,
+   "1": 0.0
+  },
+  "lle_z_median_by_label": {
+   "0": 0.23228205888310643,
+   "1": 1.6000355628413536
+  }
+ },
+ "E1_annotation": {
+  "noise_feature_loso_auc": {
+   "median": 0.11334005376344085,
+   "min": 0.023857526881720423,
+   "max": 0.4335685483870968,
+   "n_repeats": 20
+  },
+  "intercept_only_loso_auc": 0.026864919354838705,
+  "corr_subject_abnormal_share_vs_training_prevalence": -0.9749763326468056,
+  "direct_auc_lle_z": {
+   "auc": 0.7261760752688171,
+   "ci95_cluster": [
+    0.640586583795988,
+    0.8098146703314576
+   ],
+   "n": 368
+  },
+  "direct_auc_upo_score": {
+   "auc": 0.5206149193548387,
+   "ci95_cluster": [
+    0.43778390070123324,
+    0.6005551453924145
+   ],
+   "n": 368
+  },
+  "direct_auc_sdnn_ms": {
+   "auc": 0.8446572580645162,
+   "ci95_cluster": [
+    0.7031359319926838,
+    0.9481640399901305
+   ],
+   "n": 368
+  },
+  "direct_auc_rmssd_ms": {
+   "auc": 0.8883064516129033,
+   "ci95_cluster": [
+    0.774266611951029,
+    0.9657750463540964
+   ],
+   "n": 368
+  },
+  "direct_auc_pnn50": {
+   "auc": 0.8481014784946237,
+   "ci95_cluster": [
+    0.733664439820057,
+    0.934374211159317
+   ],
+   "n": 368
+  },
+  "direct_auc_lle_stat": {
+   "auc": 0.7068548387096775,
+   "ci95_cluster": [
+    0.5942272843559039,
+    0.8055783517081477
+   ],
+   "n": 368
+  },
+  "direct_auc_upo_source_rJ": {
+   "auc": 0.5679099462365592,
+   "ci95_cluster": [
+    0.48094531696683823,
+    0.6533156243266537
+   ],
+   "n": 368
+  },
+  "upo_score_zero_fraction_by_label": {
+   "0": 0.657258064516129,
+   "1": 0.6416666666666667
+  },
+  "upo_score_median_by_label": {
+   "0": 0.0,
+   "1": 0.0
+  },
+  "lle_z_median_by_label": {
+   "0": 0.31069938708842015,
+   "1": 1.6172563090960161
+  }
+ },
+ "E1_edited": {
+  "noise_feature_loso_auc": {
+   "median": 0.32498307379823965,
+   "min": 0.026404874746106973,
+   "max": 0.6066350710900474,
+   "n_repeats": 20
+  },
+  "intercept_only_loso_auc": 0.03960731211916044,
+  "corr_subject_abnormal_share_vs_training_prevalence": -0.7423575519787882,
+  "direct_auc_lle_z": {
+   "auc": 0.5497630331753555,
+   "ci95_cluster": [
+    0.25115943770275145,
+    0.8422415962157807
+   ],
+   "n": 218
+  },
+  "direct_auc_upo_score": {
+   "auc": 0.6993906567366284,
+   "ci95_cluster": [
+    0.47920450885668275,
+    0.8994741554741554
+   ],
+   "n": 218
+  },
+  "direct_auc_sdnn_ms": {
+   "auc": 0.45971563981042657,
+   "ci95_cluster": [
+    0.24429223744292236,
+    0.6934676434676433
+   ],
+   "n": 218
+  },
+  "direct_auc_rmssd_ms": {
+   "auc": 0.4373730534867975,
+   "ci95_cluster": [
+    0.19453982952751764,
+    0.6860342116644627
+   ],
+   "n": 218
+  },
+  "direct_auc_pnn50": {
+   "auc": 0.4485443466486121,
+   "ci95_cluster": [
+    0.21446750606597154,
+    0.6903417965929205
+   ],
+   "n": 218
+  },
+  "direct_auc_lle_stat": {
+   "auc": 0.4928909952606635,
+   "ci95_cluster": [
+    0.2025523734577443,
+    0.7847489316239314
+   ],
+   "n": 218
+  },
+  "direct_auc_upo_source_rJ": {
+   "auc": 0.4827352742044685,
+   "ci95_cluster": [
+    0.30974842767295596,
+    0.6687563451776649
+   ],
+   "n": 218
+  },
+  "upo_score_zero_fraction_by_label": {
+   "0": 0.6066350710900474,
+   "1": 0.2857142857142857
+  },
+  "upo_score_median_by_label": {
+   "0": 0.0,
+   "1": 0.7761842677096915
+  },
+  "lle_z_median_by_label": {
+   "0": 0.005735690586232202,
+   "1": 0.6618152293458335
+  }
+ }
+}
+```
+
+## E2: annotation-time AND detections
+
+|   record | subject   |   window |   label |   abnormal_fraction | beat_type        |   nn_fraction |   lle_p |   lle_z |   upo_score |   upo_n_gated |   upo_max_gated_modulus | detrend_applied   |   af_fraction |
+|---------:|:----------|---------:|--------:|--------------------:|:-----------------|--------------:|--------:|--------:|------------:|--------------:|------------------------:|:------------------|--------------:|
+|      106 | S106      |        0 |       1 |            0.230469 | ventricular      |     0.625     |    0.01 | 6.22825 |     2.31856 |             1 |                 1.48803 | False             |             0 |
+|      119 | S119      |        6 |       1 |            0.300781 | ventricular      |     0.394531  |    0.01 | 2.6107  |     3.35663 |             1 |                 2.56179 | False             |             0 |
+|      208 | S208      |        2 |       1 |            0.414062 | ventricular      |     0.3125    |    0.02 | 2.95613 |     2.27708 |             1 |                 1.67989 | False             |             0 |
+|      228 | S228      |        0 |       1 |            0.195312 | ventricular      |     0.613281  |    0.01 | 2.8284  |     5.36868 |             1 |                 1.25958 | False             |             0 |
+|      232 | S232      |        0 |       1 |            0.734375 | supraventricular |     0.0429688 |    0.01 | 3.67989 |     2.22076 |             1 |                 5.95221 | False             |             0 |
+|      233 | S233      |        8 |       1 |            0.25     | ventricular      |     0.523438  |    0.05 | 1.73458 |     4.18381 |             1 |                 1.47268 | False             |             0 |
+
+Raw-RR windows covering the same span (>= 90 % overlap):
+
+```
+[
+ {
+  "record": "106",
+  "ann_window": 0,
+  "raw_pair": {
+   "raw_window": 0,
+   "overlap": 0.9999877231320745,
+   "and_detected_raw": false,
+   "lle_detected_raw": true,
+   "upo_detected_raw": false,
+   "upo_score_raw": 0.0,
+   "upo_score_ann": 2.318558851966821
+  }
+ },
+ {
+  "record": "119",
+  "ann_window": 6,
+  "raw_pair": {
+   "raw_window": 6,
+   "overlap": 1.0,
+   "and_detected_raw": false,
+   "lle_detected_raw": true,
+   "upo_detected_raw": false,
+   "upo_score_raw": 2.0218055359744347,
+   "upo_score_ann": 3.35662723080008
+  }
+ },
+ {
+  "record": "208",
+  "ann_window": 2,
+  "raw_pair": null
+ },
+ {
+  "record": "228",
+  "ann_window": 0,
+  "raw_pair": null
+ },
+ {
+  "record": "232",
+  "ann_window": 0,
+  "raw_pair": {
+   "raw_window": 0,
+   "overlap": 0.9999785306367813,
+   "and_detected_raw": false,
+   "lle_detected_raw": true,
+   "upo_detected_raw": false,
+   "upo_score_raw": 1.9057971014492734,
+   "upo_score_ann": 2.220760233918129
+  }
+ },
+ {
+  "record": "233",
+  "ann_window": 8,
+  "raw_pair": {
+   "raw_window": 8,
+   "overlap": 0.994121452999353,
+   "and_detected_raw": false,
+   "lle_detected_raw": false,
+   "upo_detected_raw": true,
+   "upo_score_raw": 3.359925424394073,
+   "upo_score_ann": 4.1838112858464385
+  }
+ }
+]
+```
+
+## E3: raw vs annotation windows paired by time
+
+```
+{
+ "n_pairs": 296,
+ "label_agreement": 0.9966216216216216,
+ "crosstabs_raw_vs_ann": {
+  "and_detected": {
+   "False": {
+    "False": 292
+   },
+   "True": {
+    "False": 4
+   }
+  },
+  "lle_detected": {
+   "False": {
+    "False": 204,
+    "True": 25
+   },
+   "True": {
+    "False": 21,
+    "True": 46
+   }
+  },
+  "upo_detected": {
+   "False": {
+    "False": 282,
+    "True": 3
+   },
+   "True": {
+    "False": 7,
+    "True": 4
+   }
+  }
+ },
+ "corr_lle_z": 0.7124363633990419,
+ "corr_upo_score": 0.49967797111774465,
+ "label0": {
+  "n": 204,
+  "upo_raw": 4,
+  "upo_ann": 3,
+  "lle_raw": 25,
+  "lle_ann": 25,
+  "and_raw": 0,
+  "and_ann": 0,
+  "median_upo_score_raw": 0.0,
+  "median_upo_score_ann": 0.0
+ },
+ "label1": {
+  "n": 92,
+  "upo_raw": 3,
+  "upo_ann": 8,
+  "lle_raw": 46,
+  "lle_ann": 42,
+  "and_raw": 0,
+  "and_ann": 4,
+  "median_upo_score_raw": 0.0,
+  "median_upo_score_ann": 0.0
+ }
+}
+```
+
