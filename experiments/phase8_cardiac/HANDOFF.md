@@ -75,3 +75,10 @@ PMC9938421 (restated Table 1 gives a stable equilibrium, not its own Table 3), A
 |---|---|---|
 | source survey | done | 6afdae8 |
 | models implemented + verified: phase_reset (tau 0.66 period-3, 1.2 chaotic LE +0.135), av_node (H_bif 56.9078 exact; LE ~ -0.006 everywhere), mackey_glass (LE tau 50 = 0.0057-0.0059 vs published 0.0055-0.0058), coupled_vdp (normal 89.4 bpm vs ~90; pathological 137-256 bpm dispersed); Seidel-Herzel DROPPED | done | (this commit) |
+| ground truth: scan (426 tasks), labels, 36 regimes frozen (results/ground_truth/regimes.json) | done | 9a8035d |
+| Part B dev diagnosis (DIAGNOSIS.md): frozen UPO bottleneck; prediction tests sensitive incl. flows but ectopy-dominated; titration non-specific; candidates C1 frozen512, C2 nlp_iaaft512 (Z 16.92), C3 nlp_ep256 (Z 9.31), C4 titration256 | done | (this commit) |
+
+## Notes
+- Next: commit PREREGISTRATION.md ALONE (draft kept at /tmp/claude-0/PREREG8.draft.md), push,
+  then `OMP_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 nohup /root/venv313/bin/python -m experiments.phase8_cardiac.run_test --workers 4 > /tmp/claude-0/p8_test.log 2>&1 &`
+  (resumable; ~9.5 h), then `python -m experiments.phase8_cardiac.decide`.

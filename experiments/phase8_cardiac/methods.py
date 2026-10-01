@@ -228,8 +228,8 @@ METHODS["nlpred_ep_scan"] = _nlpred_ep_scan
 # Frozen with PREREGISTRATION.md.  Window length is part of each candidate (LENGTH).
 # Thresholds Z_C2, Z_C3 were calibrated on DEVELOPMENT nulls only (calibrate.py,
 # results/dev/calibration.json) before the preregistration.
-Z_C2 = None   # set from calibration (nlp_iaaft512)
-Z_C3 = None   # set from calibration (nlp_ep256)
+Z_C2 = 16.92  # calibrate.py, results/dev/calibration.json (binding: E3_couplets_5pct)
+Z_C3 = 9.31   # calibrate.py, results/dev/calibration.json (binding: S2_ectopic_5pct)
 CANDIDATES = ("c1_frozen512", "c2_nlp_iaaft512", "c3_nlp_ep256", "c4_titration256")
 LENGTH = {"c1_frozen512": 512, "c2_nlp_iaaft512": 512, "c3_nlp_ep256": 256, "c4_titration256": 256,
           "baseline_frozen256": 256}
