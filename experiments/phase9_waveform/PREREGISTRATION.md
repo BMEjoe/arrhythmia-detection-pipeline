@@ -1,5 +1,3 @@
-**DRAFT — not yet the preregistration (thresholds pending); no TEST seed may be used while this line is present.**
-
 # Phase 9 preregistration: annotation-masked chaos detectors on realistic ECG-derived RR
 
 This file is committed and pushed **before any TEST seed (≥ 9500) is generated and before any
@@ -26,7 +24,22 @@ This motivated the DEV-only circle-map controls and the annotation mask.
 amendment saying whether any TEST output had been seen. `run_test9.py` refuses to start unless
 this file is committed, unmodified, pushed, and lists every candidate.
 
-FROZEN_TABLE_PLACEHOLDER
+**Frozen code** (git `97c36b0`; SHA-256 prefixes):
+
+| file | SHA-256 prefix |
+|---|---|
+| `candidates9.py` | ceaf195886f0f812 |
+| `library.py` | 9a6b3a5658178ef7 |
+| `families.py` | 046bbe7301a62f25 |
+| `ecgsyn.py` | a94a584805a4c354 |
+| `morphology.py` | b474454821a47042 |
+| `noise.py` | 6fa58b7cb8704455 |
+| `regimes9.py` | bbe8c5717905bde1 |
+| `run_test9.py` | 82301e5293bca8a2 |
+| `decide9.py` | 22dcaee47e276fac |
+| `results/ground_truth/ktz_labels.json` | a9f44b9825252271 |
+| `results/dev/calibration9.json` | f0f1cb0f6201596c |
+| `final_pipeline.py` | 27bf93808ab45487 |
 
 ## 1. Library and split (`HANDOFF.md`, PHASE 9 SPLIT)
 
@@ -77,7 +90,25 @@ FROZEN_TABLE_PLACEHOLDER
     linearly interpolated must satisfy FSLE ≥ **F_MIN**.
 
 **Thresholds** (`calibrate9.py`; DEV seeds 9000–9219 only; rules in the calibrate9 docstring):
-THRESHOLD_PLACEHOLDER
+| threshold | value | rule / binding condition |
+|---|---|---|
+| Z_DET | **9.4521** | ≤ 2 % of each DEV null condition + 0.5; binding N3_linear_rr_trend (realistic) |
+| G_MIN | **0.25** | ≤ 2 % of each DEV null / non-chaotic condition passing Z_DET and G + 0.05 |
+| Z_DET_RR | **12.1603** | as Z_DET with the RR-rule mask; binding S2_ectopic_5pct (input) |
+| G_MIN_RR | **0.85** | as G_MIN with the RR-rule mask |
+| F_MIN | **1.6183** | as G_MIN for the FSLE gate value |
+
+Development performance at these thresholds (`results/dev/calibration9.json`; DEV seeds; for
+information, not a TEST prediction):
+
+| candidate | DEV CHAOTIC detected | DEV non-chaotic detected | DEV null detected |
+|---|---|---|---|
+| k2 | 586/800 | 943/2,250 (fails: quasi-periodic and ectopic non-chaotic) | 3/3,400 |
+| k3 | 411/800 | 1/2,250 | 0/3,400 |
+| k4 | 16/800 | 1/2,250 | 0/3,400 |
+| k5 | 3/800 | 2/2,250 | 0/3,400 |
+
+k3 detects 0 DEV bigeminy (E1) windows (not analysable), as expected.
 
 ## 3. TEST seeds and windows (`run_test9.py`)
 
