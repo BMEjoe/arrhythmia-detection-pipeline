@@ -1,0 +1,94 @@
+{
+ "summary": {
+  "c1_frozen512": {
+   "PASS": true,
+   "n_conditions_failed": 0,
+   "failed": [],
+   "pooled_vi": 66,
+   "N_vi": 990,
+   "pooled_iv": 10,
+   "N_iv": 330,
+   "length": 512
+  },
+  "c2_nlp_iaaft512": {
+   "PASS": false,
+   "n_conditions_failed": 2,
+   "failed": [
+    "coupled_vdp:rho=2.0,omega=5.6",
+    "coupled_vdp:rho=5.45,omega=5.6"
+   ],
+   "pooled_vi": 220,
+   "N_vi": 990,
+   "pooled_iv": 141,
+   "N_iv": 330,
+   "length": 512
+  },
+  "c3_nlp_ep256": {
+   "PASS": false,
+   "n_conditions_failed": 1,
+   "failed": [
+    "coupled_vdp:rho=2.0,omega=5.6"
+   ],
+   "pooled_vi": 148,
+   "N_vi": 990,
+   "pooled_iv": 73,
+   "N_iv": 330,
+   "length": 256
+  },
+  "c4_titration256": {
+   "PASS": false,
+   "n_conditions_failed": 30,
+   "failed": [
+    "E1_bigeminy",
+    "E2_trigeminy",
+    "E3_couplets_10pct",
+    "E3_couplets_5pct",
+    "E4_runs",
+    "E5_atrial_10pct",
+    "E5_atrial_5pct",
+    "E6_ectopic10_trend",
+    "N4_linear_rr_step",
+    "N5_linear_rr_warped",
+    "S1_setar",
+    "S2_ectopic_10pct",
+    "S2_ectopic_5pct",
+    "av_node:H=40.0",
+    "av_node:H=45.0",
+    "av_node:H=52.0",
+    "coupled_vdp:rho=10.0,omega=3.3",
+    "coupled_vdp:rho=2.0,omega=5.6",
+    "coupled_vdp:rho=4.0,omega=5.6",
+    "coupled_vdp:rho=5.45,omega=5.6",
+    "coupled_vdp:rho=6.0,omega=5.6",
+    "coupled_vdp:rho=9.6,omega=2.1",
+    "mackey_glass:tau=14.0",
+    "mackey_glass:tau=15.0",
+    "mackey_glass:tau=16.0",
+    "phase_reset:tau=0.38",
+    "phase_reset:tau=0.62",
+    "phase_reset:tau=0.66",
+    "phase_reset:tau=1.18",
+    "phase_reset:tau=1.74"
+   ],
+   "pooled_vi": 966,
+   "N_vi": 990,
+   "pooled_iv": 330,
+   "N_iv": 330,
+   "length": 256
+  },
+  "baseline_frozen256": {
+   "PASS": true,
+   "n_conditions_failed": 0,
+   "failed": [],
+   "pooled_vi": 52,
+   "N_vi": 990,
+   "pooled_iv": 10,
+   "N_iv": 330,
+   "length": 256
+  }
+ },
+ "passing": [
+  "c1_frozen512"
+ ],
+ "winner": "c1_frozen512"
+}
