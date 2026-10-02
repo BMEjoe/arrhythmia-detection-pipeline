@@ -121,7 +121,10 @@ offsets at detected V beats).  Most realistic variant = ectopy + nstdb mix 12 dB
 | C1' fixed-window RTp / Ta (beatfeat.py, verify_beatfeat.py): FAIL at mix 12 (T apex SD 80 ms) -> not usable at the primary variant; KTz chaos (T wave only) invisible to verified features | done | |
 | C2 multivariate IAAFT verified (verify_multivariate.py) | done | |
 | DEV-only circle-map controls (devmaps.py; QP + locked, NON-CHAOTIC) added before any measure ran | done | |
-| E dev diagnosis bank (dev_diag.py -> results/dev/diag.jsonl, resumable; diag_summary.py) | running | |
+| E dev diagnosis bank (dev_diag.py; stopped at 379/1,820, pattern clear) + DIAGNOSIS.md | done | |
+| E candidates9.py (k1-k5) + DEV calibration (calibrate9.py, 6,450 windows) -> thresholds frozen | done | |
+| E PREREGISTRATION.md final, pushed BEFORE any TEST seed | done | |
+| E TEST run: `OMP_NUM_THREADS=1 nohup /root/venv313/bin/python -m experiments.phase9_waveform.run_test9 --workers 4 > /tmp/claude-0/logs/test9.log 2>&1 &` (resumable; results/test/test9.jsonl); then `python -m experiments.phase9_waveform.decide9` | running | |
 
 ## Notes
 - Background jobs (restart if the container restarted; both resumable / rerunnable):
