@@ -61,10 +61,58 @@ ECG waveform analysis with appropriate surrogates + noise-robust chaos measures.
   Same pattern as recorded in Phases 3-6 (Phase 7 added the extra tests).
 - Machine: 4 CPUs, 15 GB RAM.
 
+## PHASE 9 SPLIT (recorded 2026-10-02, BEFORE any detector or chaos measure was run on any Phase 9 series)
+
+Only generator verification (ECGSYN, KTz, LR1), ground-truth Lyapunov exponents (KTz),
+nstdb download/checksums and the Part A realism table/plots (RR/HRV statistics, amplitudes,
+beat-detection counts; no chaos measure, no detector) had been run on Phase 9 material at
+this point.
+
+| family | source | labels | split |
+|---|---|---|---|
+| Phase 5-6 nulls (17: N1-N6, S1, S2 5/10, E1, E2, E3 5/10, E4, E5 5/10, E6) | Phase 5/6 generators via families.null_window | NULL | DEV seeds 9000-9499; TEST seeds >= 9500 |
+| Mackey-Glass maxima intervals (Phase 8) | Phase 8 | 7 CHAOTIC, 3 NON-CHAOTIC (Phase 8 regimes.json) | **DEV** |
+| Phase 5 positives P1 Henon RR, P2 logistic RR, G1 Lorenz maxima, G2 Rossler, G3 Mackey-Glass | Phase 5 generators | chaotic (development positives only; not in any TEST pool) | **DEV** |
+| phase-resetting map (Phase 8) | Phase 8 | 7 CHAOTIC, 5 NON-CHAOTIC | **TEST** |
+| coupled modified vdP (Phase 8) | Phase 8 | 4 CHAOTIC, 6 NON-CHAOTIC | **TEST** |
+| AV node (Phase 8) | Phase 8 | 4 NON-CHAOTIC | **TEST** |
+| KTz paced-cell map -> APD -> QT / T wave (A2 morphology family) | morph/ktz.py, ground_truth_ktz.py | regimes = (P_nom, input) pairs: 11 CHAOTIC (92,none) (92,S2_5) (92,E3_10) (100,none) (146,none) (146,S2_5) (146,E1) (230,none) (232,none) (260,none) (278,none); 31 NON-CHAOTIC (92,E1) (100,E1) (100,E3_10) (230,S2_5) (230,E1) (230,E3_10) (232,E1) (232,E3_10) (260,E1) (278,E1) (278,E3_10) and P_nom = 120, 150, 200, 250, 300 with every input; 6 AMBIGUOUS discarded | **TEST** (only verified morphology family; **development had no morphology family**) |
+
+Morphology families: the modified Luo-Rudy EAD family (Tran et al. 2009) was DROPPED (not
+verifiable; METHODS.md 3.2), so only one morphology family exists and it is entirely TEST.
+
+Disclosure (for the report): the Phase 8 TEST families (phase_reset, coupled_vdp, av_node)
+were evaluated in aggregate in Phase 8 with TEST seeds 5000-5099. Known before Phase 9 was
+designed: the frozen Phase 6 detector detected 52-66/990 TEST chaotic windows at (vi) and was
+specific on every null and non-chaotic regime at (iv) but fired 11/60 on non-chaotic coupled vdP
+with bigeminy; nonlinear prediction vs (ectopy-preserving) IAAFT was sensitive but failed on the
+forced quasi-periodic coupled-vdP regimes (rho, omega) = (2, 5.6) and (5.45, 5.6); noise titration
+failed on every ectopy pattern and 17/18 non-chaotic regimes; the UPO component limits the frozen
+detector's power.  Phase 9 uses new seeds (>= 9500) for every TEST family and never uses a TEST
+family or a TEST seed for development.
+
+Seeds: DEV windows 9000-9499; TEST windows >= 9500; KTz ground truth 990000-990002; realism
+980000-980004.  nstdb noise: DEV windows use nstdb signal 0, TEST windows signal 1.
+
+Windows (A4, predeclared): beat-level windows of 256, 512 and 1024 beats; waveform windows of
+2 and 5 minutes cut from the start of a beat-level record (512 or 1024 beats).  Any waveform
+downsampling rate is predeclared in Part B and checked on a verification subset.
+
+Variants (library.py): clean (true beats, no noise); ectopy (models: S2_5 / E1 / E3_10; KTz:
+part of the regime; nulls: built in); nstdb noise <spec><snr> with spec in mix, bw, ma, em and
+SNR 24 / 12 / 6 dB (nst definitions); beats true or detected (Pan-Tompkins); jitter (Phase 7 V
+offsets at detected V beats).  Most realistic variant = ectopy + nstdb mix 12 dB + detected beats
++ jitter.
+
 ## Status
 | Step | State | Commit |
 |---|---|---|
 | env rebuild + pytest baseline | done (455+1 / 456) | (this commit) |
-| Part 0 docs/PHASE8_CARDIAC_CHAOS.md (+ read-only tables phase8_closeout/) | done | (this commit) |
+| Part 0 docs/PHASE8_CARDIAC_CHAOS.md (+ read-only tables phase8_closeout/) | done | cdaf022 |
+| A1 ECGSYN external-RR + verification vs ecgsyn.c / paper | done | c634d05 |
+| A1 ectopic morphology (morphology.py), RR sources with beat types (families.py; nulls bit-identical to Phase 8), window builder (library.py), nstdb + nst SNR (noise.py) | done | (this commit) |
+| A2 KTz verified (LE 0.00344 at P=92 vs published ~0.0035); KTz ground truth for exact inputs (ktz_labels.json); LR1-EAD DROPPED (not verifiable) | done | (this commit) |
+| A realism table + plots (realism.py, results/realism, plots/A_*) | done | (this commit) |
+| PHASE 9 SPLIT recorded (above) before any measure/detector on Phase 9 series | done | (this commit) |
 
 ## Notes
