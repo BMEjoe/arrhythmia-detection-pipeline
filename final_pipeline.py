@@ -200,6 +200,20 @@ class PipelineConfig:
     rr_detrend_window: int = 51
     rr_detrend_lambda: float = 300.0
     rr_detrend_min_trend_sd: float = 0.0
+    # PROJECT option (Phase 9 winner k3_mnlp_growth_ann,
+    # experiments/phase9_waveform/PREREGISTRATION.md, docs/PHASE9_WAVEFORM_NOISE_ROBUST.md).
+    # Opt-in: the standalone masked_growth_chaos_test(rr, beat_labels, config) --
+    # annotation-masked nonlinear-prediction determinism test (vs masked IAAFT) AND
+    # forecast-error growth gate.  It needs beat annotations, so it is NOT called by
+    # analyze_segment (whose signature must stay label-free; tests/test_upo_feature_contract.py);
+    # nothing changes unless the caller invokes it.  The fields below are fixed at the
+    # preregistered values (validated on 512-interval windows); changing them leaves the
+    # validated configuration.
+    masked_growth_z: float = 9.4521
+    masked_growth_g: float = 0.25
+    masked_growth_surrogates: int = 39
+    masked_growth_min_valid: int = 100
+    masked_growth_seed_entropy: int = 20261006
 
     # So et al. UPO method
     #
@@ -2267,6 +2281,90 @@ def _lle_chaos_statistic(x, m, theiler, k0, k1):
     ks = np.arange(int(k0), int(k1) + 1)
     yy = y[ks]
     return float(np.polyfit(ks, yy, 1)[0]) if np.all(np.isfinite(yy)) else np.nan
+
+
+def _masked_nlp_errors(x, mask, m, horizons, k=5, theiler=5, hmax=5, min_valid=100):
+    """Robust normalized local-average prediction errors on delay vectors whose span
+    (m - 1 + hmax) contains no masked interval; None if fewer than min_valid vectors."""
+    n = len(mask)
+    span = m + hmax
+    c = np.concatenate([[0], np.cumsum(mask.astype(int))])
+    t = np.arange(0, n - span + 1)
+    t = t[(c[t + span] - c[t]) == 0]
+    if len(t) < min_valid:
+        return None
+    A = np.stack([x[t + j] for j in range(m)], axis=1)
+    d = ((A[:, None, :] - A[None, :, :]) ** 2).sum(-1)
+    d[np.abs(t[:, None] - t[None, :]) <= theiler] = np.inf
+    nn = np.argpartition(d, k, axis=1)[:, :k]
+    xs = x[~mask]
+    mad = max(np.median(np.abs(xs - np.median(xs))), 1e-12)
+    out = {}
+    for h in horizons:
+        tg = x[t + m - 1 + h]
+        out[h] = float(np.median(np.abs(tg - tg[nn].mean(1))) / mad)
+    return out
+
+
+def masked_growth_chaos_test(rr_intervals, beat_labels, config=CFG):
+    """
+    PROJECT chaos test (Phase 9 winner k3_mnlp_growth_ann;
+    experiments/phase9_waveform/PREREGISTRATION.md, candidates9.py).  Opt-in: call it
+    explicitly (analyze_segment never does); parameters in PipelineConfig.masked_growth_*.
+
+    rr_intervals: n intervals; beat_labels: the n + 1 beat annotations ('N' = normal; any
+    other label, e.g. 'V', 'A', or an unmatched detection, is not normal).  Interval k is
+    ectopy-related (masked) iff beat k or beat k + 1 is not normal.
+    Determinism: robust normalized nonlinear-prediction error (k = 5, Theiler 5, unit delay,
+    h = 1) on delay vectors free of masked intervals; z_m = (mean - observed) / SD over
+    masked_growth_surrogates IAAFT surrogates of the series with masked intervals linearly
+    interpolated (same mask), m = 2..5.  Null: the unmasked intervals are a monotone transform
+    of a stationary linear Gaussian process.
+    Growth: G = E(h = 5) - E(h = 2) at m = 3 (forecast error keeps growing with horizon).
+    Detected iff analysable (>= masked_growth_min_valid valid vectors at every m) and
+    max_m z_m >= masked_growth_z and G >= masked_growth_g.
+    """
+    import zlib
+    x = _as_1d(rr_intervals)
+    if beat_labels is None:
+        return {"detected": False, "analysable": False,
+                "reason": "beat_labels required (validated with annotation masking only)"}
+    lab = np.asarray(beat_labels).astype(str)
+    if len(lab) != len(x) + 1:
+        raise ValueError("beat_labels must have len(rr_intervals) + 1 entries")
+    bad = lab != "N"
+    mask = bad[:-1] | bad[1:]
+    xi = x.copy()
+    if mask.any() and (~mask).sum() >= 2:
+        idx = np.arange(len(x))
+        xi[mask] = np.interp(idx[mask], idx[~mask], x[~mask])
+    h = zlib.crc32(np.ascontiguousarray(np.asarray(x, dtype=float)).tobytes())
+    rng = np.random.default_rng(np.random.SeedSequence([config.masked_growth_seed_entropy, int(h), 1]))
+    ms = (2, 3, 4, 5)
+    mv = config.masked_growth_min_valid
+    obs = {m: _masked_nlp_errors(x, mask, m, (1, 2, 3, 4, 5), min_valid=mv) for m in ms}
+    out = {"n_masked": int(mask.sum())}
+    if obs[2] is None:
+        out.update({"analysable": False, "detected": False})
+        return out
+    sur = {m: [] for m in ms}
+    for _ in range(config.masked_growth_surrogates):
+        s = iaaft_surrogate(xi, rng)
+        for m in ms:
+            e = _masked_nlp_errors(s, mask, m, (1,), min_valid=mv)
+            sur[m].append(e[1] if e is not None else np.nan)
+    out["analysable"] = all(obs[m] is not None for m in ms)
+    for m in ms:
+        if obs[m] is None:
+            out[f"z_m{m}"] = float("nan")
+            continue
+        sv = np.array(sur[m], float)
+        out[f"z_m{m}"] = float((np.nanmean(sv) - obs[m][1]) / max(np.nanstd(sv, ddof=1), 1e-12))
+    out["zmax"] = float(np.nanmax([out[f"z_m{m}"] for m in ms]))
+    out["G"] = float(obs[3][5] - obs[3][2]) if obs[3] is not None else float("nan")
+    out["detected"] = bool(out["analysable"] and out["zmax"] >= config.masked_growth_z
+                           and out["G"] >= config.masked_growth_g)
+    return out
 
 
 def lle_chaos_test(x, config=CFG):

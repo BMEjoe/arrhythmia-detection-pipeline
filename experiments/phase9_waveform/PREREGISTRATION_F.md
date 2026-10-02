@@ -92,4 +92,11 @@ MIT-BIH influenced nothing in Phase 9 and is reported as exploratory only.
 
 ## Amendments
 
-(none)
+**2026-10-02 (before any Part F detector run; data downloaded, only beat counts and window
+positions of one record per database looked at).** The adopted form changed during the
+ground-rule check. `analyze_segment` must keep a label-free signature
+(`tests/test_upo_feature_contract.py`), so the winner is adopted as the standalone opt-in
+function `final_pipeline.masked_growth_chaos_test(rr, labels, config)`. Its parameters live
+in the `PipelineConfig.masked_growth_*` fields, and it is never called by default. There is
+no `masked_growth_test` flag. The test itself is unchanged: equivalence with `candidates9.py`
+is tested. Part F calls this function with `CFG`.
