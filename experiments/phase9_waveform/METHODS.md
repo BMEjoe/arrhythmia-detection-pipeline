@@ -183,7 +183,49 @@ ectopy, kept because they are properties of the published model:
   after rescaling to 0.8 s, with minimum RR down to about 0.2 s. These are the most extreme
   waveforms, and beat detection there has the most misses and extra detections.
 
-## 5–8. Parts B–D methods
+## 5. Part D: noise-robust chaos measures
+
+Implemented in `measures.py`. Verified by `verify_measures.py`, with results in
+`results/verification/measures.json`. Reference programs: TISEAN 3.0.1 C sources
+(www.pks.mpg.de/tisean), compiled locally and not committed; `ordpy` 1.2.3.
+
+| # | measure | primary / implementation source | verification (published behaviour → this implementation) | status |
+|---|---|---|---|---|
+| D1 | SDLE | Gao et al., *Front Physiol* 2011, PMC3264951 (Eqs. 1–11, the `lambda_k_curves` procedure; first defined in *PRE* 74:066204, 2006, blocked) | Clean Lorenz (σ 16, r 45.92, b 4; m = 4, L = 2, 10,000 points): plateau = λ₁. Benettin λ₁ = 1.508; the SDLE plateau (mean slope of Λ(t) over t = 12–52 samples, 3 smallest shells) is 1.57 / 1.65 / 1.68. Noise: λ ~ −γ ln ε within the embedding window, ≈ 0 beyond it. White noise: first-step slope vs ln ε −0.46 (λ 0.34 at ε = 0.87 rising to 1.41 at ε = 0.08), median after the window 0.0005. Noisy Lorenz (D = 4): −0.16 | VERIFIED |
+| D2 | FSLE | Aurell et al. 1997 (arXiv:chao-dyn/9606014); Boffetta et al. *Phys Rep* 2002 (arXiv:nlin/0101029) Eq. 3.37; Cencini et al. 2000 (arXiv:nlin/0002018). Data estimator with TISEAN `fsle`'s overshoot correction | Cencini map (Eqs. 19–20, Δ = 0.4): FSLE = ln 2.4 = 0.875 for δ < 1, ∝ δ⁻² for δ > 1. Measured: 0.888 at small δ; log-log slope −1.50 on [1.5, 20]. White noise: FSLE diverges as δ → 0. Measured: λ ≈ −0.96 ln δ + c (6.5 at δ = 10⁻³, 0.32 at δ = 0.72) | VERIFIED |
+| D3 | (ε, τ)-entropy from Grassberger–Procaccia correlation sums | Cencini et al. 2000 Eqs. 10–13; Gaspard & Wang 1993 (blocked) | Logistic r = 4: h_m(ε) = ln 2 at small ε. Measured (m = 2, 3, 4): 0.737, 0.685, 0.673. Hénon: h_KS ≈ 0.42. Measured (m = 3, 4): 0.417, 0.399. White noise: h = c − ln ε. Measured slope −1.013. TISEAN `d2` (all pairs, `-N0`): correlation sums agree within 0.09 % | VERIFIED |
+| D4 | permutation entropy H and statistical complexity C | Bandt & Pompe 2002; Rosso et al. 2007 (both blocked); ordpy paper (arXiv:2102.06786) | Exact d = 3 ordinal distributions (ordpy paper): logistic {1/3, 1/15, 2/15, 3/15, 4/15, 0}, random walk {1/4, 1/8, 1/8, 1/8, 1/8, 1/4]. Max deviation 0.0003 / 0.0011 at N = 10⁶. Agreement with ordpy H and C: max \|Δ\| 1.1e-15. Rosso: chaotic maps lie above the f^-k noise curve. Measured at d = 6, N = 2¹⁵: logistic (H 0.630, C 0.484), Hénon (0.554, 0.458) vs noise C at the same H 0.278, 0.294; white noise (0.998, 0.004) | VERIFIED |
+| D5 | RQA determinism DET, adaptive threshold at a fixed recurrence rate | Marwan, *IJBC* 21:1003 (2011), arXiv:1007.2215, Eq. (1), Sect. 3.2–3.4 | AR(3) x_i = 0.8 x_{i−1} + 0.3 x_{i−2} − 0.25 x_{i−3} + 0.9 ξ (m = 4, τ = 4, recurrence rate 0.1): DET 0.6 published; measured 0.602 ± 0.019. Rössler (a = b = 0.25, Δt = 0.1; m = 3, τ = 6, rate 0.05): "approximately DET = 0.94", almost constant across c = 35–45. Measured 0.958 / 0.976 / 0.982 at c = 36 / 40 / 44 (the same with max norm or 1,000–4,000 points). The preset ±0.04 tolerance is missed at c = 44 by 0.002. White noise at m = 3, τ = 1, rate 0.05: 0.57 (Marwan's "spurious lines" from embedding) | VERIFIED on the AR(3) value; Rössler level reproduced +0.02–0.04 high (deviation recorded) |
+| D6 | locally projective noise reduction (GHKSS) | Grassberger et al., *Chaos* 3:127 (1993) (blocked); Hegger, Kantz & Schreiber, *Chaos* 9:413 (1999), arXiv:chao-dyn/9810005, Sect. V B; TISEAN `ghkss.c` (followed step by step) | Hénon x + 5 % Gaussian noise, N = 20,000, TISEAN-paper settings (m = 7, q = 2, ≥ 50 neighbours, 3 iterations): noise RMS reduced 5.12× (TISEAN `ghkss` 5.12×; outputs correlate at 0.99999999999998, RMS difference 4e-6 of the noise). White noise: ghkss-processed data vs identically processed IAAFT surrogates (nonlinear prediction, m = 3), 2/10 rejections at 5 % | VERIFIED |
+
+**Verification history** (so that no criterion is silently changed):
+- **D3:** the first TISEAN comparison wrongly rescaled the data to [0, 1]. The second used
+  TISEAN's default `-N 1000`, which samples pairs at large ε. With all pairs the agreement
+  is 0.09 %.
+- **D2:** the pure ln r / ⟨τ⟩ estimator cannot exceed ln r per sample. Separations of
+  sampled data overshoot several levels in one step, so white noise gave a spurious constant
+  0.35 at small δ. The TISEAN overshoot-corrected estimator (Σ ln(d_exit/d_enter) / Σ τ),
+  which equals Eq. 3.37 for continuous growth, is used.
+- **D6:** the first configuration (N = 5,000) gave a factor of 1.02 for **both** this code
+  and TISEAN, so the test was too data-poor. It was rerun at N = 20,000 with the TISEAN
+  paper's settings.
+- **D1:** the first read-out averaged t = 5–20 samples, inside the initial
+  embedding transient (local slopes 3–6). The plateau is read at t ≥ 2(m − 1)L. Because the
+  local slopes oscillate with period L, the mean slope of Λ(t) is used, not the median of
+  local slopes (2.08, IQR 0.91–2.45).
+
+The underlying computations were not changed in any of these revisions; only the comparison
+or read-out was.
+
+**Use limitations shown by the verification:**
+- DET is high for linear stochastic (AR) processes and for embedded white noise, so it is
+  not specific to determinism (Marwan's own caution).
+- GHKSS needs many points per neighbourhood. At N = 5,000 it does not reduce noise even in
+  TISEAN, so at RR window lengths (256–1,024) little effect is expected.
+- SDLE and FSLE early-time / small-scale values are dominated by noise and the embedding
+  transient.
+
+## 6–8. Parts B–C methods
 
 *(added as they are implemented and verified)*
 
