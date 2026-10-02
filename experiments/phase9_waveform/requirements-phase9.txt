@@ -1,0 +1,9 @@
+# Phase 9 additions to requirements.txt (installed 2026-10-02 into /root/venv313):
+#   uv pip install -p /root/venv313/bin/python neurokit2==0.2.13 ordpy==1.2.3 numba==0.68.0 wfdb==4.3.1
+#   then re-pin pandas: uv pip install -p /root/venv313/bin/python pandas==3.0.6
+#   (neurokit2's resolver pulls pandas 2.3.3; NeuroKit2 0.2.13 runs unchanged with 3.0.6)
+neurokit2==0.2.13      # ECG delineator (DWT, Martinez et al. 2004 method), Part C
+pywavelets==1.10.0     # dependency of neurokit2
+ordpy==1.2.3           # reference implementation for permutation entropy / complexity-entropy plane (D4 verification only)
+numba==0.68.0
+wfdb==4.3.1
