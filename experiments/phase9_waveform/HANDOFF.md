@@ -124,7 +124,13 @@ offsets at detected V beats).  Most realistic variant = ectopy + nstdb mix 12 dB
 | E dev diagnosis bank (dev_diag.py; stopped at 379/1,820, pattern clear) + DIAGNOSIS.md | done | |
 | E candidates9.py (k1-k5) + DEV calibration (calibrate9.py, 6,450 windows) -> thresholds frozen | done | |
 | E PREREGISTRATION.md final, pushed BEFORE any TEST seed | done | |
-| E TEST run: `OMP_NUM_THREADS=1 nohup /root/venv313/bin/python -m experiments.phase9_waveform.run_test9 --workers 4 > /tmp/claude-0/logs/test9.log 2>&1 &` (resumable; results/test/test9.jsonl); then `python -m experiments.phase9_waveform.decide9` | running | |
+| E TEST run (12,290 windows, 8.3 h) + decide9: PASS k3, k4, k5; WINNER k3_mnlp_growth_ann (90/1,320; 0/10,100); k1 fails (non-chaotic vdP + ectopy), k2 fails | done | 801256a |
+| E adoption: final_pipeline.masked_growth_chaos_test (standalone opt-in; analyze_segment unchanged), tests/test_phase9_masked_growth.py; groundrule_check passed | done | 8939ab7 |
+| F PREREGISTRATION_F.md pushed before download (89d4ba9; 1 amendment: adopted form); nsrdb 1/180, chfdb 0/150; W1 no, W2 no | done | |
+| F EXPLORATORY MIT-BIH: 1/190 | done | |
+| G docs/PHASE9_WAVEFORM_NOISE_ROBUST.md | done | |
+
+**ALL PHASE 9 STEPS DONE.**
 
 ## Notes
 - Background jobs (restart if the container restarted; both resumable / rerunnable):

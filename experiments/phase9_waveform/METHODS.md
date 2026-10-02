@@ -335,6 +335,18 @@ or read-out was.
 - Added after the split was recorded and before any measure was run, as a development
   control for the quasi-periodic failure disclosed from Phase 8. It is never in a TEST pool.
 
+## 8b. Part E winner and adoption
+
+The winner is `k3_mnlp_growth_ann` (`candidates9.py`; PREREGISTRATION.md). It is adopted as
+`final_pipeline.masked_growth_chaos_test`, with parameters in
+`PipelineConfig.masked_growth_*`. It is opt-in: nothing calls it by default.
+
+Sources:
+- ectopy masking: Peltola 2012, PMC3358711;
+- forecast-error growth: Sugihara & May 1990, restated in PMC9760897.
+
+Tests check bit-equivalence with the preregistered code.
+
 ## 9. Dropped methods and models
 
 | item | reason |
