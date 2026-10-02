@@ -1,0 +1,10 @@
+{
+ "V1": {
+  "max_distribution_diff": 1.7763568394002505e-15,
+  "ccf_maxdiff_mv_mean": 0.05030730138452073,
+  "ccf_maxdiff_univariate_mean": 0.5744260779712859,
+  "ccf_data_lag0": 0.5468537957386244
+ },
+ "V2_rejections_of_100": 9,
+ "VERIFIED": true
+}

@@ -4,7 +4,8 @@ Phase 9 Part A: one synthetic recording per window key, from which every input l
 
 Window key: (source, name, ectopy, n, seed, noise, split)
   source  'null' (name = Phase 5-6 null), 'model' (name = Phase 8 regime name), 'ktz'
-          (name = 'ktz:P=<P_nom>')
+          (name = 'ktz:P=<P_nom>'), 'periodic' (name = 'periodic:<RR s>', constant RR; Part B
+          waveform null)
   ectopy  'none' | 'S2_5' | 'E1' | 'E3_10' (models and KTz; nulls carry their own ectopy)
   n       beats in the beat-level window (intervals); waveform windows are cut from its start
   noise   'none' or '<spec><snr>' with spec in mix, bw, ma, em and snr in 24, 12, 6 (dB)
@@ -68,7 +69,11 @@ def ktz_labels():
 def _source(source, name, ectopy, n_gen, seed):
     info = {}
     apd = apd_ref = None
-    if source == "null":
+    if source == "periodic":
+        # Part B waveform null: strictly periodic beats (constant RR = name's value, e.g. 'periodic:0.8')
+        rr = np.full(n_gen, float(name.split(":")[1]))
+        types = np.array(["N"] * (n_gen + 1))
+    elif source == "null":
         rr, types = F.null_window(name, seed, n_gen)
     elif source == "model":
         reg = {r["name"]: r for r in F.load_regimes()}[name]
@@ -112,7 +117,7 @@ def window_seed(source, name, ectopy, n, seed, noise):
 
 
 def build(source, name, ectopy, n, seed, noise="none", split="DEV", beats="true", jitter=False,
-          keep_clean=False):
+          keep_clean=False, keep_truth=False):
     """Returns a dict with the recorded ECG (mV, fs 360), true and used beat sample indices, the
     window RR (n intervals), per-beat types of the used beats, and diagnostics."""
     n_gen = n + MARGIN
@@ -138,6 +143,8 @@ def build(source, name, ectopy, n, seed, noise="none", split="DEV", beats="true"
            "first_window_beat": LEAD, "info": info, "resp_phase": ph}
     if keep_clean:
         out["ecg_clean"] = ecg.copy()
+    if keep_truth:
+        out["truth"] = true_fiducials(bt, th, b)
     if noise != "none":
         spec = "".join(c for c in noise if not c.isdigit())
         snr = int("".join(c for c in noise if c.isdigit()))
@@ -194,6 +201,27 @@ def build(source, name, ectopy, n, seed, noise="none", split="DEV", beats="true"
     out["rr_true"] = np.diff(true_idx[LEAD:LEAD + n + 1]) / FS
     if apd_full is not None:
         out["apd_true_s"] = apd_full[LEAD:LEAD + n + 1]
+    return out
+
+
+def true_fiducials(bt, th, b):
+    """Analytic fiducials (seconds) of every beat from the generator parameters (multivariate.py
+    docstring): QRS onset = t_Q - 2 sigma_Q, QRS offset = t_S + 2 sigma_S, T peak = t_T,
+    T end = t_T + 2 sigma_T, with t_i = t_R + theta_i / omega and sigma_i = b_i / omega, omega = 2 pi / RR
+    of the half-cycle containing the event (before R for Q, after R for S and T)."""
+    K = len(bt)
+    out = {k: np.full(K, np.nan) for k in ("qrs_on", "qrs_off", "t_peak", "t_end", "r")}
+    for k in range(1, K - 1):
+        w_pre = 2 * np.pi / (bt[k] - bt[k - 1])
+        w_post = 2 * np.pi / (bt[k + 1] - bt[k])
+        tq, sq = bt[k] + th[k, 1] / w_pre, b[k, 1] / w_pre
+        ts, ss = bt[k] + th[k, 3] / w_post, b[k, 3] / w_post
+        tt, st = bt[k] + th[k, 4] / w_post, b[k, 4] / w_post
+        out["qrs_on"][k] = tq - 2 * sq
+        out["qrs_off"][k] = ts + 2 * ss
+        out["t_peak"][k] = tt
+        out["t_end"][k] = tt + 2 * st
+        out["r"][k] = bt[k]
     return out
 
 
