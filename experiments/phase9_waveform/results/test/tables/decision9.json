@@ -1,0 +1,78 @@
+{
+ "candidates": {
+  "k1_frozen512": {
+   "PASS": false,
+   "failed": [
+    "noncha_real|coupled_vdp:rho=10.0,omega=3.3",
+    "noncha_real|coupled_vdp:rho=5.45,omega=5.6",
+    "noncha_real|coupled_vdp:rho=6.0,omega=5.6",
+    "noncha_real|coupled_vdp:rho=9.6,omega=2.1"
+   ],
+   "primary_detected": 74,
+   "primary_N": 1320,
+   "pass_pool_detected": 97,
+   "pass_pool_N": 10100,
+   "window_errors": 63,
+   "candidate_errors": 0
+  },
+  "k2_mnlp_ann": {
+   "PASS": false,
+   "failed": [
+    "noncha_input|coupled_vdp:rho=2.0,omega=5.6",
+    "noncha_input|coupled_vdp:rho=4.0,omega=5.6",
+    "noncha_input|coupled_vdp:rho=5.45,omega=5.6",
+    "noncha_input|coupled_vdp:rho=9.6,omega=2.1",
+    "noncha_real|coupled_vdp:rho=10.0,omega=3.3",
+    "noncha_real|coupled_vdp:rho=2.0,omega=5.6",
+    "noncha_real|coupled_vdp:rho=4.0,omega=5.6",
+    "noncha_real|coupled_vdp:rho=5.45,omega=5.6",
+    "noncha_real|coupled_vdp:rho=6.0,omega=5.6",
+    "noncha_real|coupled_vdp:rho=9.6,omega=2.1",
+    "noncha_real|mackey_glass:tau=15.0",
+    "noncha_real|mackey_glass:tau=16.0"
+   ],
+   "primary_detected": 304,
+   "primary_N": 1320,
+   "pass_pool_detected": 607,
+   "pass_pool_N": 10100,
+   "window_errors": 63,
+   "candidate_errors": 0
+  },
+  "k3_mnlp_growth_ann": {
+   "PASS": true,
+   "failed": [],
+   "primary_detected": 90,
+   "primary_N": 1320,
+   "pass_pool_detected": 0,
+   "pass_pool_N": 10100,
+   "window_errors": 63,
+   "candidate_errors": 0
+  },
+  "k4_mnlp_growth_rr": {
+   "PASS": true,
+   "failed": [],
+   "primary_detected": 2,
+   "primary_N": 1320,
+   "pass_pool_detected": 1,
+   "pass_pool_N": 10100,
+   "window_errors": 63,
+   "candidate_errors": 0
+  },
+  "k5_mnlp_fsle_ann": {
+   "PASS": true,
+   "failed": [],
+   "primary_detected": 0,
+   "primary_N": 1320,
+   "pass_pool_detected": 3,
+   "pass_pool_N": 10100,
+   "window_errors": 63,
+   "candidate_errors": 0
+  }
+ },
+ "passing": [
+  "k3_mnlp_growth_ann",
+  "k4_mnlp_growth_rr",
+  "k5_mnlp_fsle_ann"
+ ],
+ "winner": "k3_mnlp_growth_ann"
+}
