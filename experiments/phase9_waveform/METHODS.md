@@ -259,8 +259,9 @@ or read-out was.
 **B5 compute.**
 - One 2-minute window costs about 160–260 s (Cao 7 s, PPS 4–6 s per surrogate, TS
   40–90 s).
-- With the ≥ 4,000 TEST windows a preregistered run needs, that is ≥ 1.8 × 10⁵ CPU-hours
-  per surrogate type — far beyond the ~16 h × 4 workers budget.
+- With the ≥ 4,000 TEST windows a preregistered run needs, that is ≈ 220 CPU-hours
+  (≈ 56 h on 4 workers) for the waveform arm alone. That is about 3.5 × the whole budget
+  of ~16 h × 4 workers = 64 CPU-hours.
 - **The waveform arm is DROPPED**, on both B3 and B5. No Part D measure is applied to the
   waveform.
 
