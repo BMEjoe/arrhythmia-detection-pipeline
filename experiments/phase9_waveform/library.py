@@ -78,6 +78,13 @@ def _source(source, name, ectopy, n_gen, seed):
     elif source == "model":
         reg = {r["name"]: r for r in F.load_regimes()}[name]
         rr, types, info = F.model_window(reg["family"], reg["regime_idx"], reg["params"], n_gen, ectopy, seed)
+    elif source == "devmap":
+        # DEVELOPMENT-only circle-map control (devmaps.py)
+        from experiments.phase9_waveform import devmaps as DM
+        r = DM.BY_NAME[name]
+        clean = DM.circle_rr(r["K"], r["Om"], n_gen, np.random.default_rng(F.ss9(F.FAMILY9["devmap"], hash_name(name), n_gen, 0, seed)))
+        rr, types = F._insert_ectopy(clean, ectopy, np.random.default_rng(F.ss9(F.FAMILY9["devmap"], hash_name(name), n_gen,
+                                                                                 F.ECT_CODE[ectopy], seed)))
     elif source == "ktz":
         P = int(name.split("=")[1])
         lab = ktz_labels()[(P, ectopy)]
@@ -86,6 +93,10 @@ def _source(source, name, ectopy, n_gen, seed):
     else:
         raise ValueError(source)
     return np.asarray(rr, float), np.asarray(types), apd, apd_ref, info
+
+
+def hash_name(name):
+    return int(hashlib.sha256(name.encode()).hexdigest()[:8], 16)
 
 
 def _offsets():

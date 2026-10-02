@@ -42,7 +42,7 @@ NULL_TYPE = {c: ("V" if c.startswith(("S2", "E1", "E2", "E3", "E4", "E6")) else
                  "A" if c.startswith("E5") else None) for c in NULLS}
 ECTOPY = ("S2_5", "E1", "E3_10")
 ECT_CODE = {"none": 0, "S2_5": 1, "E1": 2, "E3_10": 3}
-FAMILY9 = {"mackey_glass": 1, "phase_reset": 2, "coupled_vdp": 3, "av_node": 4, "ktz": 5, "null": 6}
+FAMILY9 = {"mackey_glass": 1, "phase_reset": 2, "coupled_vdp": 3, "av_node": 4, "ktz": 5, "null": 6, "devmap": 7}
 
 
 def ss9(*key):

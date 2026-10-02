@@ -225,12 +225,123 @@ or read-out was.
 - SDLE and FSLE early-time / small-scale values are dominated by noise and the embedding
   transient.
 
-## 6–8. Parts B–C methods
+## 6. Part B: waveform embedding and surrogates
 
-*(added as they are implemented and verified)*
+**Embedding (B1, predeclared, `surrogates_wave.choose_embedding`).**
+- Delay τ: first minimum of the auto mutual information.
+- Dimension m: Cao's method (`fp.cao_method`), capped at 10.
+- Both are computed on the first 3,000 samples of the 90 Hz window. The window is
+  decimated 360 → 90 Hz with a zero-phase FIR filter, `scipy.signal.decimate`, q = 4.
+
+**Surrogates and their nulls (B2, `surrogates_wave.py`):**
+
+| surrogate | source | exact null in plain language | verification | status |
+|---|---|---|---|---|
+| PPS (pseudo-periodic surrogates), noise radius ρ by the Small et al. rule. The rule is as implemented in TimeseriesSurrogates.jl `noiseradius`: the ρ in SD × {0.02 … 0.32} that maximizes the number of length-2 matching segments | Small, Yu & Harrison, *PRL* 87:188101 (2001) (blocked); Luo, Nakamura & Small, arXiv:nlin/0404054 (open restatement) | The data are a periodic orbit with uncorrelated noise. Successive cycles differ only by noise, with no deterministic dependence between cycles | Rössler, periodic a = 0.39095 vs chaotic a = 0.398, + 5 % white noise, correlation-dimension statistic (`verify_surrogates.py`, `results/verification/surrogates.json`) | see below |
+| CS (cycle shuffle): cycles cut at a predeclared fiducial (R peak) and concatenated in random order | Theiler, *Phys Lett A* 196:335 (1995) (blocked); restated in Luo et al. | The cycles are independent draws from one distribution of cycle shapes. No dependence between consecutive cycles; within-cycle dynamics are kept | as PPS | see below |
+| TS (twin surrogates): jumps between twins (points with identical recurrence-matrix columns, recurrence rate 0.05) | Thiel, Romano, Kurths, Rolfs & Kliegl, *Europhys Lett* 75:535 (2006) and 2008 restatement (arXiv) | The surrogate is another trajectory of the same deterministic or stochastic system, from another initial condition. **This null contains chaos itself**: TS test synchronisation or coupling, not chaos versus noise | coupled Rössler phase synchronisation (Thiel et al. Sect. 5): ε = 0.02 0/10 rejections, ε = 0.045 10/10 | VERIFIED as a synchronisation test; uninformative for chaos |
+
+**B3 false-positive validation on waveform nulls** (`fp_waveform.py`,
+`results/dev/fp_waveform_summary.md`).
+- The strictly periodic ECG (constant RR 0.8 s) was rejected:
+  - clean: by PPS, CS and TS in 5/5 windows;
+  - with nstdb mix 12 dB: by PPS and CS in 3/3 windows.
+- The B3 rule says that > 7 % on any null makes a surrogate UNUSABLE, so **PPS, CS and TS
+  are all UNUSABLE** for chaos claims on the ECG waveform.
+- Mechanism:
+  - every PPS jump and every CS junction adds a discontinuity that a one-sample
+    (h = 1) or τ-sample prediction error sees;
+  - on the MIT-BIH-quantized periodic ECG, TS twins are inexact, so a TS jump also breaks
+    the orbit;
+  - in a smoke test (not part of the saved run), the correlated-HRV null N1 was also rejected
+    by PPS and CS.
+
+**B5 compute.**
+- One 2-minute window costs about 160–260 s (Cao 7 s, PPS 4–6 s per surrogate, TS
+  40–90 s).
+- With the ≥ 4,000 TEST windows a preregistered run needs, that is ≥ 1.8 × 10⁵ CPU-hours
+  per surrogate type — far beyond the ~16 h × 4 workers budget.
+- **The waveform arm is DROPPED**, on both B3 and B5. No Part D measure is applied to the
+  waveform.
+
+## 7. Part C: delineation, beat features, multivariate surrogates
+
+**C1 published delineator — NOT VERIFIED, dropped.**
+- Tool: NeuroKit2 0.2.13 `ecg_delineate(method="dwt")`, the open implementation of the
+  wavelet delineator of Martínez et al., *IEEE TBME* 51:570 (2004) (blocked; published QTDB
+  accuracy restated in Di Marco & Chiari 2011, PMC3076264, Table 6).
+- Test: run on all 105 QTDB records with the first annotator's manual fiducials and the
+  manual R positions (`verify_delineation.py`, `results/verification/delineation_qtdb.json`).
+- Result: it fails the predeclared criterion (best lead |mean| ≤ published SD, SD ≤ 2 ×
+  published SD, sensitivity ≥ 95 %).
+
+| fiducial | published (mean ± SD, ms) | NK2 dwt, best of 2 leads | sensitivity |
+|---|---|---|---|
+| QRS onset | 4.6 ± 7.7 | −15.5 ± 37.2 | 97.0 % |
+| QRS offset | 0.8 ± 8.7 | −6.3 ± 21.4 | 98.3 % |
+| T peak | 0.2 ± 13.9 | −2.5 ± 27.6 | 93.1 % |
+| T end | −1.6 ± 18.1 | −20.9 ± 34.9 | 90.4 % |
+
+- ecgpuwave (Laguna et al. 1994) needs a Fortran compiler, which is not available.
+- QT and QRS width are therefore **dropped**.
+
+**Fixed-window repolarization features — NOT VERIFIED at the primary noise level.**
+- Measures: R-to-T-apex time RTp, T amplitude Ta and QRS amplitude (`beatfeat.py`). No
+  delineator is involved; all come from fixed windows relative to R.
+- Checked against generator ground truth on DEV windows (`verify_beatfeat.py`,
+  `results/verification/beatfeat.json`).
+
+| check (predeclared) | criterion | result |
+|---|---|---|
+| F1 T apex, normal beats, mix 12 dB, detected beats | \|mean\| ≤ 13.9 ms, SD ≤ 27.8 ms, ≥ 95 % within 150 ms | +29.8 ± 79.6 ms, 86 % — **fail** |
+| F2 T apex, clean, true beats | \|mean\| ≤ 5 ms, SD ≤ 5 ms | −5.7 ± 5.3 ms — fail (marginal) |
+| F3 Ta at mix 12 vs clean | median relative error ≤ 0.1 | 0.34 — **fail** |
+| F4 RTp tracks an imposed APD sequence | slope 0.8–1.2; r ≥ 0.9 clean, ≥ 0.5 mix 12 | clean slope 1.01–1.04 but r 0.52–0.70 (RTp also scales with RR); mix 12: slope −0.03–1.0, r ≤ 0.11 — **fail** |
+
+- Exploratory, not a criterion (`beatfeat_exploratory_snr.json`): the T apex is
+  −1.5 ± 25.8 ms at 24 dB and +60 ± 102 ms at 6 dB.
+- At the realistic noise level (nstdb 12 dB relative to the QRS), a single-beat T wave is
+  not measurable with these features.
+- **Consequence:** the only morphology family, KTz (TEST), carries its chaos only in the
+  T wave / APD, because its RR is the pacing input. No verified feature can see that chaos
+  at the primary variant.
+- The multivariate feature arm (C2/C3) is reduced to features that need no T-wave
+  measurement.
+
+**C2 multivariate IAAFT — VERIFIED** (`multivariate.mv_iaaft`, `verify_multivariate.py`).
+- Source: Schreiber & Schmitz, *Physica D* 142:346 (2000), arXiv:chao-dyn/9909037,
+  Sect. 4.6, Eqs. 18–20.
+- Null: the multivariate series is a stationary multivariate linear Gaussian process, with
+  the observed auto- and cross-spectra, seen through a monotone static transform of each
+  channel.
+- Bivariate VAR(1) with an exp() channel:
+  - distributions identical to 1.8e-15 (criterion ≤ 1e-12; the first run used == 0 and
+    failed on round-off, which is recorded);
+  - mean maximum cross-correlation error 0.05, vs 0.57 for per-channel IAAFT;
+  - size of the multivariate NLP test 9/100 at nominal 5 % (criterion ≤ 10/100).
+
+## 8. Development-only control family
+
+`devmaps.py`: interbeat intervals of the sine circle map.
+- Map: θₙ₊₁ = θₙ + Ω − (K/2π) sin 2πθₙ, with the interval = the lift increment (Arnold
+  1965; Glass & Perez, *PRL* 49:1782 (1982), the phase map of a periodically stimulated
+  oscillator).
+- Regimes, all K < 1, all NON-CHAOTIC:
+  - quasi-periodic: K = 0.5 and 0.9 at Ω = 0.382 and 0.618;
+  - locked: K = 0.9 at Ω = 0.5 (1:2) and Ω = 0.65 (2:3).
+- λ = ⟨ln|1 − K cos 2πθ|⟩ (`results/ground_truth/devmaps_labels.json`): 0 ± 1e-5 for the
+  quasi-periodic regimes, −0.83 and −0.43 for the locked ones.
+- Added after the split was recorded and before any measure was run, as a development
+  control for the quasi-periodic failure disclosed from Phase 8. It is never in a TEST pool.
 
 ## 9. Dropped methods and models
 
 | item | reason |
 |---|---|
 | Modified LR1 EAD family (Tran et al. 2009) | not verifiable (Section 3.2) |
+| PPS, CS, TS on the ECG waveform | UNUSABLE: > 7 % rejections of a strictly periodic ECG (B3); TS null contains chaos |
+| waveform arm (all waveform measures) | dropped on B3 and B5 (≈ 200 s per window) |
+| NeuroKit2 DWT delineator (Martínez 2004) | failed QTDB verification (Section 7) |
+| QT, QRS width features | need a verified delineator |
+| fixed-window RTp / Ta features | fail at nstdb 12 dB (Section 7) |
+| ecgpuwave | no Fortran compiler in the environment |

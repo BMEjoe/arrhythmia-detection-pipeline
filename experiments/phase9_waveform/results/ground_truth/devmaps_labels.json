@@ -1,0 +1,56 @@
+[
+ {
+  "name": "circle:K=0.5,Om=0.382",
+  "K": 0.5,
+  "Om": 0.382,
+  "kind": "quasi-periodic",
+  "lam": 9.987881895469509e-08,
+  "se": 4.992931500203286e-06,
+  "label": "NON-CHAOTIC"
+ },
+ {
+  "name": "circle:K=0.9,Om=0.382",
+  "K": 0.9,
+  "Om": 0.382,
+  "kind": "quasi-periodic",
+  "lam": -9.757833273559228e-07,
+  "se": 1.0158978813432094e-05,
+  "label": "NON-CHAOTIC"
+ },
+ {
+  "name": "circle:K=0.5,Om=0.618",
+  "K": 0.5,
+  "Om": 0.618,
+  "kind": "quasi-periodic",
+  "lam": 1.0236029166159549e-07,
+  "se": 4.999360046849209e-06,
+  "label": "NON-CHAOTIC"
+ },
+ {
+  "name": "circle:K=0.9,Om=0.618",
+  "K": 0.9,
+  "Om": 0.618,
+  "kind": "quasi-periodic",
+  "lam": -1.5745118175778542e-07,
+  "se": 1.0082194534975945e-05,
+  "label": "NON-CHAOTIC"
+ },
+ {
+  "name": "circle:K=0.9,Om=0.5",
+  "K": 0.9,
+  "Om": 0.5,
+  "kind": "locked 1:2",
+  "lam": -0.8303656034108254,
+  "se": 6.409875621278546e-17,
+  "label": "NON-CHAOTIC"
+ },
+ {
+  "name": "circle:K=0.9,Om=0.65",
+  "K": 0.9,
+  "Om": 0.65,
+  "kind": "locked 2:3",
+  "lam": -0.4296757762600831,
+  "se": 1.7605838360084298e-05,
+  "label": "NON-CHAOTIC"
+ }
+]
