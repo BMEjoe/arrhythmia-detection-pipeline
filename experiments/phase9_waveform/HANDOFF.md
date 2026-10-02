@@ -114,5 +114,18 @@ offsets at detected V beats).  Most realistic variant = ectopy + nstdb mix 12 dB
 | A2 KTz verified (LE 0.00344 at P=92 vs published ~0.0035); KTz ground truth for exact inputs (ktz_labels.json); LR1-EAD DROPPED (not verifiable) | done | (this commit) |
 | A realism table + plots (realism.py, results/realism, plots/A_*) | done | (this commit) |
 | PHASE 9 SPLIT recorded (above) before any measure/detector on Phase 9 series | done | (this commit) |
+| D1-D6 measures implemented + verified (measures.py, verify_measures.py, METHODS 5) | done | (see git log) |
+| B1-B2 waveform embedding + PPS / CS / TS (surrogates_wave.py); TS verified (sync test); PPS/CS verification run verify_surrogates.py -> results/verification/surrogates.json | TS done; PPS/CS run in progress | |
+| B3 waveform FP (fp_waveform.py; summary results/dev/fp_waveform_summary.md): periodic ECG rejected 5/5 (PPS, CS, TS) -> all UNUSABLE; B5 ~200 s/window -> **waveform arm DROPPED** | done | |
+| C1 NK2 DWT delineator vs QTDB (verify_delineation.py): FAILED -> dropped; QT, QRSd dropped | done | |
+| C1' fixed-window RTp / Ta (beatfeat.py, verify_beatfeat.py): FAIL at mix 12 (T apex SD 80 ms) -> not usable at the primary variant; KTz chaos (T wave only) invisible to verified features | done | |
+| C2 multivariate IAAFT verified (verify_multivariate.py) | done | |
+| DEV-only circle-map controls (devmaps.py; QP + locked, NON-CHAOTIC) added before any measure ran | done | |
+| E dev diagnosis bank (dev_diag.py -> results/dev/diag.jsonl, resumable; diag_summary.py) | running | |
 
 ## Notes
+- Background jobs (restart if the container restarted; both resumable / rerunnable):
+  `OMP_NUM_THREADS=1 nohup /root/venv313/bin/python -m experiments.phase9_waveform.dev_diag --workers 3 &`
+  `OMP_NUM_THREADS=1 nohup /root/venv313/bin/python -m experiments.phase9_waveform.verify_surrogates --workers 4 &`
+- Never `pkill -f <pattern>` with the plain pattern (kills the calling shell); use `pkill -f "phase9_waveform[.]dev_diag"`.
+- KTz windows: RR is the pacing input (constant or the ectopy pattern); its chaos is in the T wave only.

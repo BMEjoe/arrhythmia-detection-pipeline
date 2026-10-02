@@ -193,6 +193,7 @@ def main(argv=None):
     if path.exists():
         done = {json.loads(line)["tid"] for line in open(path)}
     T = [t for t in tasks() if t["tid"] not in done]
+    np.random.default_rng(1).shuffle(T)            # interleave groups (order does not affect results)
     if a.limit:
         T = T[:a.limit]
     print(len(T), "to run", flush=True)
