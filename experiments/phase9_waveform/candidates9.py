@@ -51,12 +51,12 @@ N_SUR = 39
 MS = (2, 3, 4, 5)
 
 # Calibrated on DEVELOPMENT data only (calibrate9.py, results/dev/calibration9.json); set before the
-# preregistration.  None until calibrated.
-Z_DET = None       # masked-NLP determinism threshold (annotation mask)
-Z_DET_RR = None    # same, RR-rule mask
-G_MIN = None       # growth gate (annotation mask)
-G_MIN_RR = None    # growth gate (RR-rule mask)
-F_MIN = None       # FSLE gate
+# preregistration (values from calibration9.json, rounded up at the 4th decimal).
+Z_DET = 9.4521       # masked-NLP determinism threshold (annotation mask)
+Z_DET_RR = 12.1603    # same, RR-rule mask
+G_MIN = 0.25       # growth gate (annotation mask)
+G_MIN_RR = 0.85    # growth gate (RR-rule mask)
+F_MIN = 1.6183       # FSLE gate
 
 
 def rng_for(x, salt):
