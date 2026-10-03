@@ -65,10 +65,19 @@ Answer only Questions 1-4; new ideas go to "Future work".
 | Q2b verify_titration.py: **VERIFIED** (V1-V6 pass; METHODS 2.6) | done | (this commit) |
 | Q2c sources: Wu09 + PM97 used nsrdb/chfdb (dev); 12-min (~800 beat) segments; NN without interpolation | done | 7c988b7 |
 | dev data (mitdb, nsrdb, chfdb; SHA OK) + harness10 + run10 (guarded) + analysis10 + overlap10 + figures10 | done | afd8296 |
-| DEV run (`run10 --phase dev --part real,synth,seg,spike,robust`), log results/dev/run_dev.log | running (started 01:44 UTC 2026-10-03) | |
-| PREREGISTRATION_DRAFT.md (rename to PREREGISTRATION.md only when final; the guard keys on that name) | drafting | |
+| DEV run real (485), synth (410), seg (33 subjects) done; spike 96/528 and robust 3/132 done, PAUSED (resume after conf) | partial | a74aa99, 05e86f4 |
+| PREREGISTRATION.md pushed BEFORE download | done | 8fc7bd9 |
+| conf download (guarded): nsr2db 54, chf2db 29, SHA OK; 128 Hz; no header start times | done | |
+| overlap10: original rule flagged 13 chance pairs -> Amendment 1 (time-consistent rule, validated) -> no exclusion | done | 4795cf6 |
+| CONF run `run10 --phase conf --part all` (real 988, seg, synth, spike, robust), log results/conf/run_conf.log | running (started 03:43 UTC) | |
 
 ## Resume
+- CONF run is resumable (same command; finished ids skipped):
+  `cd /home/user/arrhythmia-detection-pipeline && nohup env OMP_NUM_THREADS=1 PYTHONPATH=. /root/venv313/bin/python -m experiments.phase10_final.run10 --phase conf --part all --workers 4 >> experiments/phase10_final/results/conf/run_conf.log 2>&1 &`
+  (conf data: `run10 --phase conf --download` (guarded); exclusions.json already written by `overlap10 --amended`).
+- After conf: `analysis10 --phase conf`, `analysis10 --phase conf --sensitivity-flagged`, `figures10 --phase conf`;
+  then resume the DEV run (spike, robust) for the Q4 / Q1 development comparison.
+- Never `pkill -f` a pattern that also appears later in the same shell command (it kills that shell).
 - Dev run is resumable: re-run the same command; finished task ids are skipped:
   `cd /home/user/arrhythmia-detection-pipeline && nohup env OMP_NUM_THREADS=1 PYTHONPATH=. /root/venv313/bin/python -m experiments.phase10_final.run10 --phase dev --part real,synth,seg,spike,robust --workers 4 >> experiments/phase10_final/results/dev/run_dev.log 2>&1 &`
 - Dev data: `python -m experiments.phase10_final.data10 --download dev` (gitignored dev_data/).
