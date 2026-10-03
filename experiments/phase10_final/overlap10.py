@@ -57,6 +57,64 @@ def best_match(probe, rr):
     return lag, mad, float(r[lag])
 
 
+# ------------------------------------------------------------------ AMENDMENT 1 (2026-10-03; PREREGISTRATION.md)
+OFFSET_TOL = 120.0        # s: a duplicate's probes match at one common time offset (annotation slack)
+MIN_CONSISTENT = 3
+
+
+def consistent_overlap(tc, rc, td, rd):
+    """Amended rule: a pair overlaps iff >= MIN_CONSISTENT probes match (median |diff| < TOL at the
+    best-correlation lag) AND those probes' matched positions share one time offset
+    (t_dev(match) - t_conf(probe)) within OFFSET_TOL s of the cluster's median offset."""
+    hits = []
+    for h in PROBE_HOURS:
+        i = int(np.searchsorted(tc, tc[0] + h * 3600.0))
+        i = min(i, max(0, len(rc) - PROBE_LEN))
+        lag, mad, r = best_match(rc[i:i + PROBE_LEN], rd)
+        if lag is not None and mad < TOL:
+            hits.append(float(td[lag] - tc[i]))
+    best = 0
+    for o in hits:
+        best = max(best, sum(abs(o2 - o) <= OFFSET_TOL for o2 in hits))
+    return best >= MIN_CONSISTENT, {"n_match": len(hits), "n_consistent": best, "offsets_s": hits}
+
+
+def amended(validate_only=False):
+    """Validation on development data (a known duplicate must be found, distinct subjects must not), then
+    the amended rule on every confirmatory x development pair."""
+    rng = np.random.default_rng(20261012)
+    val = []
+    for db, rec in (("chfdb", "chf09"), ("chfdb", "chf13"), ("nsrdb", "16265"), ("nsrdb", "19830")):
+        t, lab, sym, fs = D.beat_series(db, rec, D.DEV_DIR)
+        # duplicate: start 37 min later, re-annotated on a 1/128 s grid with +/- 1 sample jitter
+        k0 = int(np.searchsorted(t, t[0] + 2220.0))
+        tq = np.round(t[k0:] * 128.0 + rng.integers(-1, 2, len(t) - k0)) / 128.0
+        tq = np.sort(tq) - tq[0]
+        for db2, rec2 in (("chfdb", "chf09"), ("chfdb", "chf13"), ("nsrdb", "16265"), ("nsrdb", "19830")):
+            t2, rr2, _ = rr_of(db2, rec2, D.DEV_DIR)
+            ok, info = consistent_overlap(tq, np.diff(tq), t2, rr2)
+            val.append({"duplicate_of": f"{db}:{rec}", "against": f"{db2}:{rec2}", "same": rec == rec2,
+                        "overlap": ok, **info})
+    v_ok = all(x["overlap"] == x["same"] for x in val)
+    out = {"validation": val, "validation_pass": v_ok, "pairs": [], "excluded_subjects": []}
+    if validate_only:
+        return out
+    dev = {}
+    for db in ("nsrdb", "chfdb"):
+        for rec in D.records(db, D.DEV_DIR):
+            t, rr, _ = rr_of(db, rec, D.DEV_DIR)
+            dev[f"{db}:{rec}"] = (t, rr)
+    for db in D.CONF_DBS:
+        for rec in D.records(db, D.CONF_DIR):
+            tc, rc, _ = rr_of(db, rec, D.CONF_DIR)
+            for did, (td, rd) in dev.items():
+                ok, info = consistent_overlap(tc, rc, td, rd)
+                out["pairs"].append({"conf": f"{db}:{rec}", "dev": did, "overlap": ok, **info})
+                if ok and f"{db}:{rec}" not in out["excluded_subjects"]:
+                    out["excluded_subjects"].append(f"{db}:{rec}")
+    return out
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     report = {"resolution": {}, "metadata": {"conf": {}, "dev": {}}, "rr_matching": [], "excluded_subjects": []}
@@ -103,4 +161,18 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    if "--amended" in sys.argv:
+        res = amended()
+        OUT.mkdir(parents=True, exist_ok=True)
+        json.dump(res, open(OUT / "data_checks_amended.json", "w"), indent=1, default=str)
+        prev = json.load(open(OUT / "data_checks.json"))["excluded_subjects"]
+        json.dump({"excluded_subjects": res["excluded_subjects"], "rule": "amendment 1 (time-consistent matching)",
+                   "originally_flagged_subjects": prev}, open(OUT / "exclusions.json", "w"), indent=1)
+        print(json.dumps({"validation_pass": res["validation_pass"],
+                          "validation": [(x["duplicate_of"], x["against"], x["overlap"], x["n_match"], x["n_consistent"])
+                                         for x in res["validation"]],
+                          "excluded": res["excluded_subjects"],
+                          "max_consistent_any_pair": max(p["n_consistent"] for p in res["pairs"])}, indent=1))
+    else:
+        main()

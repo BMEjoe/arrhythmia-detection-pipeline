@@ -128,11 +128,15 @@ def curve(b, f):
 
 
 # ------------------------------------------------------------------------------- loading
+EXCLUDE = set()          # Amendment 1 sensitivity analysis: subjects dropped from every frame
+
+
 def load(phase, part):
     p = HERE / "results" / phase / f"{part}.jsonl"
     if not p.exists():
         return []
     R = [json.loads(line) for line in open(p)]
+    R = [r for r in R if r.get("subject") not in EXCLUDE]
     seen, out = set(), []
     for r in R:
         if r["id"] not in seen:
@@ -582,8 +586,13 @@ def _json_default(o):
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--phase", choices=["dev", "conf"], required=True)
+    ap.add_argument("--sensitivity-flagged", action="store_true",
+                    help="Amendment 1: drop the subjects flagged by the original overlap rule")
     a = ap.parse_args(argv)
     out = HERE / "results" / a.phase / "analysis"
+    if a.sensitivity_flagged:
+        EXCLUDE.update(json.load(open(HERE / "results" / "conf" / "exclusions.json"))["originally_flagged_subjects"])
+        out = HERE / "results" / a.phase / "analysis_sensitivity_flagged"
     out.mkdir(parents=True, exist_ok=True)
     df = real_frame(load(a.phase, "real"))
     res = {"n_windows": len(df), "n_subjects": int(df.subject.nunique()) if len(df) else 0}

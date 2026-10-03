@@ -262,4 +262,34 @@ for `docs/PHASE10_FINAL_RESULTS.md`.
 
 ## Amendments
 
-(none)
+### Amendment 1 (2026-10-03, after the download and the `overlap10.py` checks, BEFORE any detector, titration, HRV or other analysis of confirmatory data)
+
+**Seen at this point:** the SHA-256 checks; annotation sampling rates; header fields; the RR-matching
+statistics of `overlap10.py` (`results/conf/data_checks.json`) and the diagnostic below. No confirmatory
+output of any detector or titration existed.
+
+1. **Overlap rule.** The preregistered RR-matching rule flagged 13 pairs (10 chf2db subjects: chf203, 205,
+   206, 209, 210, 214, 215, 216, 224, 228). All are chance matches, not duplicates:
+   - three chf2db records "match" two different chfdb subjects each (impossible for one person);
+   - in every flagged pair the matched positions of different probes are mutually inconsistent in time
+     (e.g. chf205's probes taken at hours 14 and 18 both matched the same ~3-min stretch of chfdb chf09);
+   - the matching probes have very low variability (SD 0.006-0.05 s), so a median difference of 2 samples at
+     1/128 s is reachable by chance among ~1e5 lags; the rule did not account for this;
+   - header metadata contradicts identity (e.g. chf205 is 39 y, M; it "matched" chf09, 63 y, F, and chf13,
+     61 y, M); documentation: different institutions.
+
+   **Amended rule** (`overlap10.consistent_overlap`, `--amended`): a pair overlaps iff >= 3 of the 5 probes match
+   (same median-difference criterion) AND share one time offset within 120 s. Validated on development data
+   before being applied: re-annotated duplicates of 4 development records (shifted 37 min, re-quantized at
+   1/128 s with +/- 1 sample jitter) were all detected (5/5 consistent probes), and no distinct pair was flagged
+   (<= 1 probe). Applied to all 2,739 confirmatory x development pairs: the largest number of time-consistent
+   matching probes in any pair is 1; **no subject overlaps; no exclusion** (`results/conf/exclusions.json`,
+   `data_checks_amended.json`).
+   **Added secondary sensitivity analysis:** P1-P3 are repeated with the 10 originally flagged chf2db subjects
+   excluded (`analysis10.py --phase conf --sensitivity-flagged`).
+2. **Start times.** No nsr2db / chf2db header has a start time. As preregistered, every confirmatory window
+   and segment is placed in clock time with the assumed 09:54 start; ALL confirmatory night / day results are
+   therefore approximations (the preregistered "excluding those records" comparison is empty).
+3. **Resolution.** Every confirmatory annotation file is at 128 Hz (1/128 s, coarser than 1/360 s); the Question
+   1 spike-ins are quantized at 1/128 s as preregistered (automatic in the code).
+4. Headers carry age, sex (chf2db: 21 unknown) and NYHA class (chf2db: I-III), reported in the data table.

@@ -1,0 +1,16 @@
+{
+ "excluded_subjects": [],
+ "rule": "amendment 1 (time-consistent matching)",
+ "originally_flagged_subjects": [
+  "chf2db:chf203",
+  "chf2db:chf205",
+  "chf2db:chf206",
+  "chf2db:chf209",
+  "chf2db:chf210",
+  "chf2db:chf214",
+  "chf2db:chf215",
+  "chf2db:chf216",
+  "chf2db:chf224",
+  "chf2db:chf228"
+ ]
+}
