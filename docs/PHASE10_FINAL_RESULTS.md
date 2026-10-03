@@ -11,6 +11,10 @@
 This is the last phase that asks new scientific questions. Later phases only fix, verify and prepare
 figures.
 
+**Final-refinement errata.** Eleven text corrections (E2–E12) were made after independent verification
+(`experiments/final_refinement/VERIFICATION.md`, `ERRATA.md`). Each corrected passage is marked
+`[Erratum En]`. No table, analysis output or conclusion changed.
+
 ## 1. Summary
 
 - **Data.** Confirmatory data: nsr2db (54 healthy subjects, 58–76 y) and chf2db (29 CHF subjects, NYHA
@@ -21,9 +25,12 @@ figures.
   component carrying a fraction f of the variance. This models hidden chaos, not a chaotic heart.
   - **K3** saw strongly chaotic maps (Hénon a ≥ 1.22, logistic r ≥ 3.88) and one coupled-vdP regime well
     enough to exclude them in ≥ 5 % of windows when f ≥ 0.5–0.7, and in ≥ 20 % when f ≥ 0.3–0.5.
-  - K3 never saw weak maps (λ ≤ 0.26 per beat) or any phase-resetting regime, so no bound is possible
-    for them at any f.
-  - **K1** reached only π < 0.20 from f = 0.5–0.7, and only for the strong maps.
+  - K3 essentially never detected the weakest maps (logistic λ ≤ 0.26, Hénon λ = 0.14 per beat) or any
+    phase-resetting regime, so no bound is possible for them at any f. Hénon a = 1.14 (λ = 0.24) is bounded
+    only at π < 0.20, from f = 0.7. [Erratum E6]
+  - **K1** reached π < 0.20 from f = 0.5–0.7 for Hénon a ≥ 1.14 and logistic r ≥ 3.88 (and from f = 0.9 for
+    phase-reset τ = 1.14), and π < 0.05 only at f = 0.9 (Hénon a = 1.40, logistic r = 3.88 and 4.00).
+    [Erratum E7]
 - **Q2, faithful titration.**
   - The Poon–Barahona titration was rebuilt from the accessible sources and **verified** against the
     PNAS 2001 behaviour.
@@ -40,7 +47,8 @@ figures.
   - **K3 positives do not**: 8 positives, 7 of them in ectopy-free windows; too few for a model.
   - LLE alone and K1 also track ectopy.
   - Adjusted for burden, the titration CHF effect disappears: OR 0.77 [0.46, 1.28].
-- **Q4, robustness (secondary).** 499 surrogates changed ≤ 3 decisions per detector in 331 windows. K3
+- **Q4, robustness (secondary).** 499 surrogates changed at most 6 window decisions per detector in 331
+  windows (LLE alone 3 + 3; K1, UPO alone and K3 at most 2). [Erratum E8] K3
   rose from 0.3 % to 2.8 % at 1,024 intervals. Night vs day was not decisive (clock times approximate).
   K3 detections disappear without annotation labels (K4, K3RR 0/988).
 - **Overall.** The published titration evidence for heart-rate chaos, and for its "decrease" in CHF, is
@@ -71,7 +79,7 @@ figures.
 | Metadata | headers carry age and sex (chf2db: sex unknown for 21) and NYHA class (chf2db: I–III). nsr2db ages 58–76 y vs nsrdb 20–50 y; chf2db NYHA I–III vs chfdb III–IV |
 | Documentation | nsr2db: Washington University (P. Stein) and Columbia-Presbyterian (R. Goldsmith); chf2db: Columbia-Presbyterian; nsrdb and chfdb: Beth Israel Hospital, Boston. No overlap is implied |
 | Beat symbols | nsr2db: N 5,769,155, A 12,886, V 8,463 (+ non-beat `~`, `|`); chf2db: N 3,200,657, A 25,442, V 86,096 (+ `~`, `|`) |
-| Windows | 988 windows of 512 intervals (49 + 27 subjects with all 12, 6 subjects with 10–11; recordings 17–24 h) |
+| Windows | 988 windows of 512 intervals (49 + 27 subjects with all 12, 7 subjects with 10–11 [Erratum E2]; recordings 17–24 h) |
 
 **Subject overlap.** The preregistered RR-matching rule (5 probes of 500 intervals per confirmatory record;
 a probe matches when the median absolute interval difference at the best-correlation lag is below 2/128 s;
@@ -220,7 +228,7 @@ read from the published figure.
 **Findings (P1).**
 - **K3 rules out moderately strong chaos at moderate size.** For the stronger Hénon and logistic maps
   (λ ≥ 0.30 per beat) and one coupled-vdP regime, chaos accounting for ≥ 50 % of beat-to-beat variance
-  (f ≥ 0.5) can be present in at most 5 % of real windows. At f ≥ 0.3–0.5 it can be present in at most
+  (f ≥ 0.5; f ≥ 0.7 for logistic r = 4.00 [Erratum E9]) can be present in at most 5 % of real windows. At f ≥ 0.3–0.5 it can be present in at most
   20 %.
 - **Exclusion is possible only from f ≈ 0.5 upwards.** Below f = 0.3 no family is excluded at any
   threshold.
@@ -231,8 +239,9 @@ read from the published figure.
   - vdP (6, 3.3) at π < 0.05.
 - **Per family, for every λ tested**, the only exclusion is coupled vdP at π < 0.20 from f = 0.7. Hénon,
   logistic and phase-reset have no such f.
-- **K1 (AND detector) gives weaker bounds.** π < 0.20 only from f = 0.5–0.7 for the strong maps, and no
-  bound at all for coupled vdP. LLE alone, with 401/988 real positives (U = 0.45), gives no bound
+- **K1 (AND detector) gives weaker bounds.** π < 0.20 from f = 0.5–0.7 for Hénon a ≥ 1.14 and logistic
+  r ≥ 3.88 (from f = 0.9 for phase-reset τ = 1.14), π < 0.05 only at f = 0.9 (Hénon a = 1.40, logistic
+  r ≥ 3.88), and no bound at all for coupled vdP. [Erratum E7] LLE alone, with 401/988 real positives (U = 0.45), gives no bound
   anywhere.
 - **The replacement design (100 % chaos plus real ectopy)** is detected by K3 in 0–92 % of windows,
   depending on the family.
@@ -273,7 +282,7 @@ subject DRs with subject-cluster bootstrap 95 % CIs.
   Wu's elimination give the same result. As predicted, masking changes CHF more than NSR.
 - **About half of the healthy subjects' raw positives are also ectopy-related.** The nsr2db subjects are
   58–76 y and carry atrial and ventricular ectopic beats. In development, nsrdb (20–50 y, almost no ectopy)
-  lost only 2–6 % of positives.
+  lost only 4–6 % of positives (3.5–6.1 % across the masked, edited and Wu arms). [Erratum E12]
 - **About a quarter to a third of segments stay titration-positive after ectopy is removed, in both
   groups.** By the method's own logic this is "chaos". Phases 5–9 and Q2e show the indicator is also
   positive for static nonlinearity and some non-chaotic forced rhythms, so these remaining positives are
@@ -375,7 +384,8 @@ titration the exchangeable fit diverged and the independence working correlation
 | K1 raw → edited | 504 | 7 | 4 | 71.4 % | −0.5 % [−1.4, 0.2] |
 | UPO raw → edited | 504 | 14 | 18 | 64.3 % | +0.6 % [−0.9, 2.3] |
 
-Masking or editing removes most titration and LLE positives in windows that contain ectopy. Editing also
+Masking or editing removes most titration positives (57.5 % masked, 66.0 % edited) and about half of the LLE
+positives (47.1 % edited) in windows that contain ectopy. [Erratum E10] Editing also
 *creates* some positives: 6 new titration-positive and 29 new LLE-positive windows (raw-negative windows
 that became positive). This matches the Phase 6 finding that interpolated stretches look structured.
 The masked titration arm is not analysable when ectopy is dense: it needs ~84 clean consecutive
@@ -396,7 +406,8 @@ difference in titration positives is fully accounted for by ectopy.
 | UPO alone | 12 / 10 | 10 | 2 | 0 | 99.4 % | 0.91 |
 | K3 | 1 / 1 | 1 | 0 | 0 | 100 % | 1.00 |
 
-Surrogate Monte Carlo error changes at most 3 decisions per detector.
+Surrogate Monte Carlo error changes at most 6 window decisions per detector (LLE alone: 3 in each direction;
+K1 1, UPO alone 2, K3 0). [Erratum E8]
 
 ### 8.2 Window length (4b; 320 windows available at all three lengths)
 
@@ -409,8 +420,8 @@ Surrogate Monte Carlo error changes at most 3 decisions per detector.
 
 - **K3 is length-sensitive.** It detected 9/320 windows at 1,024 intervals, against 1 at 512 and 1 at 256.
   - Six of the nine are ectopy-free.
-  - Three subjects recur from the 512-interval detections (nsr029, nsr049, chf216; chf211 and chf218 also
-    reappear).
+  - Five of the six subjects with 512-interval detections recur (nsr029, nsr049, chf211, chf216,
+    chf218); chf211 window 7 is detected at 256, 512 and 1,024 intervals. [Erratum E11]
   - K3 was calibrated at 512 intervals only. Longer windows accumulate nonstationarity, which can produce
     determinism-like predictability.
 - **LLE alone** fires more at longer lengths, as its power to reject the linear null grows.
@@ -450,7 +461,7 @@ subjects show more titration positives at night, but the effect is weaker than i
 | nsr2db nsr052 | 6 | 0 | 1 | 11.1 | 0.33 | – / + / – / – |
 | chf2db chf211 | 7 | 0 | 1 | 10.0 | 0.30 | + / + / + / + |
 | chf2db chf216 | 2 | 0 | 0 | 10.6 | 0.40 | – / + / – / – |
-| chf2db chf218 | 12 | 5 | 11 | 16.2 | 0.27 | – / + / – / – |
+| chf2db chf218 | 12 | 5 | 11 | 16.1 [Erratum E3] | 0.27 | – / + / – / – |
 
 - **A degenerate detection.** nsr029 window 9 has SDNN 15 ms at 1/128 s resolution. Its surrogate
   prediction errors have essentially zero spread, so z is inflated by the 10⁻¹² SD floor. This is a K3
@@ -572,7 +583,7 @@ test rejected its null hypothesis; that is not proof of chaos.
    positives of the source UPO detector.** Sinusoid 0/150 and two-tone 1/150 (baseline 89 and
    67/150); noisy Hénon 293/300 (Phase 4 test seeds).
 5. **The LLE test alone cannot be interpreted on RR intervals that contain ectopic beats.** It fired in
-   94–99 % of linear-Gaussian windows with 2–10 % isolated ectopic beats (Phases 5–6). On real data
+   96–99 % of linear-Gaussian windows with 2–10 % isolated ectopic beats (Phases 5–6). [Erratum E5] On real data
    its positives track ectopy burden: OR 1.51 [1.31, 1.75] per doubling (Phase 10, Q3).
 6. **The AND of the LLE and UPO tests (K1) is protected from isolated ectopy only partially, and not from
    ectopy in non-chaotic deterministic rhythms.**
@@ -603,7 +614,7 @@ test rejected its null hypothesis; that is not proof of chaos.
     Q2b). The approximate Phase 8 version did not: it was positive on SETAR and step nulls.
 13. **Noise titration on heart-rate data mostly detects ectopy, not chaos.**
     - Window positive rate rose from 22 % with no ectopic beat to 63 % with one (Phase 10, Q3).
-    - Masking or editing ectopy removed 49–66 % of segment positives (Phase 10, P2).
+    - Masking ectopy removed 49–66 % and editing 44–55 % of segment positives (Phase 10, P2). [Erratum E4]
     - Couplets on linear RR were positive in 100/100 confirmatory synthetic windows, and runs in 96–99
       (Phase 10, Q2e).
 14. **The "decreased cardiac chaos in CHF" claim is not supported by titration on the confirmatory

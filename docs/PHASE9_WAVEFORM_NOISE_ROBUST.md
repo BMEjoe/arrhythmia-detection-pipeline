@@ -154,10 +154,15 @@ DEV results at these thresholds:
 - **Errors:** 63 window errors, all "fewer than n intervals" in fast coupled-vdP regimes,
   counted as not detected per the rule.
 
+**[Erratum E1, final refinement]** `decide9.py` grouped the 31 preregistered KTz non-chaotic regimes by
+pacing period only (81 conditions). Re-tabulated over the 101 preregistered conditions
+(`experiments/final_refinement/errata/phase9_decision_101.md`), k2 fails 16 conditions instead of 12; every
+PASS/FAIL and the winner are unchanged (`experiments/final_refinement/ERRATA.md`).
+
 | candidate | PASS | failed conditions | primary chaotic (1,320) | detections in PASS conditions (10,100) |
 |---|---|---|---|---|
 | k1_frozen512 (baseline) | **no** | 4: non-chaotic coupled vdP with ectopy, 8–45/100 | 74 | 97 |
-| k2_mnlp_ann | **no** | 12: quasi-periodic / forced vdP (up to 100/100), MG τ = 15, 16 with ectopy | 304 | 607 |
+| k2_mnlp_ann | **no** | 16 [Erratum E1]: quasi-periodic / forced vdP (up to 100/100), MG τ = 15, 16 with ectopy, 4 KTz regimes without ectopy (8–12/100) | 304 | 607 |
 | **k3_mnlp_growth_ann** | **yes** | none | **90** | **0** |
 | k4_mnlp_growth_rr | yes | none | 2 | 1 |
 | k5_mnlp_fsle_ann | yes | none | 0 | 3 |

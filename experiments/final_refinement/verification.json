@@ -3,6 +3,7 @@
  "match": 327,
  "mismatch": 12,
  "info": 0,
+ "mismatch_documented_as_errata": 12,
  "checks": [
   {
    "id": "2E-1",
@@ -1490,7 +1491,8 @@
    "where": "docs/PHASE9_WAVEFORM_NOISE_ROBUST.md 6",
    "rule": "exact",
    "status": "MISMATCH",
-   "note": "decide9.py grouping (81 conditions): PASS False, 12 failed"
+   "note": "erratum E1 (corrected); decide9.py grouping (81 conditions): PASS False, 12 failed",
+   "erratum": "E1"
   },
   {
    "id": "9-1.k3_mnlp_growth_ann",
@@ -1670,7 +1672,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md 3",
    "rule": "exact",
    "status": "MISMATCH",
-   "note": ""
+   "note": "erratum E2 (corrected)",
+   "erratum": "E2"
   },
   {
    "id": "10-Q1-0",
@@ -3290,7 +3293,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md 8.5",
    "rule": "round",
    "status": "MISMATCH",
-   "note": ""
+   "note": "erratum E3 (corrected)",
+   "erratum": "E3"
   },
   {
    "id": "10-K3t-nsr029",
@@ -3974,7 +3978,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md S12 #13",
    "rule": "round",
    "status": "MISMATCH",
-   "note": "edited arm removed 44.5 % (NSR) and 55.2 % (CHF)"
+   "note": "erratum E4 (corrected); edited arm removed 44.5 % (NSR) and 55.2 % (CHF)",
+   "erratum": "E4"
   },
   {
    "id": "T-2",
@@ -3986,7 +3991,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md S12 #5",
    "rule": "round",
    "status": "MISMATCH",
-   "note": "94 % is the lowest Phase 6 Wilson lower bound, not a rate; rates are 96.3-98.5 %"
+   "note": "erratum E5 (corrected); 94 % is the lowest Phase 6 Wilson lower bound, not a rate; rates are 96.3-98.5 %",
+   "erratum": "E5"
   },
   {
    "id": "T-3",
@@ -3998,7 +4004,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md S1 (Q1)",
    "rule": "exact",
    "status": "MISMATCH",
-   "note": "Section 5 'Findings' states it correctly (weak = logistic \u03bb <= 0.26 and H\u00e9non \u03bb = 0.14)"
+   "note": "erratum E6 (corrected); Section 5 'Findings' states it correctly (weak = logistic \u03bb <= 0.26 and H\u00e9non \u03bb = 0.14)",
+   "erratum": "E6"
   },
   {
    "id": "T-4",
@@ -4010,7 +4017,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md S1, S5 Findings",
    "rule": "exact",
    "status": "MISMATCH",
-   "note": "the K1 table in S5.2 itself is correct (see 10-Q1-K1.*)"
+   "note": "erratum E7 (corrected); the K1 table in S5.2 itself is correct (see 10-Q1-K1.*)",
+   "erratum": "E7"
   },
   {
    "id": "T-5",
@@ -4022,7 +4030,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md S1 (Q4), S8.1",
    "rule": "exact",
    "status": "MISMATCH",
-   "note": "per detector: {'K1': 1, 'LLE': 6, 'UPO': 2, 'K3': 0}; LLE 3 + 3"
+   "note": "erratum E8 (corrected); per detector: {'K1': 1, 'LLE': 6, 'UPO': 2, 'K3': 0}; LLE 3 + 3",
+   "erratum": "E8"
   },
   {
    "id": "T-6",
@@ -4034,7 +4043,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md S5 Findings",
    "rule": "round",
    "status": "MISMATCH",
-   "note": "logistic r = 4.00 (\u03bb 0.693): f_min(\u03c0 < 0.05) = 0.7 (S1 states the range 0.5-0.7 correctly)"
+   "note": "erratum E9 (corrected); logistic r = 4.00 (\u03bb 0.693): f_min(\u03c0 < 0.05) = 0.7 (S1 states the range 0.5-0.7 correctly)",
+   "erratum": "E9"
   },
   {
    "id": "T-7",
@@ -4046,7 +4056,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md S7 (3b)",
    "rule": "exact",
    "status": "MISMATCH",
-   "note": "LLE: 47.1 % removed (titration 57.5 % masked, 66.0 % edited)"
+   "note": "erratum E10 (corrected); LLE: 47.1 % removed (titration 57.5 % masked, 66.0 % edited)",
+   "erratum": "E10"
   },
   {
    "id": "T-8",
@@ -4058,7 +4069,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md S8.2",
    "rule": "exact",
    "status": "MISMATCH",
-   "note": "['chf2db:chf211', 'chf2db:chf216', 'chf2db:chf218', 'nsr2db:nsr029', 'nsr2db:nsr049'] (the report lists these five in one sentence)"
+   "note": "erratum E11 (corrected); ['chf2db:chf211', 'chf2db:chf216', 'chf2db:chf218', 'nsr2db:nsr029', 'nsr2db:nsr049'] (the report lists these five in one sentence)",
+   "erratum": "E11"
   },
   {
    "id": "T-9",
@@ -4070,7 +4082,8 @@
    "where": "docs/PHASE10_FINAL_RESULTS.md S6",
    "rule": "round",
    "status": "MISMATCH",
-   "note": "from results/dev/analysis/analysis.json (development data)"
+   "note": "erratum E12 (corrected); from results/dev/analysis/analysis.json (development data)",
+   "erratum": "E12"
   }
  ]
 }
