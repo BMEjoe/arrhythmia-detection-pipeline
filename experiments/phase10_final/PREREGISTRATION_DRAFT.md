@@ -162,6 +162,10 @@ titration claims are void.
   per group (and pooled) the mean change with subject-cluster bootstrap 95 % CI; "masking changes the
   positive rate" iff the CI excludes 0. Also the fraction of raw-positive segments that are negative after
   masking.
+- The masked arm needs ~84 consecutive clean intervals per regression row (linear memory up to 83), so it is
+  not analysable in ectopy-dense segments; the primary change uses analysable segments only, and the
+  same change with non-analysable masked segments counted as negative is reported as secondary, with the
+  analysable fractions by group.
 - **Secondary:** edited arm (paired change, eligible segments); Wu-preprocessed arm (DR by group: the
   study-faithful replication, "noise-limit positives by group"); mean NL among positive segments (raw, Wu);
   night / day DR; analysable / eligible fractions by group; GEE of segment positivity on burden and group
@@ -184,7 +188,9 @@ titration claims are void.
   (0, 1, 2-4, 5-15, >= 16 beats; counts, Wilson CIs) and the rate difference burden >= 1 vs 0 (subject-
   cluster bootstrap CI) are reported instead, and "positives track ectopy" cannot be claimed.
 - Prediction from Phases 5-9: TIT and LLE-alone positives increase with burden; K3 positives do not.
-  Reported either way.
+  Reported either way. The prediction for K3 is CONTRADICTED iff K3's b1 is estimable with CI excluding 0
+  and b1 > 0; if K3 has < 10 positives it is reported as "not contradicted; K3 positives too rare for a
+  dose-response" with the burden table (Wilson bounds per burden bin).
 - **3a secondary:** the same model for LLE alone, UPO alone, K1; unadjusted model (burden only); K3 restricted
   to analysable windows.
 - **3b paired** (windows usable in both arms; all windows and windows with >= 1 masked interval): TIT raw vs
