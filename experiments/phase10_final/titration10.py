@@ -37,8 +37,8 @@ KAPPA_MAX = 6      # [Wy06] default of the Poon-lab routine (nonlinear models)
 # model (M = 84 terms -> kappa_lin <= 83), so a limit cycle with up to 41 harmonics has an exact
 # linear description ([PB01]: periodic signals are "described both by nonlinear models and by linear
 # models of enough memory").  kappa_lin <= 6 fails [PB01] Fig. 2's periodic example (METHODS.md 2.3).
-KAPPA_LIN_MAX = comb(KAPPA_MAX + D_MAX, D_MAX) - 1
 D_MAX = 3          # [Wy06] default of the Poon-lab routine
+KAPPA_LIN_MAX = comb(KAPPA_MAX + D_MAX, D_MAX) - 1
 ALPHA = 0.01       # [PB01], [Wu09], [Wy06]
 N_REAL = 10        # [PB01] Fig. 1 legend (10 noise realisations); [Wu09] "5-10 times"
 HI0 = 2.0          # initial bisection bracket for alpha / sigma_y (doubled while still detected)

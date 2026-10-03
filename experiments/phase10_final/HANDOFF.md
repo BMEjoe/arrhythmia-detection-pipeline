@@ -60,7 +60,10 @@ Answer only Questions 1-4; new ideas go to "Future work".
 ## Status
 | Step | State | Commit |
 |---|---|---|
-| prerequisites on main confirmed; env rebuilt; pytest baseline 462+1 / 463 | done | (this commit) |
+| prerequisites on main confirmed; env rebuilt; pytest baseline 462+1 / 463 | done | 5c0c5b1 |
+| Q2a titration10.py from accessible sources (BP96/PM97 paywalled); readings tried; criteria predeclared | done | e5131dc |
+| Q2b verify_titration.py: **VERIFIED** (V1-V6 pass; METHODS 2.6) | done | (this commit) |
+| Q2c sources: Wu09 + PM97 used nsrdb/chfdb (dev); 12-min (~800 beat) segments; NN without interpolation | done | (this commit) |
 
 ## Notes
 - Never `pkill -f <pattern>` with the plain pattern (kills the calling shell).

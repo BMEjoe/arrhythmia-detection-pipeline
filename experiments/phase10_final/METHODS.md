@@ -84,3 +84,34 @@ Primary reading only; 10 noise realisations; 1,000-point series; seeds fixed in 
   ground-truth labels) sampled every 12.5: chaotic tau = 17, 23, 30: NL > 0 in >= 2 of 3; periodic tau = 14, 15,
   16: NL = 0 in >= 2 of 3. Henon (1.4, 0.3) x: NL > 0.
 - **VERIFIED** iff V1-V6 all hold. Otherwise titration claims are not made (Question 2 reports the failure).
+
+### 2.6 Verification result (`verify_titration.py`, `results/verification/titration_verification.{json,md}`; 59 s)
+**VERIFIED (V1-V6 all pass).**
+- V1-V3 (used to choose the reading): NL = 0.637 (r = 3.7; published ~0.75), 0.087 (r = 3.575; ~0.09),
+  0.000 (r = 3.565 periodic; ~0).
+- V4 logistic scan: NL > 0 at 78/78 r with LE > 0.02; NL = 0 at 18/18 r with LE < -0.02; Spearman(NL, LE) 0.85.
+- V5 controls (20 each): white noise 0/20 positive, AR(2) 0/20, limit cycle NL = 0 in 20/20, 2-torus 20/20,
+  logistic period 3 20/20.
+- V6: Lorenz r = 28 NL 0.61, r = 160 NL 0; Henon NL 0.77; Mackey-Glass chaotic tau 17 / 23 / 30: NL 0.33 / 0.68 /
+  0.66; periodic tau 14 / 15 / 16: NL 0 / 0 / 0.
+- Remaining difference: r = 3.7 gives 0.64 vs the published ~0.75 (a value read from a figure). The
+  Mann-Whitney reading gives 0.70. Titration claims are made with the primary reading.
+
+### 2.7 HRV studies, data and preprocessing (Question 2c)
+- [Wu09] (the "transient chaos" interpretation tied to ectopic beats): young group n = 13 (32 +/- 8 y) and CHF
+  n = 14 (NYHA III-IV, no beta-blockers) "from the PhysioNet database"; elderly n = 16 from the authors' laboratory.
+  These match nsrdb (18 subjects, 20-50 y) and chfdb (15 subjects, NYHA 3-4), i.e. this project's DEVELOPMENT
+  data. Subjects "selected on the basis of stability of the mean heart rate and limited number of ectopic beats
+  and undetected beats" (not reproducible). RR: PhysioNet software with "elimination (without interpolation) of
+  premature or missing beats and other ectopic beats", then manual removal of residual premature beats with
+  abnormal QRS (not reproducible without the ECG; nsr2db / chf2db have no ECG). Segments: 24-h data divided into
+  120 segments of 12 min (~800 beats). Outcomes: nonlinear detection rate DR (% of segments with nonlinearity
+  detected, per 3-h window) and NL (mean over detected segments only). Kappa and d are not reported; the
+  routine defaults of [Wy06] (kappa 6, d 3) are used. Fig. 2C: a CHF segment with NL 134.2 % fell to 0 % after
+  manual removal of RR "spikes" (undetected ectopic beats, compensatory pauses); Fig. 2D: 12 segments in 7 CHF
+  subjects.
+- [PM97] ("decrease of cardiac chaos in CHF"): healthy subjects and severe CHF; PhysioNet lists it as a user of
+  chfdb. Window length and preprocessing not accessible; [Wu09] states its 12-min / ~800-beat segmentation is
+  "as with previous studies [PM97]".
+- Neither study used nsr2db or chf2db (the CONFIRMATORY databases): chf2db is NYHA I-III (Columbia), nsr2db
+  healthy (Washington University / Columbia), both 128 Hz annotations with manual review.
