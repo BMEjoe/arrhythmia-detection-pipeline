@@ -239,21 +239,41 @@ def real_upper(df, det, seed=SEED + 20):
 
 
 def exclusion(curves, U, L=0.0):
-    """pi_upper(f) = min(1, max(0, U - L) / p(f)); smallest f with pi_upper < threshold."""
+    """PRIMARY (model-free): at each design f, pi_upper = min(1, max(0, U - L) / p_emp(f)) with p_emp = k / n
+    (pi_upper = 1 if p_emp = 0); f_min(th) = smallest design f with pi_upper < th at that f and at every larger
+    design f.  SECONDARY: the same on the fine grid with the Firth curve p_hat and with its one-sided 95 %
+    lower band (the Firth penalty adds pseudo-detections, so these can show 'exclusion' where no detection
+    was observed; they are descriptive only)."""
     out = {}
+    num = max(0.0, U - L)
     for key, c in curves.items():
         res = {}
+        fs = sorted(float(x) for x in c["empirical"])
+        pe = [c["empirical"][f"{f:g}"]["p"] for f in fs]
+        pi_e = [float(min(1.0, num / p)) if p and p > 0 else 1.0 for p in pe]
+        fm = {}
+        for th in THRESHOLDS:
+            ok = [i for i in range(len(fs)) if all(v < th for v in pi_e[i:])]
+            fm[f"{th:g}"] = fs[ok[0]] if ok else None
+        res["design"] = {"f": fs, "p_emp": pe, "pi_upper": pi_e, "f_min": fm}
+        pw = [c["empirical"][f"{f:g}"]["wilson"][0] for f in fs]
+        pi_w = [float(min(1.0, num / p)) if p and p > 0 else 1.0 for p in pw]
+        fmw = {}
+        for th in THRESHOLDS:
+            ok = [i for i in range(len(fs)) if all(v < th for v in pi_w[i:])]
+            fmw[f"{th:g}"] = fs[ok[0]] if ok else None
+        res["design_wilson_lower"] = {"pi_upper": pi_w, "f_min": fmw}
         for which in ("p_hat", "p_lo95_1s"):
             p = np.asarray(c[which])
-            pi = np.minimum(1.0, max(0.0, U - L) / np.maximum(p, 1e-12))
+            pi = np.minimum(1.0, num / np.maximum(p, 1e-12))
             fm = {}
             for th in THRESHOLDS:
-                ok = np.nonzero(pi < th)[0]
-                fm[f"{th:g}"] = float(F_FINE[ok[0]]) if len(ok) else None
+                ok = [i for i in range(len(F_FINE)) if np.all(pi[i:] < th)]
+                fm[f"{th:g}"] = float(F_FINE[ok[0]]) if ok else None
             res[which] = {"pi_upper": pi.tolist(), "f_min": fm}
         rp = c["replacement"]
         pr = rp["k"] / rp["n"] if rp["n"] else np.nan
-        res["replacement_pi_upper"] = float(min(1.0, max(0.0, U - L) / pr)) if pr and pr > 0 else 1.0
+        res["replacement_pi_upper"] = float(min(1.0, num / pr)) if pr and pr > 0 else 1.0
         out[key] = res
     return out
 
@@ -277,7 +297,8 @@ def q1(phase, df_real):
             if len(dg):
                 ug = real_upper(dg, real_col, seed=SEED + 21)
                 r[f"real_{grp}"] = ug
-                r[f"exclusion_{grp}"] = {k: {"f_min": v["p_hat"]["f_min"]} for k, v in exclusion(curves, ug["U"]).items()}
+                r[f"exclusion_{grp}"] = {k: {"f_min_design": v["design"]["f_min"], "f_min_fit": v["p_hat"]["f_min"]}
+                                         for k, v in exclusion(curves, ug["U"]).items()}
         res["detectors"][det] = r
     return res
 

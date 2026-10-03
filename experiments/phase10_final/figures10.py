@@ -83,8 +83,8 @@ def fig_curves(A, out, det):
             ef = [float(x) for x in c["empirical"]]
             ep = [c["empirical"][x]["p"] for x in c["empirical"]]
             ax.plot(ef, ep, "o", color=SERIES[i], ms=5, mec=SURF, mew=1)
-            pi = D["exclusion_L0"][k]["p_hat"]["pi_upper"]
-            ax2.plot(f, pi, color=SERIES[i], lw=2, label=lab)
+            ex = D["exclusion_L0"][k]
+            ax2.plot(ex["design"]["f"], ex["design"]["pi_upper"], "-o", color=SERIES[i], lw=2, ms=6, label=lab)
         ax.set_ylim(-0.02, 1.02)
         ax.set_title(FAMILY_TITLE[fam], fontsize=10, loc="left")
         ax2.set_ylim(0, 1.02)

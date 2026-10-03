@@ -17,6 +17,19 @@ Methods listed for the runner guard:
 - method: `K3RR`
 - method: `TIT`
 
+## 0a. Development results seen before this file (DEVELOPMENT data only; reported as such)
+- Titration verification: VERIFIED (METHODS.md 2.6).
+- nsrdb + chfdb, 12 windows of 512 per subject (396 windows): TIT raw positive 199, LLE 126, UPO 8, K1 3,
+  K3 0, K4 0, K3RR 1; TIT GEE OR per doubling of 1 + burden 2.43 (1.24-4.78); LLE 1.33 (1.16-1.52); masking
+  removed 68 % of TIT positives among windows with masked intervals (analysable in both arms).
+- 12-min segments (Wu-style), 33 subjects: TIT raw DR NSR 0.48, CHF 0.81; masking changed CHF by -0.58 and
+  NSR by -0.02; Wu-preprocessed DR NSR 0.46, CHF 0.36; NSR night 0.70 vs day 0.41.
+- Synthetic (5 development seeds per condition): TIT positive on N5 (static warp), couplets, runs, forced
+  vdP (5.45, 5.6) without ectopy; 0 on the linear nulls and SETAR.
+- Spike-ins on the first development subjects (reduced f grid): K3 detected Henon / logistic / vdP at
+  f >= 0.5-0.9 in some base windows; phase-reset never; K1 only at f = 0.9 for some maps.
+None of these changed a detector, the titration implementation, or any parameter.
+
 ## 0. What the analyses can and cannot show
 
 - An **additive chaotic component** (Question 1) is a model of *hidden chaos* added to real human RR
@@ -129,31 +142,39 @@ resamples, evaluated on f = 0.05, 0.06, ..., 0.90.
 
 **Real-data detection rate bound:** for each detector, on all confirmatory windows (both groups pooled),
 U = max(subject-cluster bootstrap 95th percentile of the mean subject-level detection rate (10,000
-resamples), one-sided 95 % Clopper-Pearson upper bound of detected / analysed windows). The CP term keeps the
+resamples), one-sided 95 % Clopper-Pearson upper bound of detected / all windows; not analysable = not
+detected, as in the spike-ins). The CP term keeps the
 bound informative when there are no detections (Phase 7 lesson: a zero-width bootstrap interval is not
 precision).
 
-**Exclusion bound (PRIMARY formula):**
+**Exclusion bound (PRIMARY formula; model-free):** at each design f,
 
-    pi_upper(f, lambda) = min(1, max(0, U - L) / p_hat(f, lambda)),   L = 0,
+    pi_upper(f, lambda) = min(1, max(0, U - L) / p_emp(f, lambda)),   L = 0,
 
-the smallest prevalence of windows containing chaos at (f, lambda) that would be expected to produce more
-detections than the 95 % bound allows (expected rate >= pi p). L = 0 is used because a lower bound on the
-synthetic false-positive rate is not a valid lower bound on the real false-positive rate (real data need
-not contain the ectopy-heavy synthetic conditions). **Secondary:** (i) p replaced by its one-sided 95 % lower
-band; (ii) L = one-sided 95 % Clopper-Pearson lower bound of the detector's pooled Phase 9 TEST
-false-positive rate over the 101 PASS conditions (K3 0/10,100 -> L = 0; K1 97/10,100); (iii) per group.
+with p_emp = detected / base windows at that f (pi_upper = 1 when p_emp = 0): the smallest prevalence of
+windows containing chaos at (f, lambda) that would be expected to produce more detections than the 95 %
+bound allows (expected rate >= pi p). L = 0 because a lower bound on the synthetic false-positive rate is
+not a valid lower bound on the real false-positive rate (real data need not contain the ectopy-heavy
+synthetic conditions). The empirical p is used, not the fitted curve, because the Firth penalty adds
+pseudo-detections: in development, families with zero detections at every f had fitted p of 0.04-0.07,
+which would manufacture exclusions from data containing no detection.
+**Secondary:** (i) p replaced by its Wilson 95 % lower bound; (ii) the Firth curve p_hat on the fine grid
+(and its one-sided 95 % lower band), descriptive only; (iii) L = one-sided 95 % Clopper-Pearson lower bound
+of the detector's pooled Phase 9 TEST false-positive rate over the 101 PASS conditions (K3 0/10,100 -> L = 0;
+K1 97/10,100); (iv) per group (NSR, CHF).
 
-**P1 (PRIMARY OUTCOME 1):** for K3 and for K1, the exclusion curves pi_upper(f) per (family, parameter), and
-for each the smallest f on the fine grid with pi_upper < 0.05 and with pi_upper < 0.20 (or "no such f up to
-f = 0.90"). Per family, also the largest of these over its parameters ("for every lambda tested").
+**P1 (PRIMARY OUTCOME 1):** for K3 and for K1, the exclusion curves pi_upper(f) per (family, parameter) at
+the design f values, and for each the smallest design f with pi_upper < 0.05 and with pi_upper < 0.20 at
+that f and at every larger design f (or "no such f up to f = 0.9"). Per family, also the largest of these
+over its parameters ("for every lambda tested").
 
 ## 5. Question 2: faithful replication of noise titration
 
 **Verification (done before this file; METHODS.md 2.5-2.6):** VERIFIED. If the implementation is changed,
 titration claims are void.
 
-**P2 (PRIMARY OUTCOME 2), 12-min segments (Wu et al. 2009 / Poon & Merrill 1997 segment length):**
+**P2 (PRIMARY OUTCOME 2), 12-min segments (Wu et al. 2009's segmentation, which they state follows Poon &
+Merrill 1997):**
 - per subject, the detection rate DR = fraction of analysable segments with TIT raw positive; per group
   the mean of the subject DRs with a subject-cluster bootstrap 95 % CI (10,000);
 - group difference CHF - NSR: bootstrap 95 % CI (subjects resampled within groups) and a two-sided
@@ -166,6 +187,7 @@ titration claims are void.
   not analysable in ectopy-dense segments; the primary change uses analysable segments only, and the
   same change with non-analysable masked segments counted as negative is reported as secondary, with the
   analysable fractions by group.
+- Prediction from Phases 5-9: masking lowers the CHF raw DR (ectopy-driven positives) more than the NSR DR.
 - **Secondary:** edited arm (paired change, eligible segments); Wu-preprocessed arm (DR by group: the
   study-faithful replication, "noise-limit positives by group"); mean NL among positive segments (raw, Wu);
   night / day DR; analysable / eligible fractions by group; GEE of segment positivity on burden and group
