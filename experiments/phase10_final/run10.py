@@ -311,6 +311,8 @@ def main(argv=None):
                 recs = D.download(db, D.CONF_DIR)
                 print(db, len(recs), "records; SHA-256 OK")
             return
+        if not (HERE / "results" / "conf" / "exclusions.json").exists():
+            raise SystemExit("refusing --phase conf: run overlap10.py first (data checks and exclusions)")
     parts = ("real", "seg", "synth", "spike", "robust") if a.part == "all" else tuple(a.part.split(","))
     out_dir = HERE / "results" / a.phase
     out_dir.mkdir(parents=True, exist_ok=True)

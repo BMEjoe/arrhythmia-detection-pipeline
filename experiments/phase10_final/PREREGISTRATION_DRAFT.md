@@ -216,7 +216,16 @@ Confirmatory and development data.
 
 - Confirmatory tasks (83 subjects before exclusions): real 996 windows; 12-min segments ~120 per subject;
   spike 83 x 16 tasks (7 f + replacement each); robust 332 windows; synthetic 41 conditions x 2 lengths x 100.
-- **Runtime budget** (development timings, 4 workers): BUDGET_TABLE
+- **Runtime budget** (development timings under 4-worker load; projected wall time on 4 workers):
+
+  | part | dev mean per task | confirmatory tasks | projected wall |
+  |---|---|---|---|
+  | real (512 windows, all detectors and arms) | 15.4 s | 996 | 1.1 h |
+  | seg (12-min segments, 4 titration arms) | 345 s per subject | 83 | 2.0 h |
+  | synth (Q2e) | 4.8 s | 8,200 | 2.7 h |
+  | spike (Q1; 8 series per task) | ~45 s for 5 series -> ~78 s | 1,328 | 7.2 h |
+  | robust (Q4a/4b) | ~100 s | 332 | 2.3 h |
+  | **total** | | | **~15.3 h** |
 - If the projected total exceeds 20 h, the spike-in grid is thinned first (drop f = 0.05 and 0.7, then the
   second and third parameter of each family), never the real-data windows; any thinning is recorded as an
   amendment.
