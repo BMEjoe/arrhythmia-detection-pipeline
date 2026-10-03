@@ -696,3 +696,16 @@ robust: 331 tasks to run (0 done)
   robust 125/331 60.4 min; eta 99.5 min
 /home/user/arrhythmia-detection-pipeline/final_pipeline.py:904: RuntimeWarning: divide by zero encountered in divide
   E2 = Estar[1:] / Estar[:-1]
+  robust 150/331 71.6 min; eta 86.3 min
+  robust 175/331 81.9 min; eta 73.0 min
+  robust 200/331 93.2 min; eta 61.0 min
+  robust 225/331 105.0 min; eta 49.5 min
+  robust 250/331 114.2 min; eta 37.0 min
+  robust 275/331 123.4 min; eta 25.1 min
+  robust 300/331 133.8 min; eta 13.8 min
+/home/user/arrhythmia-detection-pipeline/final_pipeline.py:904: RuntimeWarning: divide by zero encountered in divide
+  E2 = Estar[1:] / Estar[:-1]
+/home/user/arrhythmia-detection-pipeline/final_pipeline.py:904: RuntimeWarning: divide by zero encountered in divide
+  E2 = Estar[1:] / Estar[:-1]
+  robust 325/331 143.7 min; eta 2.7 min
+  robust 331/331 146.8 min; eta 0.0 min
