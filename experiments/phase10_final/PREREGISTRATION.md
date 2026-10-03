@@ -293,3 +293,19 @@ output of any detector or titration existed.
 3. **Resolution.** Every confirmatory annotation file is at 128 Hz (1/128 s, coarser than 1/360 s); the Question
    1 spike-ins are quantized at 1/128 s as preregistered (automatic in the code).
 4. Headers carry age, sex (chf2db: 21 unknown) and NYHA class (chf2db: I-III), reported in the data table.
+
+### Amendment 2 (2026-10-03, after the confirmatory real-window detector run; Question 3 model fitting)
+
+**Seen at this point:** the confirmatory 512-interval window results (`results/conf/real.jsonl`) and the
+first run of `analysis10.py` on them, in which the preregistered exchangeable GEE for the titration outcome
+(P3) returned non-finite estimates: statsmodels' iteration overflowed and the dependence parameter became
+NaN (also when started from the independence estimates). The same model converged for LLE alone, UPO alone
+and K1 (dependence parameters 0.085, -0.025, 0.002). While diagnosing, the independence-working-correlation
+fit for titration was seen (burden coefficient 0.836, robust SE 0.166).
+
+**Change (technical fallback, applied uniformly to every GEE in `analysis10.py`):** if the exchangeable fit
+gives a non-finite coefficient or standard error, the same model is refitted with the independence working
+correlation (still a GEE with subject clusters and robust sandwich standard errors, which remain valid
+under any within-subject correlation; it is less efficient). Each result records the working correlation
+used. No other analysis, threshold or decision rule changed.
+

@@ -426,8 +426,15 @@ def gee(df, outcome, covars):
             warnings.simplefilter("ignore")
             m = sm.GEE(y, X, groups=d.subject.values, family=sm.families.Binomial(),
                        cov_struct=sm.cov_struct.Exchangeable()).fit()
+            out["working_correlation"] = "exchangeable"
+            if not (np.all(np.isfinite(m.params)) and np.all(np.isfinite(m.bse))):
+                # Amendment 2: the exchangeable fit diverged -> independence working correlation (same
+                # model, robust sandwich SE, subject clusters)
+                m = sm.GEE(y, X, groups=d.subject.values, family=sm.families.Binomial(),
+                           cov_struct=sm.cov_struct.Independence()).fit()
+                out["working_correlation"] = "independence (exchangeable fit diverged; Amendment 2)"
         names = ["const"] + list(covars)
-        out["estimated"] = True
+        out["estimated"] = bool(np.all(np.isfinite(m.params)) and np.all(np.isfinite(m.bse)))
         out["coef"] = {n: {"beta": float(b), "se": float(s), "OR": float(np.exp(b)),
                            "OR_ci95": [float(np.exp(b - 1.96 * s)), float(np.exp(b + 1.96 * s))],
                            "p": float(p)} for n, b, s, p in zip(names, m.params, m.bse, m.pvalues)}
