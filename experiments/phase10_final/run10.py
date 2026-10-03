@@ -220,7 +220,7 @@ def run_seg(root, task):
     out = {"subject": subject_of(task["db"], task["rec"]), "group": GROUP[task["db"]], "segments": []}
     for s in H.segments(t, lab):
         rec = {"seg": s["seg"], "n": s["n"], "n_removed": s["n_removed"], "cover": s["cover"], "gap": s["gap"],
-               "clock_hour": H.clock_hour(info["base_time"], float(t[s["i0"]]))}
+               "t_start": float(t[s["i0"]]), "clock_hour": H.clock_hour(info["base_time"], float(t[s["i0"]]))}
         if not s["gap"]:
             rr_all = np.diff(t[s["i0"]:s["i1"] + 1])
             lb = lab[s["i0"]:s["i1"] + 1]
@@ -245,6 +245,7 @@ def run_synth(task):
            "n_ectopic": int(np.sum(np.asarray(types) != "N"))}
     for arm in ("raw", "masked", "edited"):
         out[f"TIT_{arm}"] = H.titration(rr, types, arm)
+    out["TIT_raw_q128"] = H.titration(H.quantize_times(0.0, rr, 128.0), None, "raw")
     return out
 
 

@@ -115,3 +115,40 @@ Primary reading only; 10 noise realisations; 1,000-point series; seeds fixed in 
   "as with previous studies [PM97]".
 - Neither study used nsr2db or chf2db (the CONFIRMATORY databases): chf2db is NYHA I-III (Columbia), nsr2db
   healthy (Washington University / Columbia), both 128 Hz annotations with manual review.
+
+## 3. Data handling (`data10.py`, `harness10.py`)
+- Downloads: PhysioNet `files/<db>/1.0.0/` RECORDS, headers and the beat-annotation file only; every file's
+  SHA-256 equals PhysioNet's SHA256SUMS.txt (`MANIFEST.json` per database; data gitignored).
+  Development: mitdb (atr, 48 records), nsrdb (atr, 18), chfdb (ecg, 15).
+- Beats and labels: the Phase 9 Part F rule (wfdb beat symbols; 'N' iff N L R B e j; an interval < 0.25 s or
+  > 2.5 s marks its ending beat non-normal). Ectopy-related interval = the K3 rule = the Phase 7 editing rule.
+- Development finding that shaped the window rule: nsrdb contains long unannotated stretches (intervals up to
+  207 s; 407 intervals > 3 s in record 16272) and chfdb spurious short intervals (< 0.25 s, up to 70 in chf03).
+  These are data gaps / annotation artefacts, so windows are moved past intervals outside the pipeline's hard
+  limits [0.25, 3.0] s, and 12-min segments drop such intervals and require >= 90 % coverage.
+- Editing: Phase 6 `edit_nn` (linear interpolation by beat index) with the K3 mask; eligible iff NN
+  fraction >= 0.80 (Phases 6-7).
+- Clock time: header start time + elapsed time. Development start times (33 long-term records) range
+  08:00-14:35, median 09:54 (used only as the predeclared fallback when a header has no start time).
+
+## 4. Question 1 spike-ins
+- Lyapunov exponents of the maps from the equations (`/tmp` scan reproduced in the preregistration table):
+  logistic mean log|r (1 - 2x)| over 4e5 iterations after 2,000; Henon (b = 0.3) Benettin / QR on the
+  Jacobian [[-2 a x, 1], [b, 0]] over 4e5 iterations. Grid chosen where the exponent stays > 0 at +/- 0.001
+  and +/- 0.002 of the parameter (avoids periodic windows): logistic r = 3.58 (0.105), 3.65 (0.255),
+  3.88 (0.464), 4.00 (0.693); Henon a = 1.08 (0.136), 1.14 (0.244), 1.22 (0.303), 1.40 (0.419).
+- Phase 8 models (`experiments.phase8_cardiac.series.model_rr`, verified in Phase 8) with their ground-truth
+  exponents (Phase 8 `regimes.json`): coupled vdP chaotic regimes (all four) and four of the seven chaotic
+  phase-resetting regimes spanning their exponent range.
+- Additive design: x' = x + s c, s^2 = f / (1 - f) var_NN (independent-sum definition of the chaos fraction);
+  beat times rounded to the record's annotation resolution. Replacement design: Phase 7 `spike_in`
+  (`groups`, `insert_ectopy`) reused unchanged.
+- Curves: Firth (1993) penalised logistic regression (Jeffreys prior; modified score
+  X'(y - p + h (1/2 - p)), h = hat-matrix diagonal), finite under complete separation; subject-cluster
+  bootstrap bands.
+- Bound: U = max(cluster-bootstrap 95th percentile, one-sided Clopper-Pearson 95 %); pi_upper = U / p.
+
+## 5. Question 3 model
+- GEE (Liang & Zeger 1986) as implemented in statsmodels 0.15.0: binomial, logit, exchangeable working
+  correlation, robust sandwich covariance; predictor log2(1 + burden) and CHF indicator. Not fitted with
+  < 10 positives or negatives (sparse-outcome rule).
