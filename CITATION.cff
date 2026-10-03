@@ -1,0 +1,54 @@
+cff-version: 1.2.0
+message: "If you use this software or its results, please cite it using the metadata below."
+type: software
+title: "arrhythmia-detection-pipeline: tests for deterministic chaos in heart-rate (RR-interval) data"
+authors:
+  - family-names: Bezanson
+    given-names: Brooks
+repository-code: "https://github.com/BMEjoe/arrhythmia-detection-pipeline"
+version: "paper-v1"
+keywords:
+  - heart rate variability
+  - RR intervals
+  - deterministic chaos
+  - Lyapunov exponent
+  - unstable periodic orbits
+  - noise titration
+  - ectopic beats
+  - preregistration
+references:
+  - type: data
+    title: "MIT-BIH Arrhythmia Database (version 1.0.0)"
+    authors:
+      - name: PhysioNet
+    doi: "10.13026/C2F305"
+  - type: data
+    title: "MIT-BIH Normal Sinus Rhythm Database (version 1.0.0)"
+    authors:
+      - name: PhysioNet
+    doi: "10.13026/C2NK5R"
+  - type: data
+    title: "BIDMC Congestive Heart Failure Database (version 1.0.0)"
+    authors:
+      - name: PhysioNet
+    doi: "10.13026/C29G60"
+  - type: data
+    title: "Normal Sinus Rhythm RR Interval Database (version 1.0.0)"
+    authors:
+      - name: PhysioNet
+    doi: "10.13026/C2S881"
+  - type: data
+    title: "Congestive Heart Failure RR Interval Database (version 1.0.0)"
+    authors:
+      - name: PhysioNet
+    doi: "10.13026/C2F598"
+  - type: data
+    title: "MIT-BIH Noise Stress Test Database (version 1.0.0)"
+    authors:
+      - name: PhysioNet
+    doi: "10.13026/C2HS3T"
+  - type: data
+    title: "QT Database (version 1.0.0)"
+    authors:
+      - name: PhysioNet
+    doi: "10.13026/C24K53"
