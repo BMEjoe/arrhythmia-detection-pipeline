@@ -1,0 +1,8 @@
+# Only CC-BY material (PLoS ONE, Wu et al. 2009) is committed; other sources are cited by URL in METHODS.md
+*
+!.gitignore
+!wu2009.xml
+!wu2009.txt
+!wu2009.pdf
+!wu2009_e001.png
+!wu2009_e002.png
