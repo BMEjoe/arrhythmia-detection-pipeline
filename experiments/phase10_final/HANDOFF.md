@@ -63,7 +63,18 @@ Answer only Questions 1-4; new ideas go to "Future work".
 | prerequisites on main confirmed; env rebuilt; pytest baseline 462+1 / 463 | done | 5c0c5b1 |
 | Q2a titration10.py from accessible sources (BP96/PM97 paywalled); readings tried; criteria predeclared | done | e5131dc |
 | Q2b verify_titration.py: **VERIFIED** (V1-V6 pass; METHODS 2.6) | done | (this commit) |
-| Q2c sources: Wu09 + PM97 used nsrdb/chfdb (dev); 12-min (~800 beat) segments; NN without interpolation | done | (this commit) |
+| Q2c sources: Wu09 + PM97 used nsrdb/chfdb (dev); 12-min (~800 beat) segments; NN without interpolation | done | 7c988b7 |
+| dev data (mitdb, nsrdb, chfdb; SHA OK) + harness10 + run10 (guarded) + analysis10 + overlap10 + figures10 | done | afd8296 |
+| DEV run (`run10 --phase dev --part real,synth,seg,spike,robust`), log results/dev/run_dev.log | running (started 01:44 UTC 2026-10-03) | |
+| PREREGISTRATION_DRAFT.md (rename to PREREGISTRATION.md only when final; the guard keys on that name) | drafting | |
+
+## Resume
+- Dev run is resumable: re-run the same command; finished task ids are skipped:
+  `cd /home/user/arrhythmia-detection-pipeline && nohup env OMP_NUM_THREADS=1 PYTHONPATH=. /root/venv313/bin/python -m experiments.phase10_final.run10 --phase dev --part real,synth,seg,spike,robust --workers 4 >> experiments/phase10_final/results/dev/run_dev.log 2>&1 &`
+- Dev data: `python -m experiments.phase10_final.data10 --download dev` (gitignored dev_data/).
+- Then `python -m experiments.phase10_final.analysis10 --phase dev` and `figures10 --phase dev`.
+- Dev-run note: the dev seg/synth parts were started with code before two small additions (seg `t_start`,
+  synth `TIT_raw_q128`); rerun synth for dev if the q128 arm is needed.
 
 ## Notes
 - Never `pkill -f <pattern>` with the plain pattern (kills the calling shell).
