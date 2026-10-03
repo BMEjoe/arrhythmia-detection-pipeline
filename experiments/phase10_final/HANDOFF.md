@@ -72,7 +72,7 @@ Answer only Questions 1-4; new ideas go to "Future work".
 | CONF run complete (real 988, seg, synth, spike, robust) | done | f979faa |
 | conf analysis + sensitivity (flagged excluded) + tables + figures; Amendment 2 (GEE independence fallback) | done | 965a586 |
 | docs/PHASE10_FINAL_RESULTS.md assembled (sections 1-14) | done | (this commit) |
-| DEV spike (96/528) + robust (21/132) resumed with 3 workers, background; partial, reported as such in report 9.1 | partial | |
+| DEV spike (96/528) + robust (36/132): stopped at session end (resumable); partial, reported as such in report 9.1 | partial | |
 
 ## Resume
 - Phase 10 is COMPLETE except the optional dev spike/robust completion. To finish it: rerun the dev command below, then `analysis10 --phase dev`, `tables10 --phase dev`, `figures10 --phase dev`, and update report 9.1.

@@ -480,7 +480,7 @@ The direction of every primary result was the same in both data sets.
 **The development spike-in and robustness runs are partial.** They were paused so the confirmatory run
 could go first and were resumed afterwards.
 - Spike-ins: 96 of 528 tasks, i.e. 6 base windows per condition instead of 12.
-- Robustness: 21 of 132 tasks.
+- Robustness: 36 of 132 tasks (run stopped at session end; resumable).
 - Within those limits, the development spike-ins agree with the confirmatory pattern:
   - K3 sees strong maps and coupled vdP at f ≥ 0.3–0.9;
   - K3 never sees weak maps or phase-reset regimes;

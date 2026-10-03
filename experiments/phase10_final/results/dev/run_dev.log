@@ -63,3 +63,4 @@ spike: 528 tasks to run (0 done)
 /home/user/arrhythmia-detection-pipeline/final_pipeline.py:904: RuntimeWarning: divide by zero encountered in divide
   E2 = Estar[1:] / Estar[:-1]
 robust: 129 tasks to run (3 done)
+  robust 25/129 16.7 min; eta 69.3 min
