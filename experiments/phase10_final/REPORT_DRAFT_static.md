@@ -166,3 +166,46 @@ intervals per regression row. Only 281 of the windows with masked intervals were
 **3c.** The titration group difference (CHF more often positive) is OR 2.60 [1.64, 4.13] unadjusted
 and **0.77 [0.46, 1.28] after adjusting for ectopy burden**. At the 512-window level, the group
 difference in titration positives is fully accounted for by ectopy.
+
+### 8.3 Time of day (4c; clock time approximate: no header start times, assumed 09:54 start)
+
+| detector | NSR night | NSR day | CHF night | CHF day |
+|---|---|---|---|---|
+| titration | 66/152 (43 %) | 177/490 (36 %) | 47/82 (57 %) | 165/264 (63 %) |
+| LLE alone | 40/152 | 190/490 | 33/82 | 138/264 |
+| UPO alone | 1/152 | 11/490 | 3/82 | 16/264 |
+| K1 | 1/152 | 3/490 | 2/82 | 10/264 |
+| K3 | 1/152 | 4/490 | 0/82 | 3/264 |
+| K4 | 0/152 | 0/490 | 0/82 | 0/264 |
+
+Titration GEE night effect, adjusted for burden and group: OR 1.40 [0.97, 2.00], p = 0.069. Healthy
+subjects show more titration positives at night, but the effect is weaker than in the development data
+(nsrdb, which had real start times). The segment-level circadian result is in Section 6.
+
+### 8.4 Beat labels (4d)
+
+- **Rates.** K3 with annotation labels detected 8/988 windows (NSR 0.78 %, CHF 0.87 %). The RR-rule
+  versions detected 0/988: K4 (its own frozen thresholds) and K3RR (K3's thresholds with RR-rule labels).
+- **Agreement.** K3 and K4 disagree only on K3's 8 windows.
+- **Interpretation.** On these manually reviewed annotations, removing the annotation dependence
+  removes every detection. This is consistent with Phase 9: the RR-rule mask leaks less structure but
+  also has far lower power.
+
+### 8.5 The 8 confirmatory K3 detections (descriptive)
+
+| subject | window | burden | masked intervals | z_max | G | K1 / LLE / UPO / titration |
+|---|---|---|---|---|---|---|
+| nsr2db nsr029 | 9 | 0 | 1 | **2 × 10¹¹** | 0.40 | – / + / – / – |
+| nsr2db nsr049 | 3 | 0 | 1 | 14.9 | 0.53 | – / + / – / + |
+| nsr2db nsr049 | 5 | 0 | 1 | 11.1 | 0.40 | – / + / – / – |
+| nsr2db nsr049 | 6 | 0 | 3 | 13.8 | 0.30 | – / + / – / – |
+| nsr2db nsr052 | 6 | 0 | 1 | 11.1 | 0.33 | – / + / – / – |
+| chf2db chf211 | 7 | 0 | 1 | 10.0 | 0.30 | + / + / + / + |
+| chf2db chf216 | 2 | 0 | 0 | 10.6 | 0.40 | – / + / – / – |
+| chf2db chf218 | 12 | 5 | 11 | 16.2 | 0.27 | – / + / – / – |
+
+- **A degenerate detection.** nsr029 window 9 has SDNN 15 ms at 1/128 s resolution. Its surrogate
+  prediction errors have essentially zero spread, so z is inflated by the 10⁻¹² SD floor. This is a K3
+  failure mode at coarse quantization and low variability. Phase 9 tested K3 only at 1/360 s.
+- **Clustering.** Three detections come from one healthy subject (nsr049).
+- **Close calls.** 34 windows passed the determinism threshold (z ≥ 9.45). The growth gate removed 26.

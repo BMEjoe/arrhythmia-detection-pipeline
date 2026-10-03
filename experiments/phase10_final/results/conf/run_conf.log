@@ -56,3 +56,40 @@ real: 988 tasks to run (0 done)
   real 975/988 61.2 min; eta 0.8 min
   real 988/988 62.2 min; eta 0.0 min
 seg: 83 tasks to run (0 done)
+  seg 25/83 29.3 min; eta 67.9 min
+  seg 50/83 55.9 min; eta 36.9 min
+  seg 75/83 87.9 min; eta 9.4 min
+  seg 83/83 98.5 min; eta 0.0 min
+synth: 8200 tasks to run (0 done)
+  synth 25/8200 0.0 min; eta 1.9 min
+  synth 50/8200 0.0 min; eta 1.7 min
+  synth 75/8200 0.0 min; eta 1.7 min
+  synth 100/8200 0.0 min; eta 1.6 min
+  synth 125/8200 0.0 min; eta 1.7 min
+  synth 150/8200 0.0 min; eta 1.8 min
+  synth 175/8200 0.0 min; eta 1.8 min
+  synth 200/8200 0.0 min; eta 1.8 min
+  synth 225/8200 0.1 min; eta 1.8 min
+  synth 250/8200 0.1 min; eta 1.8 min
+  synth 275/8200 0.1 min; eta 1.8 min
+  synth 300/8200 0.1 min; eta 1.7 min
+  synth 325/8200 0.1 min; eta 1.8 min
+  synth 350/8200 0.1 min; eta 1.8 min
+  synth 375/8200 0.1 min; eta 1.8 min
+  synth 400/8200 0.1 min; eta 1.8 min
+  synth 425/8200 0.1 min; eta 1.8 min
+  synth 450/8200 0.1 min; eta 1.8 min
+  synth 475/8200 0.1 min; eta 1.8 min
+  synth 500/8200 0.1 min; eta 1.7 min
+  synth 525/8200 0.1 min; eta 1.8 min
+  synth 550/8200 0.1 min; eta 1.8 min
+  synth 575/8200 0.1 min; eta 1.8 min
+  synth 600/8200 0.1 min; eta 1.8 min
+  synth 625/8200 0.2 min; eta 2.5 min
+  synth 650/8200 0.2 min; eta 2.5 min
+  synth 675/8200 0.2 min; eta 2.5 min
+  synth 700/8200 0.3 min; eta 3.1 min
+  synth 725/8200 0.3 min; eta 3.2 min
+  synth 750/8200 0.3 min; eta 3.2 min
+  synth 775/8200 0.3 min; eta 3.2 min
+  synth 800/8200 0.4 min; eta 3.9 min
