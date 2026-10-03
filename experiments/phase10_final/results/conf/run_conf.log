@@ -1,0 +1,28 @@
+real: 988 tasks to run (0 done)
+  real 25/988 1.7 min; eta 65.1 min
+  real 50/988 3.6 min; eta 67.7 min
+  real 75/988 5.1 min; eta 62.4 min
+  real 100/988 6.7 min; eta 59.1 min
+  real 125/988 8.2 min; eta 56.3 min
+/home/user/arrhythmia-detection-pipeline/final_pipeline.py:904: RuntimeWarning: divide by zero encountered in divide
+  E2 = Estar[1:] / Estar[:-1]
+  real 150/988 9.5 min; eta 53.3 min
+/home/user/arrhythmia-detection-pipeline/final_pipeline.py:904: RuntimeWarning: divide by zero encountered in divide
+  E2 = Estar[1:] / Estar[:-1]
+  real 175/988 11.2 min; eta 51.9 min
+  real 200/988 13.1 min; eta 51.6 min
+  real 225/988 14.6 min; eta 49.6 min
+  real 250/988 16.1 min; eta 47.6 min
+  real 275/988 17.6 min; eta 45.7 min
+  real 300/988 19.2 min; eta 44.0 min
+  real 325/988 20.6 min; eta 42.1 min
+  real 350/988 22.3 min; eta 40.6 min
+  real 375/988 24.0 min; eta 39.3 min
+  real 400/988 25.7 min; eta 37.8 min
+/home/user/arrhythmia-detection-pipeline/final_pipeline.py:904: RuntimeWarning: divide by zero encountered in divide
+  E2 = Estar[1:] / Estar[:-1]
+  real 425/988 27.4 min; eta 36.3 min
+  real 450/988 29.1 min; eta 34.8 min
+  real 475/988 30.7 min; eta 33.1 min
+  real 500/988 32.1 min; eta 31.3 min
+  real 525/988 33.8 min; eta 29.8 min
