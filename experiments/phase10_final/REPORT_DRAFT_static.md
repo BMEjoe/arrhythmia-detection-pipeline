@@ -251,3 +251,48 @@ subject DRs with subject-cluster bootstrap 95 % CIs.
   burden + CHF) needed the Amendment 2 fallback: burden OR 1.99 [1.51, 2.62] per doubling, CHF OR 0.87
   [0.55, 1.36].
 - **Night vs day** (approximate clock): NSR 55.8 % vs 50.4 %; CHF 72.0 % vs 75.1 %.
+
+### 6.2 Q2e: false positives of the verified titration on the validated synthetic checks
+
+Seeds 10100–10199 (100 windows per condition), 512 intervals (800 in parentheses), true beat types as
+labels. All conditions are non-chaotic, so every positive is a false positive.
+
+| condition | raw | raw re-quantized 1/128 s | edited (eligible) | masked (analysable) |
+|---|---|---|---|---|
+| N1 linear, N2 power-law, N3 trend, N6 noisy RSA | 0 (0) each | 0 | 0 | 0 (100) |
+| N4 level step | 10 (1) | 0 (0) | 10 (1) | 10 (100) |
+| **N5 static monotone warp of linear RR** | **100 (100)** | 99 (98) | 100 | 100 (100) |
+| S1 SETAR | 0 (3) | 0 (3) | 0 (3) | 0 (100) |
+| S2 isolated ectopy 5 % / 10 % | 5 (2) / 0 (0) | 5 (0) / 0 | 12 (13) / 1 (0) | not analysable |
+| E1 bigeminy / E2 trigeminy | 0 / 0 | 0 / 0 | not eligible | not analysable |
+| **E3 couplets 5 % / 10 %** | **100 / 100 (100 / 100)** | 100 / 100 | 39 (38) / 23 (15) | not analysable |
+| **E4 VT runs** | **96 (99)** | 96 (99) | 11 (6) | 0 of 56 (0 of 100) |
+| E5 atrial 5 % / 10 % | 2 (4) / 0 (0) | 1 (2) / 0 | 21 (11) / 10 (3) | not analysable |
+| E6 ectopy + trend | 0 (0) | 0 | 0 | not analysable |
+| **vdP (5.45, 5.6), forced quasi-periodic, no ectopy** | **100 (100)** | 96 (100) | 100 | 100 (100) |
+| vdP (5.45, 5.6) + E1 / + E3 / + S2 | 32 (38) / 94 (94) / 1 (0) | 31 / 93 / 1 | – / 100 / 100 | not analysable |
+| other 5 non-chaotic vdP regimes, no ectopy | 0 (0) each | 0 | 0 | 0 (100) |
+| vdP (2, 5.6), (4, 5.6), (6, 5.6) + E3 couplets | 100 (100) each | 100 | 100 / 44–82 / 100 | not analysable |
+| vdP (9.6, 2.1), (10, 3.3) + E3 | 9 (0) / 0 (0) | 8 / 0 | 29 (11) / 9 (0) | not analysable |
+| non-chaotic vdP + S2 isolated ectopy | 0–1 | 0–1 | **71–100 for (2, 5.6), (4, 5.6), (6, 5.6), (5.45, 5.6)**; 20 (9.6, 2.1); 0 (10, 3.3) | not analysable |
+
+**Specific, unlike the approximate version.** The verified titration is specific on linear nulls, SETAR
+and isolated ectopy. The approximate Phase 8 version was positive on SETAR (43/100), N4 (98/100) and
+every ectopy pattern.
+
+**False positives remain:**
+- **Static nonlinearity.** A monotone warp of linear RR (N5) is positive in 100 %.
+- **Clustered ectopy.** Couplets and runs are positive in 96–100 %.
+- **One non-chaotic forced rhythm.** vdP (5.45, 5.6) without ectopy is positive in 100 %.
+
+**Editing creates positives.** Edited isolated ectopy in deterministic rhythms is positive in 71–100 %:
+interpolated stretches look like low-dimensional structure (as Phase 6 found for the LLE test).
+
+**The masked arm cannot be assessed here.** At 5–10 % ectopy no regression row has the 84 clean
+intervals it needs.
+
+**Resolution does not matter.** Re-quantization to 1/128 s changes almost nothing, except removing the
+N4 positives.
+
+These are the false-positive sources that remain open for the real-data positives that survive masking
+(Section 6).
