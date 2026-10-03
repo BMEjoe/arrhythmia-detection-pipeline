@@ -1,0 +1,8 @@
+# Phase 10 environment = Phase 9 environment (requirements.txt + experiments/phase9_waveform/requirements-phase9.txt)
+# rebuilt 2026-10-03:
+#   uv venv -p /usr/bin/python3.13 /root/venv313
+#   uv pip install -p /root/venv313/bin/python -r requirements.txt wfdb==4.3.1 numba==0.68.0
+#   uv pip install -p /root/venv313/bin/python neurokit2==0.2.13 ordpy==1.2.3 numba==0.68.0 wfdb==4.3.1
+#   uv pip install -p /root/venv313/bin/python pandas==3.0.6
+# Phase 10 addition (installed AFTER the pytest baseline, used only by experiments/phase10_final):
+#   statsmodels (GEE for Question 3); version recorded below once installed.
