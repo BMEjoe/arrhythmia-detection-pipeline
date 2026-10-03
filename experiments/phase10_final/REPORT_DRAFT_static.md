@@ -296,3 +296,69 @@ N4 positives.
 
 These are the false-positive sources that remain open for the real-data positives that survive masking
 (Section 6).
+
+## 5. Question 1: detection limits on real human recordings (P1)
+
+**An additive chaotic component is a model of hidden chaos, not of a chaotic heart.**
+
+**Design.**
+- **Base windows.** One window of 512 intervals per confirmatory subject (83 in total).
+- **Additive design.** x' = x + s·c, with f = var(chaos) / (var(chaos) + var(NN part)) for
+  f ∈ {0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9}. Beat times are quantized to 1/128 s. The real labels and
+  ectopy are kept.
+- **Replacement design.** Phase 7's replacement design is reported as secondary.
+- **Real-rate bound.** U = max(cluster-bootstrap 95th percentile, one-sided Clopper–Pearson).
+- **Exclusion bound.** π_upper(f) = U / p_emp(f) at each design f (model-free, Section 4 of the
+  preregistration). f_min is the smallest design f with π_upper below the threshold at that f and at
+  every larger f.
+- **Run.** 1,328 tasks, 10,624 spiked series, 0 errors.
+
+### 5.1 K3 (real detections 8/988; U = 0.0146)
+
+| family | parameter (λ) | detected / 83 at f = 0.05 … 0.9 | replacement | **f_min, π < 0.05** | **f_min, π < 0.20** |
+|---|---|---|---|---|---|
+| Hénon | a = 1.08 (0.136/beat) | 0 1 0 0 0 0 0 | 0 | none | none |
+| Hénon | a = 1.14 (0.244) | 0 0 0 2 2 9 8 | 4 | none | 0.7 |
+| Hénon | a = 1.22 (0.303) | 0 0 3 6 32 58 76 | 33 | **0.5** | **0.5** |
+| Hénon | a = 1.40 (0.419) | 0 1 4 9 29 58 76 | 69 | **0.5** | **0.3** |
+| logistic | r = 3.58 (0.105) | 0 0 0 0 0 0 0 | 0 | none | none |
+| logistic | r = 3.65 (0.255) | 0 0 0 0 0 1 0 | 0 | none | none |
+| logistic | r = 3.88 (0.464) | 1 1 1 5 28 59 77 | 62 | **0.5** | **0.5** |
+| logistic | r = 4.00 (0.693) | 0 0 0 1 9 25 73 | 76 | **0.7** | **0.5** |
+| coupled vdP | (8, 3.3) (0.075/model unit) | 1 2 5 13 33 48 71 | 31 | **0.5** | **0.3** |
+| coupled vdP | (6, 3.3) (0.079) | 0 0 0 3 10 13 23 | 45 | none | 0.5 |
+| coupled vdP | (2, 2.7) (0.085) | 0 0 0 2 6 20 63 | 60 | 0.9 | 0.7 |
+| coupled vdP | (6, 4.0) (0.101) | 0 1 2 6 13 15 27 | 25 | 0.9 | 0.5 |
+| phase-reset | τ = 1.14, 0.58, 1.20, 1.16 (0.035–0.185/stimulus) | ≤ 5 at any f | 0–10 | none | none |
+
+### 5.2 K1 (real detections 16/988; U = 0.0245)
+
+| family | parameter | detected / 83 at f = 0.05 … 0.9 | replacement | f_min, π < 0.05 | f_min, π < 0.20 |
+|---|---|---|---|---|---|
+| Hénon | a = 1.08 / 1.14 / 1.22 / 1.40 | 2 2 0 0 0 0 0 / 0 0 4 0 7 11 24 / 0 0 2 3 8 20 38 / 0 1 0 1 6 14 42 | 0 / 19 / 40 / 54 | none / none / none / 0.9 | none / 0.7 / 0.7 / 0.7 |
+| logistic | r = 3.58 / 3.65 / 3.88 / 4.00 | 0 … 0 / ≤ 2 / 0 0 0 0 7 20 54 / 1 0 2 6 11 30 65 | 0 / 1 / 38 / 53 | none / none / 0.9 / 0.9 | none / none / 0.7 / 0.5 |
+| coupled vdP | all four | ≤ 3 at any f | 0–7 | none | none |
+| phase-reset | τ = 1.14 / 1.16 (others ≈ 0) | … 13 / … 8 | 0 / 18 | none | 0.9 / none |
+
+**Findings (P1).**
+- **K3 rules out moderately strong chaos at moderate size.** For the stronger Hénon and logistic maps
+  (λ ≥ 0.30 per beat) and one coupled-vdP regime, chaos accounting for ≥ 50 % of beat-to-beat variance
+  (f ≥ 0.5) can be present in at most 5 % of real windows. At f ≥ 0.3–0.5 it can be present in at most
+  20 %.
+- **Exclusion is possible only from f ≈ 0.5 upwards.** Below f = 0.3 no family is excluded at any
+  threshold.
+- **No bound exists in four cases**, because K3 essentially never detected them:
+  - weak chaos (logistic λ ≤ 0.26, Hénon λ = 0.14);
+  - every phase-resetting regime;
+  - Hénon a = 1.14 at π < 0.05;
+  - vdP (6, 3.3) at π < 0.05.
+- **Per family, for every λ tested**, the only exclusion is coupled vdP at π < 0.20 from f = 0.7. Hénon,
+  logistic and phase-reset have no such f.
+- **K1 (AND detector) gives weaker bounds.** π < 0.20 only from f = 0.5–0.7 for the strong maps, and no
+  bound at all for coupled vdP. LLE alone, with 401/988 real positives (U = 0.45), gives no bound
+  anywhere.
+- **The replacement design (100 % chaos plus real ectopy)** is detected by K3 in 0–92 % of windows,
+  depending on the family.
+- **Secondary versions agree.** The Wilson-lower-bound version shifts several f_min one design step
+  higher. The Firth-fit version (descriptive) gives interpolated values 0.21–0.53 for the excluded
+  families.
