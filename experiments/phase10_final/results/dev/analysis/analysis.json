@@ -49788,6 +49788,7 @@
    "n": 3364,
    "n_pos": 2092,
    "n_subjects": 33,
+   "working_correlation": "exchangeable",
    "estimated": true,
    "coef": {
     "const": {
@@ -50574,6 +50575,7 @@
     "n": 396,
     "n_pos": 199,
     "n_subjects": 33,
+    "working_correlation": "exchangeable",
     "estimated": true,
     "coef": {
      "const": {
@@ -50617,6 +50619,7 @@
     "n": 396,
     "n_pos": 126,
     "n_subjects": 33,
+    "working_correlation": "exchangeable",
     "estimated": true,
     "coef": {
      "const": {
@@ -50697,6 +50700,7 @@
     "n": 396,
     "n_pos": 199,
     "n_subjects": 33,
+    "working_correlation": "exchangeable",
     "estimated": true,
     "coef": {
      "const": {
@@ -50729,6 +50733,7 @@
     "n": 396,
     "n_pos": 126,
     "n_subjects": 33,
+    "working_correlation": "exchangeable",
     "estimated": true,
     "coef": {
      "const": {
@@ -50807,6 +50812,7 @@
    "n": 396,
    "n_pos": 199,
    "n_subjects": 33,
+   "working_correlation": "exchangeable",
    "estimated": true,
    "coef": {
     "const": {
@@ -51308,6 +51314,7 @@
     "n": 89,
     "n_pos": 37,
     "n_subjects": 44,
+    "working_correlation": "exchangeable",
     "estimated": true,
     "coef": {
      "const": {
@@ -51340,6 +51347,7 @@
     "n": 89,
     "n_pos": 31,
     "n_subjects": 44,
+    "working_correlation": "exchangeable",
     "estimated": true,
     "coef": {
      "const": {
@@ -51407,6 +51415,7 @@
     "n": 89,
     "n_pos": 37,
     "n_subjects": 44,
+    "working_correlation": "exchangeable",
     "estimated": true,
     "coef": {
      "const": {
@@ -51439,6 +51448,7 @@
     "n": 89,
     "n_pos": 31,
     "n_subjects": 44,
+    "working_correlation": "exchangeable",
     "estimated": true,
     "coef": {
      "const": {
@@ -51979,41 +51989,41 @@
  "Q4": {
   "Q4a_499": {
    "K1": {
-    "n": 3,
+    "n": 36,
     "both": 0,
     "a_only": 0,
     "b_only": 0,
-    "neither": 3,
+    "neither": 36,
     "agreement": 1.0,
     "kappa": null,
     "mcnemar_exact_p": 1.0
    },
    "LLE": {
-    "n": 3,
-    "both": 0,
+    "n": 36,
+    "both": 7,
     "a_only": 0,
     "b_only": 0,
-    "neither": 3,
+    "neither": 29,
     "agreement": 1.0,
-    "kappa": null,
+    "kappa": 1.0,
     "mcnemar_exact_p": 1.0
    },
    "UPO": {
-    "n": 3,
-    "both": 0,
+    "n": 36,
+    "both": 1,
     "a_only": 0,
     "b_only": 0,
-    "neither": 3,
+    "neither": 35,
     "agreement": 1.0,
-    "kappa": null,
+    "kappa": 1.0,
     "mcnemar_exact_p": 1.0
    },
    "K3": {
-    "n": 3,
+    "n": 36,
     "both": 0,
     "a_only": 0,
     "b_only": 0,
-    "neither": 3,
+    "neither": 36,
     "agreement": 1.0,
     "kappa": null,
     "mcnemar_exact_p": 1.0
@@ -52021,15 +52031,15 @@
   },
   "Q4b_lengths": {
    "K1": {
-    "n_windows": 3,
+    "n_windows": 36,
     "rate_256": 0.0,
-    "rate_1024": 0.0,
+    "rate_1024": 0.05555555555555555,
     "rate_512": 0.0,
     "by_group": {
      "NSR": {
       "256": 0.0,
       "512": 0.0,
-      "1024": 0.0
+      "1024": 0.05555555555555555
      },
      "CHF": {
       "256": null,
@@ -52039,15 +52049,15 @@
     }
    },
    "LLE": {
-    "n_windows": 3,
-    "rate_256": 0.0,
-    "rate_1024": 0.0,
-    "rate_512": 0.0,
+    "n_windows": 36,
+    "rate_256": 0.16666666666666666,
+    "rate_1024": 0.3888888888888889,
+    "rate_512": 0.19444444444444445,
     "by_group": {
      "NSR": {
-      "256": 0.0,
-      "512": 0.0,
-      "1024": 0.0
+      "256": 0.16666666666666666,
+      "512": 0.19444444444444445,
+      "1024": 0.3888888888888889
      },
      "CHF": {
       "256": null,
@@ -52057,15 +52067,15 @@
     }
    },
    "UPO": {
-    "n_windows": 3,
+    "n_windows": 36,
     "rate_256": 0.0,
-    "rate_1024": 0.0,
-    "rate_512": 0.0,
+    "rate_1024": 0.1111111111111111,
+    "rate_512": 0.027777777777777776,
     "by_group": {
      "NSR": {
       "256": 0.0,
-      "512": 0.0,
-      "1024": 0.0
+      "512": 0.027777777777777776,
+      "1024": 0.1111111111111111
      },
      "CHF": {
       "256": null,
@@ -52075,15 +52085,15 @@
     }
    },
    "K3": {
-    "n_windows": 3,
+    "n_windows": 36,
     "rate_256": 0.0,
-    "rate_1024": 0.0,
+    "rate_1024": 0.027777777777777776,
     "rate_512": 0.0,
     "by_group": {
      "NSR": {
       "256": 0.0,
       "512": 0.0,
-      "1024": 0.0
+      "1024": 0.027777777777777776
      },
      "CHF": {
       "256": null,
@@ -52237,6 +52247,7 @@
    "n": 396,
    "n_pos": 199,
    "n_subjects": 33,
+   "working_correlation": "exchangeable",
    "estimated": true,
    "coef": {
     "const": {

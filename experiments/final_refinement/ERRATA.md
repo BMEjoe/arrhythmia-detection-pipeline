@@ -6,12 +6,14 @@ preregistered analysis (or the analysis output) exactly; only the affected compu
 deterministically; every report and table that used the wrong number is updated; and a fix that would change a
 conclusion is not made without the author's decision.
 
-**Outcome: 12 errata. None changes any conclusion, decision, winner, or preregistered outcome.**
+**Outcome: 13 errata. None changes any conclusion, decision, winner, or preregistered outcome.**
 - E1 is a tabulation deviation from a preregistered decision rule (Phase 9). Corrected by a deterministic
   re-tabulation; the decision is unchanged.
 - E2–E12 are report-text errors in `docs/PHASE10_FINAL_RESULTS.md`: a miscount, a rounding slip, and summary
   sentences that misstate the tables beneath them. The tables, analysis outputs and raw results are correct.
   The text was corrected in place; each corrected passage carries the marker `[Erratum En]`.
+- E13 is a stale derived file: the development `analysis.json` / `tables.md` of Phase 10 predated the last
+  development robustness records. Regenerated deterministically; no reported number used it.
 
 | id | where | was | is | evidence (VERIFICATION.md) | conclusion changed? |
 |---|---|---|---|---|---|
@@ -27,6 +29,7 @@ conclusion is not made without the author's decision.
 | E10 | PHASE10 7 (3b text) | "removes most titration and LLE positives" | most titration positives (57.5 % masked, 66.0 % edited), about half of LLE positives (47.1 %) | T-7, 10-P3b-* | no |
 | E11 | PHASE10 8.2 | "Three subjects recur from the 512-interval detections" | five of the six subjects recur (nsr029, nsr049, chf211, chf216, chf218) | T-8 | no |
 | E12 | PHASE10 6 | development nsrdb "lost only 2–6 % of positives" | 4–6 % (3.5–6.1 % over the masked, edited and Wu arms) | T-9 | no |
+| E13 | `phase10_final/results/dev/analysis/{analysis.json, tables.md}` | Q4 development robustness computed on 3 windows | 36 windows (the committed `dev/robust.jsonl`) | reproduce check (rerun of `analysis10 --phase dev`) | no |
 
 ## E1 — Phase 9 TEST decision tabulated over 81 instead of the 101 preregistered conditions
 
@@ -139,6 +142,22 @@ chf202, chf211, chf216 (two windows) and chf218; five of the six subjects with a
 **Was (Section 6):** "In development, nsrdb (20–50 y, almost no ectopy) lost only 2–6 % of positives." **Is:**
 3.5–6.1 % of raw positives (Wu 3.5 %, edited 3.6 %, masked 6.1 %; `results/dev/analysis/analysis.json`), i.e.
 4–6 %. No conclusion changes.
+
+## E13 — stale development analysis output (Phase 10)
+
+**What was wrong.** The committed `experiments/phase10_final/results/dev/analysis/analysis.json` (and the
+`tables.md` generated from it) was written when the development robustness run had 3 windows. The development
+run continued in the background and the committed `results/dev/robust.jsonl` holds 36 windows (commits `a3defa0`,
+`1147f76`). Rerunning `analysis10 --phase dev` on the committed raw files changes only the Q4 development block
+(surrogate-count agreement and window-length rates, now on 36 windows) and adds the `working_correlation` field
+written by the current code (every development GEE converged with the exchangeable working correlation, as
+before; their estimates are unchanged). The development spike-in, real-window and segment results are unchanged.
+
+**Affected.** Only these two development files. `docs/PHASE10_FINAL_RESULTS.md` 9.1 reports the development
+robustness run only as "36 of 132 tasks", which is correct; no development Q4 number appears in any report.
+
+**Fix.** `analysis10 --phase dev` and `tables10 --phase dev` were rerun (deterministic; same frozen code) and the
+regenerated files committed. **Conclusion changed?** No.
 
 ## Observations that are not errors
 
