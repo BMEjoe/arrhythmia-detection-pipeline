@@ -1,6 +1,7 @@
 # Final refinement: summary
 
-Branch `claude/serene-sagan-2qgi8e`, started from `main` at `1147f76` (Phases 2E-10), tagged `paper-v1`. This
+Branch `claude/serene-sagan-2qgi8e`, started from `main` at `1147f76` (Phases 2E-10); release tag `paper-v1` on the
+last commit of this branch. This
 phase asked no new question, added no method, downloaded no data for analysis, and changed no detector or
 analysis parameter. Living notes: `experiments/final_refinement/HANDOFF.md`.
 

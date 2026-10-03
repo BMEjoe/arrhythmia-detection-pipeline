@@ -59,12 +59,14 @@ to "Open items" in `docs/FINAL_SUMMARY.md`.
 | E14 (Conclusion 8 wording vs MG maxima-interval detections, check X-21): documented, NOT corrected | done | 3015a21 |
 | Part 5: docs/RESULTS_INDEX.md, CONCLUSIONS_CHECKLIST.md, AI_USE_RECORD.md, SOURCES_USED.md | done | 3015a21 |
 | Provenance: pinned mitdb manifest = Phase 7 DATA_MANIFEST hashes (144/144) | done | (recorded) |
-| FINISH: docs/FINAL_SUMMARY.md (340 checks: 327 MATCH, 13 MISMATCH; E1-E13 corrected, E14 for the author; figures, tables, reproduction, open items); tag `paper-v1` | done | (this commit, tagged) |
+| FINISH: docs/FINAL_SUMMARY.md (340 checks: 327 MATCH, 13 MISMATCH; E1-E13 corrected, E14 for the author; figures, tables, reproduction, open items) | done | 851ba36 |
+| Tag `paper-v1`: created locally on the final commit; `git push origin paper-v1` refused by the session's git proxy (HTTP 403; branch pushes allowed, tag pushes not). The author pushes or creates the tag | blocked | - |
 
 ## Resume
 - Environment: see above (statsmodels 0.15.0 installed after the pytest baseline, as in Phase 10).
-- Final refinement complete; tag `paper-v1` on this branch. Waiting on the author: E14 (Conclusion 8 wording),
-  licence choice, open items in docs/FINAL_SUMMARY.md 5. Not merged into main; no pull request.
+- Final refinement complete. Waiting on the author: the tag `paper-v1` on the last commit of this branch (tag push
+  refused from this session), E14 (Conclusion 8 wording), licence choice, open items in docs/FINAL_SUMMARY.md 5.
+  Not merged into main; no pull request.
 - `bash reproduce.sh fast` rewrites Phase 2E tables/plots with formatting-only differences; restore them with
   `git checkout -- experiments/phase2e` before committing.
 - Re-run everything from stored results: `python -m experiments.final_refinement.verify_all`,
