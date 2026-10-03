@@ -1,0 +1,975 @@
+                  ARTICLE
+                  https://doi.org/10.1038/s42003-019-0715-9                 OPEN
+
+                  A simple method for detecting chaos in nature
+                  Daniel Toker         1*, Friedrich T. Sommer1 & Mark D’Esposito1
+1234567890():,;
+
+
+
+
+                  Chaos, or exponential sensitivity to small perturbations, appears everywhere in nature.
+                  Moreover, chaos is predicted to play diverse functional roles in living systems. A method for
+                  detecting chaos from empirical measurements should therefore be a key component of the
+                  biologist’s toolkit. But, classic chaos-detection tools are highly sensitive to measurement
+                  noise and break down for common edge cases, making it difﬁcult to detect chaos in domains,
+                  like biology, where measurements are noisy. However, newer tools promise to overcome
+                  these limitations. Here, we combine several such tools into an automated processing pipeline,
+                  and show that our pipeline can detect the presence (or absence) of chaos in noisy recordings,
+                  even for difﬁcult edge cases. As a ﬁrst-pass application of our pipeline, we show that heart
+                  rate variability is not chaotic as some have proposed, and instead reﬂects a stochastic
+                  process in both health and disease. Our tool is easy-to-use and freely available.
+
+
+
+
+                  1 Helen Wills Neuroscience Institute, University of California, Berkeley, CA, USA. *email: danieltoker@berkeley.edu
+
+
+                  COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio             1
+ARTICLE                                                                 COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9
+
+
+
+
+A
+          remarkable diversity of natural phenomena are thought                  Researchers also need a tool that can detect varying degrees of
+         to be chaotic. Formally, a system is chaotic if it is bounded       chaos (Glossary) in noisy recordings. In strongly chaotic systems,
+         (meaning that, like a planet circling a star, its dynamics          initially similar system states diverge faster than they do in weakly
+stay inside an orbit rather than escaping off to inﬁnity), and if it is      chaotic systems. And such varying degrees of chaos are predicted
+deterministic (meaning that, with the exact same initial condi-              to occur in biology, with functional consequences. For example, a
+tions, it will always evolve over time in the same way), and if tiny         model of white blood cell concentrations in chronic granulocytic
+perturbations to the system get exponentially ampliﬁed (Glos-                leukemia can display varying levels of chaos, and knowing how
+sary (Supplementary Information), Supplementary Figs. 1, 2).                 chaotic those concentrations are in actual leukemia patients could
+The meteorologist Edward Lorenz famously described this phe-                 have important implications for health outcomes19. As another
+nomenon as the butterﬂy effect: in a chaotic system, something as            example, models of the human cortex predict that macro-scale
+small as the ﬂapping of a butterﬂy’s wings can cause an effect as            cortical electrodynamics should be weakly chaotic during waking
+big as a tornado. This conceptually simple phenomenon—i.e.,                  states and should be strongly chaotic under propofol anesthesia20;
+extreme sensitivity to small perturbations—is thought to appear              if this prediction is true, then detecting changing levels of chaos in
+everywhere in nature, from cosmic inﬂation1, to the orbit of                 large-scale brain activity could be useful for monitoring depth of
+Hyperion2, to the Belousov–Zhabotinskii chemical reaction3, to               anesthesia and for basic anesthesia research. Thus, it is imperative
+the electrodynamics of the stimulated squid giant axon4. These               to develop tools that can not only determine that an experimental
+are only a few examples of the many places in nature where chaos             system is chaotic, but also tools to assess changing levels of chaos
+has been found.                                                              in a system.
+   It is relatively simple to determine if a simulated system is                 Although classic tools for detecting the presence and degree of
+chaotic: just run the simulation a few times, with very slightly             chaos in data are slow, require large amounts of data, are highly
+different initial conditions, and see how quickly the simulations            sensitive to measurement noise, and break down for common
+diverge (Supplementary Fig. 1). But, if all that is available are            edge cases, more recent mathematical research has provided new,
+measurements of how a real, non-simulated system evolves over                more robust tools for detecting chaos or a lack thereof in noisy
+time—for e.g., how a neuron’s membrane potential changes                     time-series recordings. Here, for the ﬁrst time (to our knowledge),
+over time, or how the brightness of a star changes over time—                we combine several key mathematical tools into a single, fully
+how can it be determined if those observations come from a                   automated Matlab processing pipeline, which we call the Chaos
+chaotic system? Or if they are just noise? Or if the system is in fact       Decision Tree Algorithm21 (Fig. 1). The Chaos Decision Tree
+periodic (Glossary, Supplementary Figs. 1, 2), meaning that, like a          Algorithm takes a single time-series of any type—be it recordings
+clock, small perturbations do not appreciably inﬂuence its                   of neural spikes, time-varying transcription levels of a particular
+dynamics?                                                                    gene, ﬂuctuating oil prices, or recordings of stellar ﬂux - and
+   While a reliable method for detecting chaos using empirical               classiﬁes those recorded data as coming from a system that is
+recordings should be an essential part of any scientist’s toolbox,           predominantly (or “operationally”22) stochastic, periodic, or
+such a tool might be especially helpful to biologists, as chaos is           chaotic. The algorithm requires no input from the user other than
+predicted to play an important functional role in a wide variety of          a time-series recording, though we have structured our code such
+biological processes (that said, we note that real biological systems        that users can also select from among a number of alternative
+cannot be purely chaotic in the strict mathematical since, since             subroutines (see Methods section, Fig. 1).
+they certainly contain some level of dynamic noise—see Glossary                  In this paper, we show that the Chaos Decision Tree Algo-
+—but that researchers have long speculated that many biological              rithm performs with very high accuracy across a wide variety of
+processes are still predominantly deterministic, but chaotic5). For          both real and simulated systems, even in the presence of rela-
+example, following early speculations about the presence of chaos            tively high levels of measurement noise. Moreover, our pipeline
+in the electrodynamics of both cardiac6 and neural7 tissue, the              can accurately track changing degrees of chaos (for e.g., transi-
+science writer Robert Pool posited in 1989 that “chaos may                   tions from weak to strong chaos). With an eye toward applica-
+provide a healthy ﬂexibility for the heart, brain, and other parts of        tions to biology, the simulated systems we tested included a
+the body.”8 Though this point has been intensely debated since               high-dimensional mean-ﬁeld model of cortical electrodynamics,
+the 1980s5,9, a range of more speciﬁc possible biological functions          a model of a spiking neuron, a model of white blood cell con-
+for chaos have since been proposed, including potentially max-               centrations in chronic granulocytic leukemia, and a model of the
+imizing the information processing capacity of both neural sys-              transcription of the NF-κB protein complex. We also tested the
+tems10 and gene regulatory networks11, enabling multistable                  algorithm on a wide variety of non-biological simulations,
+perception12, allowing neural systems to ﬂexibly transition                  including several difﬁcult edge cases; these included strange non-
+between different activity patterns13, and boosting cellular sur-            chaotic systems, quasi-periodic systems, colored noise, and
+vival rates through the promotion of heterogeneous gene                      nonlinear stochastic systems (see Glossary for deﬁnitions of these
+expression14. And there is good reason to expect chaos to exist in           terms), which are all classically difﬁcult to distinguish from
+biological systems, as a large range of simulations of biological            chaotic systems23–26. We also tested the algorithm on a
+processes15, and in particular of neural systems9, show clear                hyperchaotic system (Glossary), which can be difﬁcult to dis-
+evidence of chaos. Moreover, unambiguous evidence of biological              tinguish from noise25, as well as on several non-stationary pro-
+chaos has been found in a very small number of real cases that               cesses (Glossary) in order to test the robustness of the algorithm
+were amenable to comparison to good theoretical models; these                against non-stationarity. Finally, we tested the Chaos Decision
+include periodically stimulated squid giant axons4 and cardiac               Tree Algorithm on several empirical (i.e. non-simulated) datasets
+cells16, as well as the discharges of the Onchidium pacemaker                for which the ground-truth presence or absence of chaos has
+neuron17 and the Nitella ﬂexillis internodal cell18. But, beyond             been previously established by other studies. These included an
+simulations and these select empirical cases, most attempts to test          electronic circuit in periodic, strange non-chaotic, and chaotic
+the presence or predicted functions of chaos in biology have fallen          states27, a chaotic laser28, the stellar ﬂux of a strange non-chaotic
+short due to high levels of measurement noise (Glossary) in                  star29, the linear/stochastic North Atlantic Oscillation index30,
+biological recordings. For this reason, it has long been recognized          and nonlinear/stochastic Parkinson’s and essential tremors26.
+that biologists need a noise-robust tool for detecting the presence          Overall, our pipeline performed with near-perfect accuracy in
+(or absence) of chaos in their noisy empirical data9,15.                     classifying these data as stochastic, periodic, or chaotic, as well as
+
+2                           COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio
+COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9                                                                               ARTICLE
+
+
+
+
+Fig. 1 The Chaos Decision Tree Algorithm21. The ﬁrst step of the algorithm is to test if data are stochastic. The Chaos Decision Tree Algorithm uses a
+surrogate-based approach to test for stochasticity, by comparing the permutation entropy of the original time-series to the permutation entropies of random
+surrogates of that time series. If the user does not specify which surrogate algorithms to use, the Chaos Decision Tree Algorithm automatically picks a
+combination of Amplitude Adjusted Fourier Transform33 surrogates and Cyclic Phase Permutation35 surrogates—see Supplementary Tables 2, 3. If the
+permutation entropy of the original time-series falls within either surrogate distribution, the time-series is classiﬁed as stochastic; if the permutation entropy
+falls outside the surrogate distributions, then the algorithm proceeds to denoise the inputted signal. Several de-noising subroutines are available, but if the
+user does not specify a subroutine, the pipeline will use Schreiber’s noise-reduction algorithm36 (Supplementary Table 5). The pipeline then checks for signal
+oversampling; if data are oversampled, the pipeline iteratively downsamples the data until they are no longer oversampled (note that an alternative
+downsampling method proposed by Eyébé Fouda and colleagues68 may be selected instead—see Supplementary Table 6). Finally, the Chaos Decision Tree
+Algorithm performs the 0–1 chaos test on the input data, which has been modiﬁed from the original 0–1 test to be less sensitive to noise, suppress
+correlations arising from quasi-periodicity, and normalize the standard deviation of the test signal (see Methods section). The value for the parameter that
+suppresses signal correlations can be speciﬁed by the user, but is otherwise automatically chosen based on ROC analyses performed here (Supplementary
+Fig. 4). The modiﬁed 0–1 test provides a single statistic, K, which approaches 1 for chaotic systems and approaches 0 for periodic systems. Any cutoff for K
+may be inputted to the pipeline, and if no cutoff is provided, the pipeline will use a cutoff based on the length of the time-series (Supplementary Fig. 6). If K is
+greater than the cutoff, the data are classiﬁed as chaotic, and if they are less than or equal to the cutoff, they are classiﬁed as periodic.
+
+
+
+in tracking changing degrees of chaos in both real and simulated                   evidence that heart rate variability reﬂects a predominantly
+systems. Finally, we applied our algorithm to electrocardiogram                    stochastic, rather than chaotic process.
+recordings from healthy subjects, patients with congestive heart                      We have made our Matlab code freely and publicly available at
+failure, and patients with atrial ﬁbrillation31, and provide                       https://ﬁgshare.com/s/80891dfb34c6ee9c8b34.
+
+COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio                                                         3
+ARTICLE                                                                  COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9
+
+
+Results                                                                       tests of chaos (Supplementary Tables 8–13), as well as to optimize
+The Chaos Decision Tree Algorithm21 is depicted graphically in                the 0–1 test for chaos (Supplementary Figs. 4–6), we further
+Fig. 1. The pipeline consists of four steps: (1) Determine if the             tested the Chaos Decision Tree Algorithm on held out datasets,
+data are stochastic using permutation entropy32 and a combi-                  which were not used to adjudicate between alternative tools.
+nation of Amplitude Adjusted Fourier transform surrogates33,34                These held out datasets included both simulated systems
+and Cyclic Phase Permutation surrogates34,35 (Glossary), (2) De-              (Table 3) and recordings from real (non-simulated) systems
+noise the data using the Schreiber de-noising algorithm36                     (Table 4). Several of these held out datasets were of direct bio-
+(Glossary), (3) Correct for possible signal oversampling, and (4)             logical relevance: the periodically stimulated Poincaré oscillator in
+Test for chaos using a modiﬁed 0–1 test for chaos23,37–40                     Table 3 is thought to be a good model of cardiac cell electro-
+(Glossary). For each step of the processing pipeline, we compared             dynamics41, which, like the Poincaré oscillator, are chaotic when
+the performance of different available tools (i.e., different                 periodically stimulated with certain delays between stimulation
+surrogate-based tests for stochasticity, different de-noising                 pulses16; the integrated circuit in Table 4 is a physical imple-
+methods, different downsampling methods, and different chaos-                 mentation of equations that are based on the Hodgkin-Huxley
+detection methods), and chose the tools with the highest classi-              neuron model42; and the tremor signals in Table 4 are direct
+ﬁcation performance (Supplementary Tables 1–14). Note that                    recordings from patients. The Chaos Decision Tree Algorithm
+with user input, the Chaos Decision Tree Algorithm can use any                classiﬁed the systems in Tables 1–4 as stochastic, periodic, or
+of the alternative tools tested here, and that with no user input             chaotic with near-perfect accuracy even at high levels of mea-
+other than a time-series recording, the algorithm will auto-                  surement noise, with the exception of the noise-driven sine map
+matically use the tools we found maximized its performance. All               (Table 2)—see Discussion section. Finally, we tested the perfor-
+results reported in the main body of this paper are for this                  mance of the Chaos Decision Tree Algorithm on sub-samples of
+automated set of high-performing tools. See Supplementary Fig. 3              all systems in Tables 1–3, and conﬁrmed that it is still highly
+for example time-traces illustrating each step of the algorithm.              accurate for data with just 1000 time-points (Supplementary
+   We tested the performance of the (automated) Chaos Decision                Table 16) or 5000 time-points (Supplementary Table 17), though
+Tree Algorithm in detecting the presence and degree of chaos in a             we note that performance for some systems did go down with less
+wide range of simulated and empirical systems for which the                   data, which is to be expected40.
+ground-truth presence of chaos, periodicity, or stochasticity has                Table 5 reports the accuracy of the Chaos Decision Tree
+already been established. Details about each dataset and how the              Algorithm in detecting degree of chaos. Formally, a system’s
+ground-truth presence or absence of chaos in those systems was                degree of chaos is quantiﬁed by the magnitude of its largest
+previously determined are included in the Methods. Note that                  Lyapunov exponent (Glossary). Unfortunately, largest Lyapu-
+some systems are labeled “SNA,” which is an abbreviation for                  nov exponents are very difﬁcult to estimate from ﬁnite, noisy
+“strange non-chaotic attractor” (Glossary). These are systems                 time-series recordings. But, directly estimating largest Lyapu-
+whose attractors in phase space (Glossary) are fractal (like chaotic          nov exponents may not be necessary for tracking changing
+systems), but which are periodic (i.e., non-chaotic). Among these,            degrees of chaos in real systems: following prior observations of
+we included the only known non-artiﬁcial strange non-chaotic                  a strong correlation between a quick-to-compute and noise-
+system, the stellar ﬂux of the so-called golden star KIC 5520878,             robust measure called permutation entropy (Glossary) and the
+as recorded by the Kepler space telescope29. All simulated data-              largest Lyapunov exponents of several systems32,43, the Chaos
+sets consisted of 10,000 time-points, and all initial conditions              Decision Tree Algorithm approximates degree of chaos by
+were randomized. For systems with more than one variable, we                  calculating the permutation entropy of the inputted signal, after
+here report results for linear combinations of those variables (see           it has been de-noised and corrected for possible over-sampling.
+Methods section), under the assumption that in most real-life                 In agreement with prior ﬁndings, we found that permutation
+cases, empirical recordings will contain features of multiple                 entropy tracked degree of chaos in the logistic map, the Hénon
+components of the system of study; that said, we also conﬁrmed                map, the Lorenz system, a high-dimensional mean-ﬁeld model
+that the Chaos Decision Tree Algorithm has very high perfor-                  of the cortex, and an electronic circuit. See Methods for details
+mance for individual system variables (Supplementary Table 15).               on the parameters that were used to generate dynamics with
+   Results for simulations of biological systems are reported in              different degrees of chaos in these systems, and for details on
+Table 1, and results for non-biological simulations are reported in           how ground-truth largest Lyapunov exponents were calculated.
+Table 2. Note that no measurement noise was added to the                      Note that without downsampling, the correlation between the
+colored noise signals in Table 2, as doing so would ﬂatten their              largest Lyapunov exponents and permutation entropy breaks
+power spectra. Because the datasets in Tables 1 and 2 were used to            down in continuous systems (Supplementary Table 14), which
+choose between alternative methods for detecting stochasticity                is to be expected, as permutation entropy has only been ana-
+(Supplementary Tables 1–4), de-noising (Supplementary                         lytically proven to track the degree of chaos in discrete-time
+Table 5), downsampling (Supplementary Table 6), and alternative               systems32,44 (see Glossary).
+
+
+ Table 1 The Chaos Decision Tree Algorithm classiﬁed biological simulations as periodic or chaotic with near-perfect accuracy.
+
+                                               Measurement noise level (% of std. dev.)
+ System                                        0%                      10%                     20%                      30%              40%
+ Cortical model20 (chaotic)                    100/100                 100/100                 100/100                  97/100           83/100
+ Cortical model20 (periodic)                   100/100                 100/100                 100/100                  100/100          100/100
+ Spiking neuron49 (chaotic)                    100/100                 100/100                 100/100                  100/100          98/100
+ Granulocyte levels19 (chaotic)                100/100                 100/100                 100/100                  100/100          100/100
+ Granulocyte levels19 (periodic)               100/100                 100/100                 100/100                  100/100          83/100
+ NF-κB transcription14 (chaotic)               99/100                  99/100                  100/100                  100/100          100/100
+ NF-κB transcription14 (periodic)              100/100                 100/100                 97/100                   100/100          100/100
+
+
+4                            COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio
+COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9                                                                ARTICLE
+
+ Table 2 The Chaos Decision Tree Algorithm classiﬁed non-biological simulations as stochastic, periodic, or chaotic with high
+ accuracy. These simulated systems include strange non-chaotic attractors (SNAs), linear stochastic processes, and nonlinear
+ stochastic processes, all of which are classically difﬁcult to distinguish from chaos.
+
+                                                             Measurement noise level (% of std. dev.)
+ System                                                      0%                   10%                  20%            30%                40%
+ Cubic map50 (chaotic)                                       100/100              100/100              100/100        100/100            100/100
+ Cubic map50 (periodic)                                      100/100              100/100              100/100        100/100            100/100
+ Cubic map50 (SNA HH)                                        100/100              100/100              100/100        100/100            100/100
+ Cubic map50 (SNA S3)                                        100/100              100/100              100/100        100/100            0/100
+ GOPY map51 (SNA)                                            100/100              100/100              100/100        99/100             14/100
+ Logistic map52 (chaotic)                                    100/100              100/100              100/100        100/100            100/100
+ Logistic map52 (periodic)                                   100/100              100/100              100/100        100/100            100/100
+ Lorenz system53 (chaotic)                                   100/100              100/100              97/100         82/100             36/100
+ Generalized Hénon map54 (hyperchaotic)                      100/100              100/100              100/100        100/100            93/100
+ Freitas map55 (nonlinear stochastic)                        78/100               83/100               98/100         98/100             74/100
+ Noise-driven sine map55 (nonlinear stochastic)              55/100               3/100                22/100         5/100              78/100
+ Bounded random walk56 (nonlinear stochastic)                100/100              97/100               59/100         95/100             100/100
+ Cyclostationary process57 (linear stochastic)               99/100               100/100              99/100         100/100            100/100
+ ARMA process (linear stochastic)                            85/100               98/100               99/100         99/100             100/100
+ Trended random walk (linear stochastic)                     100/100              89/100               90/100         98/100             100/100
+ Random walk (linear stochastic)                             100/100              98/100               100/100        100/100            100/100
+ Violet noise58 (linear stochastic)                          99/100
+ Blue noise58 (linear stochastic)                            100/100
+ White noise58 (linear stochastic)                           100/100
+ Pink noise58 (linear stochastic)                            100/100
+ Red noise58 (linear stochastic)                             100/100
+
+
+
+
+ Table 3 Classiﬁcation accuracy in held out simulated systems. While the datasets in Tables 1, 2 were used to optimize the Chaos
+ Decision Tree Algorithm, these datasets were not. Performance was near-perfect.
+
+                                                         Measurement noise level (% of std. dev.)
+ System                                                  0%                    10%                   20%             30%                 40%
+ Rössler system59 (chaotic)                              70/100                90/100                96/100          100/100             100/100
+ Ikeda map60 (chaotic)                                   100/100               100/100               100/100         100/100             14/100
+ Hénon map61 (periodic)                                  100/100               100/100               100/100         100/100             100/100
+ Cubic map61 (period-doubled)                            100/100               100/100               100/100         100/100             100/100
+ Poincaré oscillator41 (periodic)                        100/100               100/100               100/100         100/100             57/100
+ Poincaré oscillator41 (quasi-periodic)                  100/100               100/100               100/100         100/100             100/100
+ Poincaré oscillator41 (chaotic)                         100/100               100/100               100/100         100/100             100/100
+ Multivariate AR model (linear stochastic)               100/100               100/100               100/100         100/100             100/100
+
+
+   Finally, as a ﬁrst-pass implementation of our method, we                    whether a time-series signal is generated by a predominantly
+applied the Chaos Decision Tree Algorithm to recordings of                     stochastic, periodic, or chaotic system, and can also accurately
+human heart rate variability, made available by Physionet31.                   track changing levels of chaos within a system using permutation
+There has been considerable debate over whether or not the                     entropy. The pipeline makes no assumptions about the input
+irregularities of heart rate signals (in either health or disease)             data. The Chaos Decision Tree Algorithm consists of four broad
+reﬂect a predominantly chaotic process. While many classic                     steps: (1) testing for stochasticity using surrogate data methods,
+chaos-detection methods have identiﬁed heart rate variability as               (2) de-noising, (3) downsampling if data are oversampled, and (3)
+chaotic (see Glass5 for a review), other studies have argued that              testing for chaos using the modiﬁed 0–1 test. We tested the
+this is an erroneous classiﬁcation, suggesting that heart rate                 performance of several different surrogate data generation algo-
+variability is, in fact, a nonlinear stochastic process45,46, and that         rithms, de-noising algorithms, downsampling algorithms, and
+prior classiﬁcations of heart rate signals as chaotic simply reﬂect            parameters for the modiﬁed 0–1 test. Each alternative algorithm
+the shortcomings of classic chaos-detection methods. In agree-                 and parameter choice has its relative strengths and weaknesses,
+ment with this view, we here show that the Chaos Decision Tree                 and we have structured our code such that a user can specify
+Algorithm classiﬁed heart rate signals from healthy subjects,                  which algorithms and parameters to use for each step of the
+congestive heart failure patients, and atrial ﬁbrillation patients as          pipeline. If a user only inputs a time-series recording without
+stochastic, rather than chaotic, with the exception of two con-                specifying any sub-algorithms or parameters, then our pipeline
+gestive heart failure patients (Table 6).                                      will automatically use the methods and parameters we found
+                                                                               yielded the most accurate results across a large and diverse set of
+                                                                               data. All analyses reported in the main body of this paper are for
+Discussion                                                                     this automated set of subroutines.
+In this paper, we have introduced a processing pipeline, called the               We tested the (automated) Chaos Decision Tree Algorithm
+Chaos Decision Tree Algorithm21, that can accurately detect                    on a diverse range of simulations of biological systems, non-
+
+COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio                                       5
+ARTICLE                                                                                      COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9
+
+
+biological simulations, and empirical (non-simulated) data                                          the level of intrinsic noise was increased (Supplementary
+recordings. Empirical data were recorded from an integrated                                         Table 18). It is also possible that this system is, in fact, an example
+circuit in a periodic, strange non-chaotic, and chaotic state, a                                    of noise-induced chaos47. Finally, although the choice of system
+chaotic laser, the stellar ﬂux of a strange non-chaotic star, the                                   observables did not appreciably affect the performance of our
+North Atlantic Oscillation index, a Parkinson’s tremor, an                                          method (Supplementary Table 15), we agree with Letellier and
+essential tremor, and heart rate variability from congestive                                        colleagues48 that some system observables are better representa-
+heart failure patients, atrial ﬁbrillation patients, and healthy                                    tions of a system’s dynamics than others, and that this can have
+controls. In the cases for which the ground-truth was known (i.e.,                                  important consequences for the accuracy of nonlinear time-series
+all datasets other than heart rate variability), the Chaos Decision                                 analysis methods such as this one. In light of these potential
+Tree Algorithm performed at very high accuracy even at relatively                                   limitations, it bears re-emphasizing that the absence, presence,
+high levels of measurement noise. For heart rate variability,                                       and degree of chaos can only be determined with absolute cer-
+our results support the hypothesis that cardiac rhythm variability                                  tainty in a computer model that is free of measurement noise, by
+is stochastic45,46. Overall, these ﬁndings make us conﬁdent                                         running multiple simulations and seeing how quickly initially
+that the Chaos Decision Tree Algorithm can be fruitfully applied                                    similar states diverge. Thus, although the Chaos Decision Tree
+to biological and non-biological signals contaminated by                                            Algorithm pipeline performs at very high accuracy, it should,
+measurement noise.                                                                                  when possible, be used in conjunction with analyses of a com-
+   We note a few limitations/shortcomings of our algorithm. First,                                  puter model of the system at hand.
+the 0–1 test used in our pipeline might classify some very weakly                                      We hope that the Chaos Decision Tree Algorithm will help
+chaotic systems (i.e., systems whose largest Lyapunov exponent is                                   advance the decades-old effort to bring the insights of chaos
+positive but very near zero) as periodic if the length of the time-                                 theory to biology. While a diverse range of biological simulations
+series provided is short; but, with longer time-series, the test is                                 and a small number of real biological cases have been shown to be
+guaranteed to provide accurate results40. We also note that the                                     chaotic, detecting the presence and degree of chaos in biological
+algorithm performed poorly for the noise-driven sine map, which                                     recordings has been difﬁcult. The Chaos Decision Tree Algorithm
+was consistently mis-classiﬁed as chaotic (Table 2). It is possible                                 overcomes the difﬁculties of prior tests, by being fast, highly
+that this system was not classiﬁed as stochastic because its level of                               robust to measurement noise, and, unless the user speciﬁes spe-
+intrinsic noise was very low; in support of this, we found that the                                 ciﬁc alternative subroutines, fully automated. We welcome any
+Chaos Decision Tree Algorithm classiﬁed nonlinear dynamical                                         efforts to identify edge cases for which our pipeline systematically
+systems with very low levels of intrinsic noise as deterministic,                                   breaks down; given that our pipeline is a modular decision tree,
+and that classiﬁcations of stochasticity became more frequent as                                    new subroutines can be added to accommodate such edge cases.
+                                                                                                    We hope that our pipeline (and perhaps future iterations of it)
+                                                                                                    will be useful to any of the domains of science—and in particular
+                                                                                                    of biology—in which chaos has been invoked, but not tested.
+ Table 4 Classiﬁcation accuracy in empirical (non-simulated)
+ data from stochastic, periodic, strange non-chaotic (SNA),                                         Methods
+                                                                                                    The Chaos Decision Tree Algorithm. To understand the logic of the Chaos
+ and chaotic systems. As was the case for the data in                                               Decision Tree Algorithm21, we begin with the ﬁnal test in the decision tree. The
+ Table 3, these datasets were not used to optimize algorithm                                        crux of the Chaos Decision Tree Algorithm is the 0–1 test for chaos. The 0–1 test
+ performance, and so are also held out datasets. Algorithm                                          for chaos was originally developed by Gottwald and Melbourne37, who later offered
+ performance was perfect.                                                                           a slightly modiﬁed version of the test, which can cope with moderate amounts of
+                                                                                                    measurement noise38. Several years later, Dawes and Freeland further modiﬁed the
+                                                                                                    test, such that it could suppress correlations induced by quasi-periodic dynamics,
+ System                                                                                             and thus more effectively distinguish between chaotic and strange non-chaotic
+ Neuron integrated circuit27 (chaotic)                                                10/10         dynamics, which are difﬁcult to distinguish given only a time-series recording23.
+ Neuron integrated circuit27 (SNA)                                                    10/10         The modiﬁed 0–1 test involves taking a one-dimensional time-series of interest ϕ,
+                                                                                                    and using it to drive the following two-dimensional system:
+ Neuron integrated circuit27 (periodic)                                               10/10
+ Laser28 (chaotic)                                                                    1/1
+ Stellar ﬂux29 (SNA)                                                                  1/1                                         pðn þ 1Þ ¼ pðnÞ þ ϕðnÞ cos cn
+ North Atlantic Oscillation index30 (linear stochastic)                               1/1                                                                                                        ð1Þ
+                                                                                                                                  qðn þ 1Þ ¼ qðnÞ þ ϕðnÞ sin cn
+ Essential tremor26 (nonlinear stochastic)                                            1/1
+ Parkinson’s tremor26 (nonlinear stochastic)                                          1/1
+                                                                                                    where c is a random value bounded between 0 and 2π. For a given c, the solution to
+
+
+
+
+ Table 5 The Chaos Decision Tree Algorithm uses permutation entropy, calculated from data that have been de-noised and
+ downsampled (if oversampled), to track the degree of chaos in a system, which might change as the state of the system
+ changes.
+
+                                                 Measurement noise level (% of std. dev.)
+ System                                          0%                            10%                           20%                           30%                          40%
+ Logistic map52                                  0.93***                       0.80***                       0.93***                       0.93***                      0.91***
+ Hénon map61                                     0.92***                       0.93***                       0.94***                       0.92***                      0.88***
+ Lorenz system53                                 0.81***                       0.71***                       0.73***                       0.69***                      0.62***
+ Cortical model20                                0.69***                       0.55***                       0.39***                       0.33***                      0.24***
+ Neuron integrated circuit27                     0.94***
+ We here show Spearman correlations between permutation entropy and largest Lyapunov exponents, which measure degree of chaos but which are difﬁcult to estimate from empirical data. Data include
+ four simulated systems and recordings from an integrated circuit in different states. See Methods for how ground-truth largest Lyapunov exponents were calculated for these systems
+ ***p < 0.001 (two-tailed) after Bonferroni-correcting for multiple comparisons to the same set of ground-truth largest Lyapunov exponents
+
+
+
+6                                     COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio
+COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9                                                                                                      ARTICLE
+
+                                                                                                    surrogates33 and Cyclic Phase Permutation surrogates35, unlike Zunino and Kulp,
+ Table 6 The Chaos Decision Tree Algorithm consistently
+                                                                                                    who used iterative amplitude adjusted Fourier transform33 surrogates, because we
+ classiﬁes heart rate recordings, across conditions, as                                             found that this combination led to far higher classiﬁcation accuracy
+ stochastic.                                                                                        (Supplementary Tables 2, 3). The Chaos Decision Tree Algorithm classiﬁes data as
+                                                                                                    stochastic (and thus does not proceed to subsequent steps) if the permutation
+                                                                                                    entropy of the original data falls within either surrogate distribution. The algorithm
+                               Classiﬁcation                                                        uses the Toolboxes for Complex Systems implementation of the permutation
+ Condition                     Stochastic                 Periodic           Chaotic                entropy algorithm, written by Andreas Müller65. Surrogates are generated using the
+                                                                                                    Matlab toolbox recently released by Lancaster and colleagues34. Note that because
+ Healthy controls31            5/5                        0/5                0/5                    Fourier-based surrogates are strictly stationary, surrogate-based tests that use only
+ Congestive heart              3/5                        2/5                0/5                    Fourier-based algorithms are only valid if the test time-series is also stationary34,57;
+ failure31                                                                                          that said, we found that non-stationarity did not affect the accuracy of a
+ Atrial ﬁbrillation31          5/5                        0/5                0/5                    stochasticity test that uses a combination of amplitude adjusted Fourier transform
+                                                                                                    and Cyclic Phase Permutation surrogates (Supplementary Tables 1–4). We also did
+ The only exceptions were the heart rate signals recorded from two patients with congestive         not ﬁnd that a normality transformation of the data improved the performance of
+ heart failure, which were classiﬁed as periodic                                                    our surrogate-based stochasticity test (Supplementary Table 2), counter to what has
+                                                                                                    been suggested elsewhere22.
+                                                                                                        If data “pass” the stochasticity test described above and are deemed
+Eq. (1) yields:                                                                                     operationally deterministic, then the Chaos Decision Tree Algorithm automatically
+                                                                                                    denoises the inputted signal. We compared three de-noising algorithms: a moving
+                                             X
+                                             n
+                                  pc ðnÞ ¼         ϕðjÞ cos jc                                      average ﬁlter (using Matlab’s smooth.m function), the Matlab Chaotic Systems
+                                             j¼1                                                    Toolbox’s66 implementation of Schreiber’s noise-reduction algorithm36 (Glossary),
+                                                                                              ð2Þ   and wavelet de-noising using an empirical Bayesian method with a Cauchy prior
+                                             X
+                                             n
+                                  qc ðnÞ ¼         ϕðjÞ sin jc                                      (using Matlab’s wdenoise.m function). Although it is considerably slower to run,
+                                             j¼1                                                    Schreiber denoising markedly outperforms the other two approaches in recovering
+                                                                                                    the deterministic component of signals contaminated by measurement noise
+Gottwald and Melbourne show that if the inputted time-series ϕ is regular, the                      (Supplementary Table 5), and markedly improves the performance of the modiﬁed
+motion of p and q is bounded, while p and q display asymptotic Brownian motion                      0–1 test (Supplementary Table 6, Supplementary Fig. 4). Thus, the Chaos Decision
+if ϕ is chaotic. The time-averaged mean square displacement of p and q, plus the                    Tree Algorithm automatically uses Schreiber de-noising before testing for chaos,
+noise term proposed by Dawes and Freeland23, is                                                     unless the user speciﬁes one of the other two de-noising algorithms tested here to
+                                                                                                    be used instead.
+                     1X N
+                                                                                                        The ﬁnal step of the Chaos Decision Tree Algorithm before applying the 0–1
+         M c ðnÞ ¼        ð½p ðj þ nÞ  pc ðjÞ2 þ ½qc ðj þ nÞ  qc ðjÞ2 Þ þ σηn :           ð3Þ
+                     N j¼1 c                                                                        test is to check if data are oversampled and to downsample them if they are.
+                                                                                                    Gottwald and Melbourne have shown39 that the 0–1 test can give inaccurate results
+where ηn is a uniformly distributed random variable between ½ 12 ; 12 and σ is the                for continuous (i.e., non-discrete-time) systems sampled at a very high frequency,
+noise level. Finally, the outputted K-statistic of the 0–1 test uses a correlation                  but that it can accurately differentiate between periodic dynamics and chaotic
+coefﬁcient to measure the growth rate of the mean squared displacement of the                       dynamics in continuous deterministic systems when data are properly
+two-dimensional system in Eq. (1):                                                                  downsampled. In light of this, the Chaos Decision Tree Algorithm utilizes the
+                                                                                                    (crude) test for oversampling used by Matthews67, by calculating a measure η,
+                                   K c ¼ corrðn; M c ðnÞÞ                                     ð4Þ   which is the difference between the global maximum and global minimum of the
+K is computed for 100 different values of c, randomly sampled between 0 and 2π,                     data divided by the mean absolute difference between consecutive time-points in
+and the ﬁnal output of the test is the median K across different values of c. For                   the data. If η > 10, then the data are deemed to be oversampled, and the Chaos
+chaotic systems, this median K value will approach 1, and for periodic systems, K                   Decision Tree Algorithm iteratively downsamples the data by a factor of 2 until
+will approach 023,37–40.                                                                            η  10 or until there are fewer than 100 time-points left in the signal. We
+    There are two parameters in this modiﬁed 0–1 test: the parameter σ that                         compared this approach both to no downsampling and to an alternative method,
+controls the level of added noise in Eq. (3), and the cutoff for what K-statistic                   suggested by Eyébé Fouda and colleagues68 to improve 0–1 test performance,
+values are classiﬁed as indicating chaos or periodicity in a ﬁnite time-series. We                  which downsamples by taking just the local minima and maxima of oversampled
+performed ROC-curve analyses for different values of σ and found that σ ¼ 0:5                       signals. We found that downsampling after de-noising yields more accurate results
+maximized classiﬁcation performance across systems and noise levels                                 than either alternative approach when oversampled signals are contaminated by
+(Supplementary Fig. 4), and so our pipeline automatically sets σ to 0.5 if σ is not                 measurement noise (Supplementary Table 6). We also note that recorded
+speciﬁed by the user. Note that for non-zero values of σ, K approaches zero as the                  experimental data may be unlikely to be oversampled (Supplementary Table 7),
+standard deviation of a test signal approaches zero (Supplementary Fig. 5), and so                  and that this problem may be more likely to arise in simulated continuous systems.
+the Chaos Decision Tree Algorithm multiplies a test signal by a constant to ﬁx its                  If the data are not oversampled, or if they have been downsampled, the Chaos
+standard deviation at 0.5 before applying the 0–1 test. A cutoff for K can also be                  Decision Tree Algorithm then applies the modiﬁed 0–1 test to the data, as
+inputted to our Matlab script, such that data that yield a K value greater than that                described above.
+cutoff are classiﬁed as chaotic and data that yield a K value less than or equal to that                Finally, the algorithm uses the permutation entropy of the inputted signal as a
+cutoff are classiﬁed as periodic. If no cutoff is provided, a cutoff is chosen based on             proxy for the degree of chaos in the system. Though the algorithm uses
+an analysis of optimal cutoffs as a function of time-series length (Supplementary                   permutation entropy to establish whether or not a signal is predominantly
+Fig. 6). If the automatically selected cutoff is greater than 0.99, the cutoff is set to            deterministic (see above), permutation entropy has also been shown to tightly track
+K ¼ 0:99, as K is upper-bounded by 1. We have conﬁrmed that this automated                          the largest Lyapunov exponent (and therefore the degree of chaos) of the logistic
+cutoff selection yields highly accurate results for sub-samples of both test and held-              map32, the tent map69, and the Dufﬁng oscillator43. We should in general expect a
+out datasets (Supplementary Tables 16, 17).                                                         close correspondence between permutation entropy and Lyapunov exponents, in
+    The 0–1 test described above only yields accurate results for data that are                     light of the equivalence in discrete-time systems between permutation entropy and
+deterministic24,40,62,63. A system is considered deterministic if, given the exact                  Kolmogorov-Sinai entropy44,70–72, which is upper-bounded by the sum of a
+same initial conditions, it always evolves over time the same way, whereas a system                 system’s positive Lyapunov exponents—a relationship known as the “Pesin
+is considered stochastic if there is appreciable randomness built in to its evolution               identity”73. When calculating permutation entropy to track degree of chaos (rather
+over time (Glossary, Supplementary Fig. 1, 2). Not only are all chaotic systems                     than for determinism testing as above), we follow Bandt and Pompe’s32
+(predominantly) deterministic—and thus the possibility of chaos can be                              recommendation and simply set the time-lag to 1 and the permutation order to 5,
+automatically rejected if a system is found to be stochastic (though we note that a                 which we showed tracks degree of chaos in all systems tested (Table 5). Because this
+mathematically rigorous deﬁnition of chaos has recently been extended to the                        equivalence is only known to hold for discrete-time systems44, permutation
+domain of stochastic systems, under the framework of the Supersymmetric Theory                      entropy is only calculated after the inputted signal has been de-noised and, if
+of Stochastics47)—but the 0–1 test is also known to incorrectly classify stochastic                 oversampled, downsampled; this considerably improves its ability to track degree
+dynamics as chaotic24,62,63. Thus, the Chaos Decision Tree Algorithm ﬁrst rules out                 of chaos in continuous systems (Table 5, Supplementary Table 14).
+the possibility that data are predominantly stochastic before applying the modiﬁed                      The full decision tree of our algorithm is depicted graphically in Fig. 1.
+0–1 test. To do so, it uses a noise-robust method recently developed by Zunino and
+Kulp64, which tests for determinism using surrogate statistics33, with permutation
+entropy32 as the test statistic. The calculation of permutation entropy relies on two               Data
+parameters: permutation order and time-lag. We follow the recommendation from                       Biological simulations. The following describes the simulations of biological sys-
+Bandt and Pompe32 and set the time-lag to 1, and found that a permutation order                     tems analyzed in this paper. We only picked biological simulations for which the
+of 8 maximized stochasticity detection accuracy (Supplementary Tables 2, 3).                        presence or absence of chaos has been established in prior work. Initial conditions
+Moreover, we use a combination of amplitude adjusted Fourier transform                              were randomized in all simulations. We also tested the effect of measurement noise
+
+COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio                                                                                 7
+ARTICLE                                                                            COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9
+
+
+on the accuracy of the Chaos Decision Tree Algorithm in classifying systems, by         Mackey-Glass system using a ﬁrst-order Euler method with an integration step of
+adding white noise to our simulated data, the amplitude of which was up to 40%          1, and then downsampled by a factor of 10 (to avoid over-sampling).
+the standard deviation of the original data. For each simulated system and level of         Periodic NF-κB transcription. Heltberg and colleageus14 recently described a ﬁve-
+measurement noise, we created 100 datasets with 10,000 time points.                     dimensional mathematical model of oscillating concentrations of the transcription
+    Chaotic mean-ﬁeld cortical model. Steyn-Ross, Steyn-Ross, and Sleigh20 describe     factor NF-κB, which regulates several genes involved in immune responses and is
+a mean-ﬁeld model of the cortex based on the equations ﬁrst introduced by Liley         widely studied in immunity and cancer research. They show that the dynamics of NF-
+and colleagues74,75, which includes electrical gap-junction synapses in addition to     κB concentration are coupled to varying levels of a cytokin-like tumor necrosis factor
+the standard chemical synapses used in the earlier models. The model contains           (TNF). They show that when TNF oscillations have a low amplitude, NF-κB
+both inhibitory and excitatory neural populations communicating locally through         oscillations are periodic. We simulated periodic NF-κB oscillations using Heltberg and
+gap junctions and chemical synapses and communicating over long ranges via              colleagues’ Matlab code, available at https://github.com/Mathiasheltberg/ChaoticDyna
+myelinated axons. The dynamics of each neural population in the model are               micsInTranscriptionFactors.
+determined by two ﬁrst-order and six second-order partial differential equations,           Chaotic NF-κB transcription. Heltberg and colleagues14 show that by increasing
+which is equivalent to 14 ﬁrst-order differential equations. The primary output of      the amplitude of the TNF signal, the oscillating number of NF-κB molecules in
+the model is the mean excitatory ﬁring rates of 120 neural populations, which           their model becomes chaotic. We simulated chaotic NF-κB oscillations using
+approximates the large-scale cortical signals that might be measured through            Heltberg and colleagues’ Matlab code, available at https://github.com/
+electrocortigraphy, magnetoencephalography, or electroencephalography. Steyn-           Mathiasheltberg/ChaoticDynamicsInTranscriptionFactors.
+Ross, Steyn-Ross, and Sleigh20 show that just by varying the inhibitory gap-
+junction diffusive-coupling strength parameter in their model, they can produce
+                                                                                        Non-biological simulations. Because there are only a limited number of biological
+dynamics ranging from periodicity to strong chaos. In their simulation of “waking”
+                                                                                        simulations for which the presence of chaos has already been established, we also
+cortical dynamics, Turing (spatial) and Hopf (temporal) instabilities interact to
+                                                                                        applied the Chaos Decision Tree Algorithm to a wide range of mathematical
+produce chaotic, low-frequency spatiotemporal oscillations. For chaotic dynamics,
+                                                                                        systems previously studied in the chaos theory and nonlinear time-series analysis
+we simulated 2,000,000 time-points of their “wake” simulation, with the inhibitory
+                                                                                        literatures:
+gap-junction diffusive-coupling strength parameter set to 0.4, and then                     Chaotic cubic map. Venkatesan and Lakshmanan50 describe a quasiperiodically
+downsampled the data to 10,000 time-points. We only applied our algorithm to the
+                                                                                        forced cubic map, which can exhibit a large diversity of periodic, chaotic, and
+mean excitatory ﬁring rate of one neural population, i.e. to just one out of 14
+                                                                                        strange non-chaotic dynamics. In particular, the map exhibits many different
+variables describing the dynamics of just one out of 120 interacting such 14-
+                                                                                        routes to chaos. Their system is described by the following:
+dimensional systems (though the variable is biologically well-deﬁned). The Matlab
+code for the simulations is available in the Supplementary Material of Steyn-Ross,                              xiþ1 ¼ Q þ f cosð2πθi Þ  Axi þ x3i
+Steyn-Ross, and Sleigh20.                                                                                                                                                 ð8Þ
+                                                                                                                θiþ1 ¼ θi þ ωðmod 1Þ;
+    Periodic mean-ﬁeld cortical model. Steyn-Ross, Steyn-Ross, and Sleigh show that                  pﬃﬃ
+their cortical mean-ﬁeld model enters a periodic, seizure-like state dominated by a     where ω ¼ 521 (the golden ratio). We set f ¼ 0:8, Q ¼ 0, and A ¼ 1:5, which
+Hopf instability when the inhibitory gap-junction diffusive-coupling strength           Venkatesan and Lakshmanan have shown lead to chaotic dynamics50. For the
+parameter is set to 0.1. Just as in the chaotic case, we simulated 2,000,000 time-      results reported in Table 2, we followed Dawes and Freeland23 in taking a linear
+points and then downsampled to 10,000 time-points. Note that Steyn-Ross, Steyn-         combination of x and θ: ϕi ¼ xi =6 þ θi =10. Results for x individually are reported
+Ross, and Sleigh estimate the largest Lyapunov exponent of their model to be            in Supplementary Table 15 (results for θ on its own are not informative, as θ is an
+around zero when the inhibitory gap-junction diffusive-coupling strength                independent, quasi-periodic process).
+parameter is 0.1, whereas our own estimate (using an automated version of their             Periodic cubic map. Venkatesan and Lakshmanan50 show that the system in Eq.
+same method—see below) placed the largest Lyapunov exponent more clearly in             (8) exhibits periodic (one-frequency torus) dynamics when f ¼ 0, Q ¼ 0, and
+the periodic regime, at −2.1.                                                           A ¼ 1. We picked these parameters for periodic dynamics. To get a time-series ϕ
+    Chaotic spiking neuron. Izhikevich49,76 describes a simple neuron model that        from the cubic map, we again took a linear combination of x and θ:
+can display both spiking and bursting behavior. The model consists of a neuron’s        ϕi ¼ xi =6 þ θi =10. Results for x and θ individually are reported in Supplementary
+membrane potential v, a membrane recovery variable u, an input current I, and           Table 15.
+parameters a, b, c, and d:                                                                  Strange non-chaotic cubic map (HH). We set f ¼ 0:7, Q ¼ 0, and A ¼ 1:88697
+                                                                                        for one type of strange non-chaotic dynamics, which Venkatesan and
+                         dv
+                            ¼ 0:004v2 þ 5v þ 140  u þ I                                Lakshmanan50 have shown bring the forced cubic map into a strange non-chaotic
+                         dt                                                      ð5Þ    regime via the Heagy-Hammel route (i.e., collision of a period-doubled quasi-
+                         du                                                             periodic torus with its unstable parent). Results for x individually are reported in
+                            ¼ aðbv  uÞ
+                         dt                                                             Supplementary Table 15.
+with the auxiliary after-spike resetting:                                                   Strange non-chaotic cubic map (S3). We set f ¼ 0:35, Q ¼ 0, and A ¼ 0:35 for a
+                                                                                        second type of strange non-chaotic dynamics, which Venkatesan and
+                                                                                       Lakshmanan50 have shown push the forced cubic map into a strange non-chaotic
+                                                       v     c
+                         if v  þ30 mV; then                                     ð6Þ    regime via Type-3 Intermittency (i.e., inverse period-doubling bifurcation). Results
+                                                   u       u þ d:
+                                                                                        for x individually are reported in Supplementary Table 15.
+When a ¼ 0:2, b ¼ 2, c ¼ 56, d ¼ 16, and I ¼ 99, the neuron’s membrane                   Period-doubled cubic map. Venkatesan and Lakshmanan50 show that the system
+potential v (which is the variable we analyze) displays chaotic spikes49,76. We         in Eq. (8) exhibits period-doubled dynamics when f ¼ 0:18, Q ¼ 0, and A ¼ 1:1.
+simulated the Izhikevich neuron using a ﬁrst-order Euler method, with an                We picked these parameters for period-doubled dynamics. To get a time-series ϕ
+integration step of 0.25 ms. We generated 50,000 time points, and dowsampled by a       from the cubic map, we again took a linear combination of x and θ:
+factor of 5 (to avoid over-sampling).                                                   ϕi ¼ xi =6 þ θi =10. Results for x individually are reported in Supplementary
+    Periodic white blood cell concentration. Inspired by the ﬁnding that chronic        Table 15.
+granulocytic leukemia involves apparently aperiodic oscillations in the                     Strange non-chaotic GOPY model. The ﬁrst known strange non-chaotic system
+concentration of circulating white blood cells77, Mackey and Glass19 study              was described by Grebogi, Ott, Pelikan, and Yorke, commonly referred to as the
+mathematical models of oscillating physiological control systems. They describe a       GOPY model51. The GOPY model is described by the following:
+simple mathematical model of the concentration of circulating white blood cells:                                    xiþ1 ¼ 2σðtanh xi Þ cosð2πθi Þ
+                                                                                                                                                                           ð9Þ
+                                 dx      x                                                                          θiþ1 ¼ θi þ ωðmod 1Þ;
+                                    ¼ a τ c  bx                                 ð7Þ                                        pﬃﬃ
+                                 dt    1 þ xτ
+                                                                                        where σ ¼ 1:5, θ ¼ 0:5, and ω ¼ 521 (the golden ratio). To get a time-series ϕ
+where a ¼ 0:2, b ¼ 0:1, and c ¼ 10. The parameter τ represents the delay between        from the GOPY model, we followed Dawes and Freeland23 in taking a linear
+white blood cell production in bone marrow and the release of those cells into the      combination of x and θ: ϕi ¼ xi =6 þ θi =10. Results for x individually are reported
+blood stream. Since this cellular generation delay time is increased in some patients   in Supplementary Table 15 (as is the case for the cubic map, results for θ on its own
+with chronic granulocytic leukemia, Mackey and Glass study the behavior of this         are not informative, as θ is an independent, quasi-periodic process).
+system as a function of the delay time τ. They ﬁnd that as τ increased, the resulting       Chaotic logistic map. The logistic map is one of the simplest known systems that
+oscillations produced by this equation became aperiodic. Through formal analysis        can exhibit both periodic and chaotic behavior. It was originally introduced by
+of Lyapunov exponents of this system, Farmer78 later conﬁrmed that for τ ¼ 10,          biologist Robert May52 as a discrete-time model of population growth. It is
+the oscillations of this system are periodic. We simulated 100,000 time-points of       described by the following equation:
+the periodic Mackey-Glass system using a ﬁrst-order Euler method with an
+                                                                                                                         xiþ1 ¼ rxi ð1  xi Þ                            ð10Þ
+integration step of 1, and then downsampled by a factor of 10 (to avoid over-
+sampling).                                                                              where xi represents the ratio of the population size at time i to the maximum
+    Chaotic white blood cell concentration. For τ ¼ 30, Farmer conﬁrmed78 that the      possible population size. For chaotic dynamics52, we set r ¼ 4.
+Mackey-Glass equation (Eq. (7)) for the concentration of circulating white blood           Periodic logistic map. For periodic dynamics52 in the logistic map, we set r ¼
+cells yields a chaotic oscillation. We simulated 100,000 time-points of the chaotic     3:5 in Eq. (10).
+
+8                                 COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio
+COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9                                                                                                             ARTICLE
+
+   Chaotic Lorenz system. Perhaps the most famous of all chaotic systems, the                       ARMA process. A general autoregressive moving-average (ARMA) process is
+Lorenz model of atmospheric convection is described by the following system of                   described by the following:
+equations53:
+                                                                                                                                           X
+                                                                                                                                           p                   X
+                                                                                                                                                               q
+
+                                      dx                                                                                  X t ¼ c þ ϵt þ          ϕi X ti þ         θi ϵti             ð18Þ
+                                         ¼ σðy  xÞ                                                                                         i¼1                i¼1
+                                      dt
+                                      dy                                                         where c is a constant, ϕ1 ; :::; ϕp and θ1 ; :::; θp are parameters, and ϵt ; ϵt1 ; ::: are
+                                         ¼ xðρ  zÞ  y                                  ð11Þ
+                                      dt                                                         white noise error terms. An ARMA process with a lag of 1, or an ARMA(1)
+                                      dz                                                         process, is:
+                                         ¼ xy  βz
+                                      dt                                                                                       X t ¼ c þ ϵt þ ϕX t1 þ θϵt1                             ð19Þ
+where x is the rate of convection, y is the horizontal temperature variation, and z is
+                                                                                                 When ϕ < 1, the ARMA process is (weakly) stationary. When ϕ is close to but less
+the vertical temperature variation. Though the equations were initially meant to
+                                                                                                 than 1 and θ ≠ 0, ARMA processes, though stationary, are often mis-classiﬁed as
+model atmospheric convection, identical equations have been found in models of a
+                                                                                                 non-stationary by stationarity tests84. All ARMA processes simulated in this paper
+wide variety of physical systems, including lasers79 and chemical reactions80. We
+                                                                                                 were lag 1, and we set c ¼ 0 and ϕ ¼ 0:99. For the analyses in Supplementary
+set σ ¼ 10, ρ ¼ 30, and β ¼ 83, for which the Lorenz system exhibits chaos
+                                                                                                 Tables 1–4 and in Table 2, we drew θ from a random, normal distribution with
+(determined by calculating the largest Lyapunov exponent of the system with these                mean μ ¼ 0 and standard deviation σ ¼ 1 for each simulation. We also tested
+parameters, using Ramasubramanian’s algorithm81). We integrated the equations                    ARMA(1) processes for θ values ﬁxed at −0.5, 0, 0.5, and 0.9 (Supplementary
+for the Lorenz system using the Fourth Order Runge-Kutta method with an                          Table 19).
+integration step of 0.01. To get a single time-series ϕ from the Lorenz model, we                   Random walk. A random walk is modeled by an autoregressive process with a
+took a linear combination of x and y: ϕ=x + y. Results for x, y, and z individually              unit root:
+are reported in Supplementary Table 15.
+    Hyperchaotic generalized Henon map. Data from hyperchaotic systems, which                                                          X t ¼ X t1 þ ϵt                                  ð20Þ
+contain more than one positive Lyapunov exponent, can be difﬁcult to distinguish
+from noise25. As such, hyperchaotic systems present a challenge to tests of                      where ϵ is a white noise error term with mean μ ¼ 0 and standard deviation σ ¼ 1.
+determinism from time-series data, which might mistake hyperchaos for                            Random walks are non-stationary.
+stochasticity. To demonstrate the robustness of the Chaos Decision Tree                              Trended random walk. A trended random walk introduces a secondary non-
+Algorithm’s stochasticity test, we analyzed the Generalized Henon Map, which is                  stationarity, namely, a linear trend, to the random walk:
+described by the following equation:                                                                                                X t ¼ X t1 þ b þ ϵt                                 ð21Þ
+                                  xiþ1 ¼ a  x2i1  bxi2                               ð12Þ    where ϵ is a white noise error term with mean μ ¼ 0 and standard deviation σ ¼ 1
+                                                                                                 and b is the slope of the linear trend. For all trended random walks simulated in
+We set a ¼ 1:76 and b ¼ 0:1, for which the Generalized Henon Map produces                        this paper, b was randomly drawn from a Gaussian distribution with mean μ ¼ 0
+hyperchaos54.                                                                                    and standard deviation σ ¼ 0:01.
+   Noise-driven sine map. Freitas and colleagues55 describe a non-chaotic,
+                                                                                                     Colored noise. Colored noise refers to a stationary, stochastic process with a
+randomly driven system:                                                                          non-uniform power spectrum. White noise has a uniform power spectrum
+                                   xiþ1 ¼ μ sinðxi Þ þ Y i ηi                            ð13Þ    (meaning equal power at all frequencies); pink noise has a power spectral density
+                                                                                                 proportional to 1f , where f is frequency; red noise has a power spectral density
+where μ ¼ 2:4, Y i is a random Bernoulli process that equals 1 with probability 0.01             proportional to f12 ; blue noise has a power spectral density proportional to f ; and
+and 0 with probability 0.99, and ηi is a random variable uniformly distributed
+between −2 and 2. Freitas and colleagues show that a chaos-detection technique                   violet noise has a power spectral density proportional to f 2 . All colored noise
+called “noise titration”82 incorrectly classiﬁes this system as chaotic.                         signals were simulated using Zhivomirov’s algorithm58, available at https://www.
+    Freitas map. Freitas and colleagues55 also describe a nonlinear correlated noise             mathworks.com/matlabcentral/ﬁleexchange/42919-pink-red-blue-and-violet-
+process, which we here call the “Freitas map.” The Freitas map contains dynamic                  noise-generation-with-matlab.
+noise added to a nonlinear moving average ﬁlter:                                                     Rössler system. The Rössler system is described by the following system of
+                                                                                                 differential equations59:
+                                viþ1 ¼ 3vi þ 4vi1 ð1  vi Þ                             ð14Þ                                     dx
+                                                                                                                                      ¼ wy  z
+where vn is a uniform random variable distributed between 0 and 1. Freitas and                                                    dt
+colleagues show that the noise titration technique also incorrectly classiﬁes this                                                dy
+                                                                                                                                      ¼ wx þ ay                                   ð22Þ
+system as chaotic.                                                                                                                dt
+    Bounded random walk. Nicolau56 describes a bounded random walk (BRW),                                                         dz
+which is a globally stationary process with local unit roots (i.e. local non-                                                         ¼ b þ zðx  cÞ
+                                                                                                                                  dt
+stationarities):
+                                                                                                 We set a ¼ 0:2, b ¼ 0:2, and c ¼ 5:7, for which the Rössler system exhibits
+                   X t ¼ X t1 þ ek ðeα1 ðX t1 τÞ  eα2 ðX t1 τÞ Þ þ σ t ϵt         ð15Þ    chaos59. w controls the frequency of the system’s oscillations, and was set to 1. We
+                                                                                                 integrated the equations for the Rössler system using the Fourth Order Runge-
+where τ, k, α1 , α2 , and σ are parameters, and ϵt is a white noise error term. Note             Kutta method with an integration step of 0.01. We generated 5,000,000 time-
+that the bounded random walk can be decomposed into a random walk,                               points, and then downsampled to 10,000 datapoints. To get a single time-series ϕ
+X t ¼ X t1 þ σ t ϵt , plus an adjustment function ek ðeα1 ðX t1 τÞ  eα2 ðX t1 τÞ Þ. The   from the Rössler model, we took a linear combination of x and y: ϕ = x + y.
+adjustment function serves to pull the random walk toward τ if the process deviates              Results for x, y, and z individually are reported in Supplementary Table 15.
+too far from τ. Though it is a stationary process (albeit with local non-                            Ikeda map. Ikeda and colleagues described a chaotic model of light passing
+stationarities), the bounded random walk is often mis-classiﬁed as non-stationary                through a nonlinear optical resonator85. The model can be simpliﬁed into a two-
+by stationarity tests83. Following Nicolau56 and Patterson83, we set τ ¼ 100,                    dimensional map86:
+k ¼ 15, α1 ¼ 3, α2 ¼ 3, and σ ¼ 0:4, which generates a random walk that
+                                                                                                                             xiþ1 ¼ 1 þ uðxi cos t i  yi sin t i Þ
+remains roughly within the interval of 100 ± 5.                                                                                                                                          ð23Þ
+    Cyclostationary process. A cyclostationary autoregressive process is essentially a                                       yiþ1 ¼ uðxi sin t i  yi cos t i Þ
+combination of a noise-driven linear damped oscillator and linear relaxators.
+                                                                                                 where u is a parameter and
+Cyclostationary systems are non-stationary because their probability distributions
+vary cyclically with time. Following Timmer57, we simulate a cyclostationary                                                                           6
+                                                                                                                                   t i ¼ 0:4                                            ð24Þ
+process described by the following:                                                                                                               1 þ x2i þ y2i
+                                X t ¼ a1 X t1 þ a2 X t2 þ ϵt                           ð16Þ    We set u ¼ 0:9, for which the Ikeda map exhibits chaos86. Table 3 reports results
+                                                                                                 for a linear combination of the two variables, ϕ = x + y. Results for x and y
+where ϵt is a white noise error term and                                                         individually are reported in Supplementary Table 15.
+                                                                                                     Hénon map. The Hénon map61 is a two-dimensional system of equations:
+                                   a1 ¼ 2 cosð2π=TÞe1=τ
+                                                                                         ð17Þ                                       xiþ1 ¼ 1  ax2i þ yi
+                                         a2 ¼ e2=τ                                                                                                                                     ð25Þ
+                                                                                                                                    yiþ1 ¼ bxi
+τ is the relaxation time and T is the oscillation period. We set τ ¼ 50 and T ¼ 10,
+which Timmer has shown leads to incorrect classiﬁcation of this system as                        We set a ¼ 1:25 and b ¼ 0:3, for which the Hénon map is periodic87. Table 3
+nonlinear or deterministic by surrogate tests that only use Fourier-based                        reports results for a linear combination of the two variables, ϕ = x + y. Results for
+surrogates, which are strictly stationary.                                                       x and y individually are reported in Supplementary Table 15.
+
+COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio                                                                                   9
+ARTICLE                                                                                   COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9
+
+
+    Periodic Poincaré oscillator. The Poincaré oscillator has been widely studied as a             A chaotic neuron integrated circuit. Data recorded from an integrated circuit
+model of biological oscillations, particularly as a model of the effect of periodic            were kindly sent to us by Seiji Uenohara and colleagues. The circuit is a physical
+stimulation on the dynamics of biological oscillators88. The oscillator is described           implementation of a chaotic neuron model that is based on the Hudgkin-Huxley
+by the following equations:                                                                    equations90. The equations governing the circuit’s behavior can be reduced to the
+                                                                                               following two-dimensional map:
+                                        dr
+                                           ¼ krð1  rÞ                                                          ζðt þ 1Þ ¼ kr ζðtÞ þ af ðζðtÞ þ b cosð2πθðtÞÞÞ þ a
+                                        dt                                              ð26Þ                                                                                     ð30Þ
+                                        dΦ                                                                      θðt þ 1Þ ¼ θðtÞ þ ω ðmod1Þ
+                                            ¼ 2Φ
+                                        dt
+                                                                                               where f ðÞ is a monotonically decreasing nonlinearpoutput
+                                                                                                                                                       ﬃﬃ     function, b controls the
+where k is a positive value that controls the oscillator’s relaxation rate. The phase of       amplitude of the quasi-periodic forcing, and ω ¼ 521 (the golden ratio). The
+this system is described by its angular coordinate ϕ in a unit cycle. Periodic
+                                                                                               quasi-periodic external forcing was inputted to the circuit using an analog board
+stimulation of the system is modeled as a perturbation of magnitude b away from
+                                                                                               PXI-6289, which was also used to record the circuit’s output. Varying the
+the unit cycle, which leads to an instantaneous resetting of the phase of the
+                                                                                               parameter b can bring the circuit into periodic, strange non-chaotic, and chaotic
+oscillator, as determined by the following phase resetting curve:
+                                                                                               states, which Uenohara and colleagues were able to classify by analyzing the
+                            1              cos 2πϕ þ b                                         consistency of the circuit’s response to an external input27. There are 10 datasets
+                  gðϕÞ ¼      arccos qﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ ðmod 1Þ   ð27Þ   recorded from the circuit’s chaotic state.
+                           2π         1 þ b2 þ 2b cos 2πϕ                                          A strange non-chaotic neuron integrated circuit. There are 10 datasets recorded
+                                                                                               from the strange non-chaotic state of Uenohara and colleagues’ circuit.
+The period of the stimulation is determined by a parameter τ. For periodic                         A periodic neuron integrated circuit. There are 10 datasets recorded from the
+dynamics, we analyze the time-varying phase of the Poincaré oscillator with b ¼                periodic state of Uenohara and colleagues’ circuit.
+1:13 and τ ¼ 0:69, which Guevara and Glass show leads to phase locking between                     Chaotic laser. Hübner and colleagues28 used phase portrait, correlation integral,
+the oscillator and the periodic perturbations41.                                               and autocorrelation function analyses to detect chaos in the intensity pulsing of an
+   Quasi-periodic Poincaré oscillator. For quasi-periodic dynamics41 in the                    unidirectional far-infrared NH3 ring laser. Laser data were downloaded from
+Poincaré oscillator, wet set b ¼ 0:95 in Eq. (20), with an inter-stimulus delay                https://www.pdx.edu/biomedical-signal-processing-lab/chaotic-time-series.
+τ ¼ 0:75.                                                                                          Stellar ﬂux of a strange non-chaotic star. We analyzed stellar ﬂux from KIC
+   Chaotic Poincaré oscillator. For chaotic dynamics41 in the Poincaré oscillator,             5520878, the only known non-artiﬁcial strange non-chaotic system29. Data were
+wet set b ¼ 1:13 and τ ¼ 0:65.                                                                 sent to us by John F. Lindner, who, together with colleagues, determined the status
+   Stochastic Lorenz system. To study the effect of dynamic noise on our                       of KIC 5520878 as a strange non-chaotic system using a series of spectral scaling
+algorithm’s classiﬁcation of stochastic chaotic systems, we took the Lorenz system             analyses29. Data were originally obtained from the Mikulski Archive for Space
+described in Eq. (11), and added intrinsic/dynamic Gaussian noise to the x                     Telescopes. Because there are large shifts in the data due to the stellar ﬂux being
+component of the system (we found that the system was far less sensitive to noise              recorded in different pixels of the Kepler Space Telescope, we visually inspected the
+being injected into the y variable):                                                           data to ﬁnd a relatively stable period (i.e. a period in between large shifts) and then
+                                    dx                                                         detrended the data. We thus exclusively analyzed time points 11,620 to 14,003 from
+                                       ¼ σðy  xÞ þ Aη                                         the dataset analzed in Lindner and colleagues’ paper29.
+                                    dt
+                                    dy                                                             North Atlantic Oscillation Index. We analyzed the monthly mean North
+                                       ¼ xðρ  zÞ  y                                   ð28Þ   Atlantic Oscillation (NAO) Index from January 1950 to December 2018. The NAO
+                                    dt                                                         Index is the difference in atmospheric pressure at sea level between the Azores high
+                                    dz                                                         and the Icelandic low, and has been shown by several groups of researchers,
+                                       ¼ xy  βz
+                                    dt                                                         employing a range of techniques, to be stochastic25,91–96. Data were downloaded
+where ηi is a normally distributed random variable with mean 0 and standard                    from the Climate Prediction Center website (http://www.cpc.ncep.noaa.gov/).
+deviation 1, and A is a parameter that controls the amplitude of the dynamic/                      Parkinson’s tremor. We analyzed recordings of a Parkinson’s patient’s hand
+intrinsic noise. As for the deterministic case, we set σ ¼ 10, ρ ¼ 30, and β ¼ 83. The         acceleration, measured for 30 s at a sampling rate of 1000 Hz by piezoresistive
+stochastic Lorenz system was simulated using the Fourth Order Runge-Kutta                      accelerometers. Through analyses of correlation integrals, Poincaré and return
+method with an integration step of 0.01. Supplementary Table 18 reports results for            maps, Lyapunov exponents, and the δ-ϵ method, Timmer and colleageus57 showed
+different values of A, both for all system variables individually and for the linear           that this Parkinson’s tremor was a nonlinear stochastic oscillator. Data were
+combination x + y.                                                                             downloaded from http://jeti.uni-freiburg.de/path_tremor/readme.
+    Stochastic Rössler system. We also took the Rössler system described in Eq. (22),              Essential tremor. We analyzed recordings of hand acceleration from a patient
+and added dynamical Gaussian noise to the x component of the system:                           with an essential tremor, also measured for 30 seconds at a sampling rate of 1000
+                                                                                               Hz by piezoresistive accelerometers. As they did with the Parkinson’s tremor,
+                                    dx                                                         Timmer and colleagues used correlation integrals, Poincaré and return maps,
+                                       ¼ σðy  xÞ þ Aη                                         Lyapunov exponents, and the δ-ϵ method to show that this essential tremor was a
+                                    dt
+                                    dy                                                         nonlinear stochastic oscillator. Data were downloaded from http://jeti.uni-freiburg.
+                                       ¼ xðρ  zÞ  y                                   ð29Þ   de/path_tremor/readme.
+                                    dt
+                                    dz                                                             Heart rate (healthy subjects). Five heart beat (RR-interval) time-series
+                                       ¼ xy  βz                                               recordings from healthy subjects were downloaded from Physionet31: https://www.
+                                    dt                                                         physionet.org/challenge/chaos/. The signals were recorded using continuous
+where ηi is a normally distributed random variable with mean 0 and standard                    ambulatory (Holter) electrocardiograms, and are in sinus rhythm. Outliers were
+deviation 1, and A is a parameter that controls the amplitude of the dynamic/                  ﬁltered out of the data using Physionet’s WFDB software package. Though a full
+intrinsic noise. As for the deterministic case, we set a ¼ 0:2, b ¼ 0:2, and c ¼ 5:7,          24 h of data were available for each subject, we only took the ﬁrst 2.78 h of data,
+and simulated the model using the Fourth Order Runge-Kutta method with an                      corresponding to 10,000 time-points. This was both to save on computation time
+integration step of 0.01. We generated 5,000,000 time-points, and then                         and to be consistent with the length of other time-series analyzed in this paper.
+downsampled to 10,000 datapoints. Supplementary Table 18 reports results for                       Heart rate (congestive heart failure patients). Five heart beat (RR-interval) time-
+different values of A, both for all system variables individually and for the linear           series recordings from patients with congestive heart failure were downloaded from
+combination of x + y.                                                                          Physionet31. Like the healthy rate signals, these data were recorded using
+    Multivariate AR model. We generated random multivariate autoregressive (AR)                continuous ambulatory (Holter) electrocardiograms, are in sinus rhythm, and were
+models using the Multivariate Granger Causality (MVGC) toolbox89. To create                    ﬁltered for outliers. Though a full 24 h of data were available for each subject, we
+random regression matrices, we created random 5-node dense positive deﬁnite                    only took the ﬁrst 2.78 h of data.
+matrices using Matlab’s sprandsym.m function, with a graph density of 1. To                        Heart rate (atrial ﬁbrillation). Five heart beat (RR-interval) time-series
+ensure stationary dynamics, we used the MVGC toolbox’s var_specrad.m                           recordings from patients with congestive heart failure were downloaded from
+function to decay the coefﬁcients of the random dense positive deﬁnite matrices so             Physionet31. Like the healthy rate signals, these data were recorded using
+that their spectral radii were 0.8. To ensure uncorrelated noise in the resulting AR           continuous ambulatory (Holter) electrocardiograms and were ﬁltered for outliers,
+model, we created error matrices with diagonal elements set to 1 and off-diagonal              but are not in sinus rhythm. We only took the ﬁrst 2.78 h of data, corresponding to
+elements set to 0. We then inputted these regression and error matrices into the               10,000 time-points.
+MVGC toolbox’s var_to_tsdata.m function to create multivariate time-series
+with 5 nodes and 10,000 time-points. We then applied the Chaos Decision Tree
+                                                                                               Parameters and largest Lyapunov exponents for data in Table 5. We here
+Algorithm to just the univariate activity of the ﬁrst node of the resulting
+                                                                                               describe the methods used to generate data with different degrees of chaos for the
+multivariate signal.
+                                                                                               analyses reported in Table 5, as well as the methods used to calculate largest Lya-
+                                                                                               punov exponents in these systems.
+Empirical data. We here describe the real-world data analyzed in this paper, and                  Logistic map. The logistic map has only a single parameter, r (see above).
+how these data were previously classiﬁed as stochastic, periodic, or chaotic:                  Following Bandt and Pompe32, we varied r between 3.5 and 4, in intervals of 0.001,
+
+10                                    COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio
+COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9                                                                                              ARTICLE
+
+to generate 501 10,000 time-point signals with different levels of chaos. Ground-          Reporting summary. Further information on research design is available in
+truth largest Lyapunov exponents were calculated using the derivative method,              the Nature Research Reporting Summary linked to this article.
+which does not involve generating time-series data.
+    Hénon map. To generate different degrees of chaos in the Hénon map, we
+varied its a parameter (see above) between 1 and 1.4, in intervals of 0.001, to            Data availability
+generate 401 10,000 time-point signals with different degrees of chaos. Ground-            Links to Matlab scripts for simulating the mean-ﬁeld cortical model and NF-κB
+truth largest Lyapunov exponents were calculated using code provided in                    transcription are provided in the Methods. Matlab scripts for simulating all other systems
+Dynamical Systems with Applications using Matlab97, available at https://github.           described in this paper are provided along with the code for the Chaos Decision Tree
+com/springer-math/Dynamical-Systems-with-Applications-using-MATLAB/.                       Algorithm at https://ﬁgshare.com/s/80891dfb34c6ee9c8b34 (DOI: doi.org/10.6084/m9.
+    Lorenz system. For the Lorenz system, we varied its σ parameter between 5.75           ﬁgshare.7476362.v7). All empirical datasets except for the integrated circuit recordings
+and 15, in intervals of 0.05, and generated 10,000 time-points per simulation.             are freely available online, and URLs to each data source are provided in the Methods.
+Within this parameter range, the Lorenz system is chaotic, but displays varying
+degrees of chaos. To calculate largest Lyapunov exponents for each parameter, we
+used the algorithm provided by Ramasubramanian81, which, like the algorithms
+                                                                                           Code availability
+                                                                                           The code for the Chaos Decision Tree Algorithm is provided at https://ﬁgshare.com/s/
+used for the logistic and Hénon maps, does not involve generating time-series data.
+                                                                                           80891dfb34c6ee9c8b34 (DOI: doi.org/10.6084/m9.ﬁgshare.7476362.v7).
+    Mean-ﬁeld cortical model. Following Steyn-Ross, Steyn-Ross, and Sleigh20,
+different levels of chaos in their mean-ﬁeld cortical model were generated by
+varying two parameters: postsynaptic inhibitory response and inhibitory diffusion.         Received: 29 March 2019; Accepted: 26 November 2019;
+The postsynaptic inhibitory response parameter (λi in their model) was varied
+between 0.98 and 1.018 in intervals of 0.001, and the inhibitory diffusion parameter
+(D2 in their model) was varied between 0.1 and 0.8 in intervals of 0.05, producing a
+total of 585 parameter conﬁgurations. We simulated 25,000 time-points in the
+model, with no downsampling, so we could again test the effect of the Chaos
+Decision Tree Algorithm’s automated downsampling on permutation entropy’
+ability to track level of chaos in continuous systems. Unfortunately, there are no         References
+tools for analytically estimating the largest Lyapunov exponent of the mean-ﬁeld           1.    Linde, A. D. Eternally existing self-reproducing chaotic inﬂanationary
+cortical model, and so largest Lyapunov exponents were approximated by running                   universe. Phys. Lett. B 175, 395–400 (1986).
+two noise-free simulations of the model for each parameter conﬁguration, with              2.    Wisdom, J., Peale, S. J. & Mignard, F. The chaotic rotation of hyperion. Icarus
+very slightly different initial conditions, and ﬁtting a line to the rate of divergence          58, 137–152 (1984).
+between the two simulations from the beginning of the simulations to the point             3.    Hudson, J. & Mankin, J. Chaos in the belousov-zhabotinskii reaction. J. Chem.
+when their divergence rate saturates and ﬂattens out. The slope of the ﬁtted line is             Phys. 74, 6171–6177 (1981).
+taken as the estimate of the largest Lyapunov exponent10. While Steyn-Ross, Steyn-         4.    Kaplan, D. T. et al. Subthreshold dynamics in periodically stimulated squid
+Ross, and Sleigh’s code for estimating largest Lyapunov exponents using this                     giant axons. Phys. Rev. Lett. 76, 4074 (1996).
+method requires subjective evaluation of where to ﬁt the line (i.e. ﬁnding the non-        5.    Glass, L. Introduction to controversial topics in nonlinear science: Is the
+saturated part of the divergence rate plot), we automated this process by ﬁtting a
+                                                                                                 normal heart rate chaotic? Chaos 19, 028501 (2009).
+line from the beginning of the divergence rate plot to the point where its mean
+                                                                                           6.    Goldberger, A. L. & West, B. J. Applications of nonlinear dynamics to clinical
+abruptly changes, reﬂecting saturation; this point was determined using Matlab’s
+                                                                                                 cardiology. Ann. N. Y. Acad. Sci. 504, 195–213 (1987).
+ﬁndchangepts.m function. Simulations with approximated largest Lyapunov
+                                                                                           7.    Skarda, C. A. & Freeman, W. J. How brains make chaos in order to make sense
+exponents less than −5 or greater than 5 were excluded from the analysis, as these
+are likely poor estimates; visual inspection conﬁrmed that for these cases, there was            of the world. Behav. Brain Sci. 10, 161–173 (1987).
+often no clear point of saturation for the divergence rate between simulations, and        8.    Pool, R. Is it healthy to be chaotic? Science 243, 604–607 (1989).
+so lines were often automatically ﬁtted to particularly steep, short sub-segments of       9.    Korn, H. & Faure, P. Is there chaos in the brain? ii. experimental evidence and
+the plot. Visual inspection further conﬁrmed that in most other cases, there was a               related models. C. R. Biol. 326, 787–840 (2003).
+clear, linear rate of divergence between simulations followed by saturation, and that      10.   Destexhe, A. Oscillations, complex spatiotemporal behavior, and information
+the automatically ﬁtted line was a good ﬁt.                                                      transport in networks of excitatory and inhibitory neurons. Phys. Rev. E 50,
+    Neuron integrated circuit. The integrated circuit data analyzed in Table 5 are the           1594 (1994).
+same as those analyzed in Table 4. Because the circuit is a physical implementation        11.   Lizier, J.T., Prokopenko, M. & Zomaya, A.Y. The information dynamics
+of a known and simple two-dimensional system of equations, Uenuhara and                          of phase transitions in random boolean networks. In ALIFE, 374–381
+colleagues used those equations to calculate the ground-truth largest Lyapunov                   (2008).
+exponents of the circuit in its three different states (periodic, strange non-chaotic,     12.   Nagao, N., Nishimura, H. & Matsui, N. A neural chaos model of multistable
+and chaotic), and report those largest Lyapunov exponents in their paper27.                      perception. Neural Process. Lett. 12, 267–276 (2000).
+                                                                                           13.   Rabinovich, M. & Abarbanel, H. The role of chaos in neural systems.
+                                                                                                 Neuroscience 87, 5–14 (1998).
+                                                                                           14.   Heltberg, M. L., Krishna, S. & Jensen, M. H. On chaotic dynamics in
+Statistics and reproducibility. In reporting the performance of the Chaos                        transcription factors and the associated effects in differential gene regulation.
+Decision Tree Algorithm, we only made recourse to statistical tests in Table 5                   Nat. Commun. 10, 71 (2019).
+and Supplementary Table 14, where we report the (two-tailed) p-values of                   15.   Glass, L. & Mackey, M.C. From clocks to chaos: The rhythms of life (Princeton
+Spearman correlations between largest Lyapunov exponents and permutation                         University Press, 1988).
+entropies. Because these correlations were calculated against the same set of
+                                                                                           16.   Guevara, M. R., Glass, L. & Shrier, A. Phase locking, period-doubling
+ground-truth largest Lyapunov exponents for each system, p-values were
+                                                                                                 bifurcations, and irregular dynamics in periodically stimulated cardiac cells.
+Bonferroni-corrected for multiple comparisons. Elsewhere, we only report the
+                                                                                                 Science 214, 1350–1353 (1981).
+fraction out of all datasets that were correctly classiﬁed as stochastic, periodic, or
+                                                                                           17.   Hayashi, H. & Ishizuka, S. Chaotic nature of bursting discharges in the
+chaotic (with exact sample sizes provided in all tables). Within the Chaos
+Decision Tree Algorithm itself, statistical tests appear in two locations. First, if             onchidium pacemaker neuron. J. Theor. Biol. 156, 269–291 (1992).
+the user chooses to test for stationarity, then the pipeline will only proceed to          18.   Hayashi, H., Nakao, M. & Hirakawa, K. Chaos in the self-sustained oscillation
+test for stochasticity if the test signal passes a (two-tailed) stationarity test with α         of an excitable biological membrane under sinusoidal stimulation. Phys. Lett.
+= 0.05. Moreover, the pipeline uses surrogate statistics to test for determinism: if             A 88, 265–266 (1982).
+the permutation entropy of the inputted signal lies outside the distribution of            19.   Mackey, M. C. & Glass, L. Oscillation and chaos in physiological control
+permutation entropies of 1000 surrogates (which is equivalent to a two-tailed                    systems. Science 197, 287–289 (1977).
+statistical test with α = 9.99e−4), then the data are classiﬁed as being generated         20.   Steyn-Ross, M. L., Steyn-Ross, D. A. & Sleigh, J. W. Interacting Turing-Hopf
+by a predominantly deterministic system. No sample size calculation was per-                     instabilities drive symmetry-breaking transitions in a mean-ﬁeld model of the
+formed before analyzing the data presented, as our results simply report clas-                   cortex: a mechanism for the slow oscillation. Phys. Rev. X 3, 021005 (2013).
+siﬁcation accuracy for a large number of datasets (and no statistical analyses             21.   Toker, D. The chaos decision tree algorithm. https://doi.org/10.6084/m9.
+were performed beyond reporting classiﬁcation accuracy). No data were exclu-                     ﬁgshare.7476362.v7 (2019).
+ded from the analysis. Data in Tables 1, 2 were used to optimize our algorithm,            22.   Chan, K.-S. & Tong, H. Chaos: a statistical perspective (Springer Science &
+which was then re-tested on datasets in Tables 3, 4. Finally, note that no p-value               Business Media, 2013).
+is associated with the K-statistic outputted by the 0–1 test for chaos. To facilitate      23.   Dawes, J. H. P. & Freeland, M. C. The ‘0–1 test for chaos’ and strange
+the reproducibility of our analyses, we have included code alongside our pipe-                   nonchaotic attractors. preprint https://people.bath.ac.uk/jhpd20/publications/
+line, as well as links to code in our Methods, for generating all simulated datasets             sna.pdf (2008).
+tested in this paper. Links to most empirical datasets analyzed here have been             24.   Hu, J., Tung, W.-w, Gao, J. & Cao, Y. Reliability of the 0-1 test for chaos. Phys.
+provided in the Methods.                                                                         Rev. E 72, 056207 (2005).
+
+
+COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio                                                                        11
+ARTICLE                                                                             COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9
+
+
+25. Kulp, C. & Zunino, L. Discriminating chaotic and stochastic dynamics                 54. Richter, H. The generalized henon maps: examples for higher-dimensional
+    through the permutation spectrum test. Chaos: an Interdisciplinary. J.                   chaos. Int. J. Bifurc. Chaos 12, 1371–1384 (2002).
+    Nonlinear Sci. 24, 033116 (2014).                                                    55. Freitas, U. S., Letellier, C. & Aguirre, L. A. Failure in distinguishing colored
+26. Timmer, J., Häußler, S., Lauk, M. & Lücking, C.-H. Pathological tremors:                 noise from chaos using the “noise titration” technique. Phys. Rev. E 79, 035201
+    deterministic chaos or nonlinear stochastic oscillators? Chaos: An                       (2009).
+    Interdisciplinary. J. Nonlinear Sci. 10, 278–288 (2000).                             56. Nicolau, J. Stationary processes that look like random walks the bounded
+27. Uenohara, S. et al. Experimental distinction between chaotic and strange                 random walk process in discrete and continuous time. Econom. Theory 18,
+    nonchaotic attractors on the basis of consistency. Chaos: an Interdisciplinary.          99–118 (2002).
+    J. Nonlinear Sci. 23, 023110 (2013).                                                 57. Timmer, J. Power of surrogate data testing with respect to nonstationarity.
+28. Huebner, U., Abraham, N. & Weiss, C. Dimensions and entropies of chaotic                 Phys. Rev. E 58, 5153 (1998).
+    intensity pulsations in a single-mode far-infrared nh 3 laser. Phys. Rev. A 40,      58. Zhivomirov, H. A method for colored noise generation. Rom. J. Acoust. Vib.
+    6354 (1989).                                                                             15, 14–19 (2018).
+29. Lindner, J. F. et al. Strange nonchaotic stars. Phys. Rev. Lett. 114, 054101         59. Rössler, O. E. An equation for continuous chaos. Phys. Lett. A 57, 397–398
+    (2015).                                                                                  (1976).
+30. Hurrell, J. W., Kushnir, Y., Ottersen, G. & Visbeck, M. An overview of the           60. Hammel, S., Jones, C. & Moloney, J. Global dynamical behavior of the optical
+    North Atlantic Oscillation. North Atl. Oscillation: Climatic Signiﬁcance                 ﬁeld in a ring cavity. JOSA B 2, 552–564 (1985).
+    Environ. Impact 134, 1–35 (2003).                                                    61. Hénon, M. in The Theory of Chaotic Attractors, 94–102 (Springer, 1976).
+31. Goldberger, A. L. et al. Physiobank, Physiotoolkit, and Physionet: components        62. Kulp, C. W. & Smith, S. Characterization of noisy symbolic time series. Phys.
+    of a new research resource for complex physiologic signals. Circulation 101,             Rev. E 83, 026201 (2011).
+    e215–e220 (2000).                                                                    63. Bernardini, D. & Litak, G. An overview of 0-1 test for chaos. J. Braz. Soc.
+32. Bandt, C. & Pompe, B. Permutation entropy: a natural complexity measure for              Mech. Sci. Eng. 38, 1433–1450 (2016).
+    time series. Phys. Rev. Lett. 88, 174102 (2002).                                     64. Zunino, L. & Kulp, C. W. Detecting nonlinearity in short and noisy time series
+33. Theiler, J., Eubank, S., Longtin, A., Galdrikian, B. & Farmer, J. D. Testing for         using the permutation entropy. Phys. Lett. A 381, 3627–3635 (2017).
+    nonlinearity in time series: the method of surrogate data. Phys. D: Nonlinear        65. Riedl, M., Müller, A. & Wessel, N. Practical considerations of permutation
+    Phenom. 58, 77–94 (1992).                                                                entropy. Eur. Phys. J. Spec. Top. 222, 249–262 (2013).
+34. Lancaster, G., Iatsenko, D., Pidde, A., Ticcinelli, V. & Stefanovska, A. Surrogate   66. Leontitsis, A. Chaotic systems toolbox, https://www.mathworks.com/
+    data for hypothesis testing of physical systems. Phys. Rep. 748, 1–60 (2018).            matlabcentral/ﬁleexchange/1597-chaotic-systems-toolbox. (2004).
+35. Jamšek, J., Paluš, M. & Stefanovska, A. Detecting couplings between                  67. Matthews, P. 0–1 test for chaos. https://www.mathworks.com/matlabcentral/
+    interacting oscillators with time-varying basic frequencies: Instantaneous               ﬁleexchange/25050-0-1-test-for-chaos. (2009).
+    wavelet bispectrum and information theoretic approach. Phys. Rev. E 81,              68. EyébéFouda, J. S. A., Bodo, B., Sabat, S. L. & Effa, J. Y. A modiﬁed 0-1 test for
+    036207 (2010).                                                                           chaos detection in oversampled time series observations. Int. J. Bifurc. Chaos
+36. Schreiber, T. Extremely simple nonlinear noise-reduction method. Phys. Rev.              24, 1450063 (2014).
+    E 47, 2401 (1993).                                                                   69. Hawkins, R. Permutation entropies and chaos. https://pdfs.semanticscholar.
+37. Gottwald, G.A. & Melbourne, I. in Proceedings of the Royal Society of London             org/e5d9/65c915e62694a3a8a99863477911cc837992.pdf (2015).
+    A: Mathematical, Physical and Engineering Sciences, vol. 460, 603–611 (The           70. Politi, A. Quantifying the dynamical complexity of chaotic time series. Phys.
+    Royal Society, 2004).                                                                    Rev. Lett. 118, 144101 (2017).
+38. Gottwald, G. A. & Melbourne, I. Testing for chaos in deterministic systems           71. Bandt, C., Keller, G. & Pompe, B. Entropy of interval maps via permutations.
+    with noise. Phys. D: Nonlinear Phenom. 212, 100–110 (2005).                              Nonlinearity 15, 1595 (2002).
+39. Gottwald, G. A. & Melbourne, I. On the implementation of the 0–1 test for            72. Keller, K., Unakafov, A. M. & Unakafova, V. A. On the relation of KS entropy
+    chaos. SIAM J. Appl. Dynamical Syst. 8, 129–145 (2009).                                  and permutation entropy. Phys. D: Nonlinear Phenom. 241, 1477–1481
+40. Gottwald, G. A. & Melbourne, I. Comment on “reliability of the 0-1 test for              (2012).
+    chaos”. Phys. Rev. E 77, 028201 (2008).                                              73. Pesin, Y. B. Characteristic Lyapunov exponents and smooth ergodic theory.
+41. Guevara, M. R. & Glass, L. Phase locking, period doubling bifurcations and               Russian Math. Surv. 32, 55–114 (1977).
+    chaos in a mathematical model of a periodically driven oscillator: A theory for      74. Liley, D. T., Cadusch, P. J. & Wright, J. J. A continuum theory of electro-
+    the entrainment of biological oscillators and the generation of cardiac                  cortical activity. Neurocomputing 26, 795–800 (1999).
+    dysrhythmias. J. Math. Biol. 14, 1–23 (1982).                                        75. Liley, D. T., Cadusch, P. J. & Daﬁlis, M. P. A spatially continuous mean
+42. Horio, Y., Aihara, K. & Yamamoto, O. Neuron-synapse IC chip-set for large-               ﬁeld theory of electrocortical activity. Netw.: Comput. Neural Syst. 13, 67–113
+    scale chaotic neural networks. IEEE Trans. Neural Netw. 14, 1393–1404                    (2002).
+    (2003).                                                                              76. Izhikevich, E. M. Which model to use for cortical spiking neurons? IEEE
+43. Trostel, M. L., Misplon, M. Z., Aragoneses, A. & Pattanayak, A. K.                       Trans. Neural Netw. 15, 1063–1070 (2004).
+    Characterizing complex dynamics in the classical and semi-classical dufﬁng           77. Gatti, A. et al. Cyclically changing phenomenon of cancer cells in an untreated
+    oscillator using ordinal patterns analysis. Entropy 20, 40 (2018).                       hemophilia patient. Blood 41, 771–773 (1973).
+44. Amigó, J. M. The equality of Kolmogorov-Sinai entropy and metric permutation         78. Farmer, J. D. Chaotic attractors of an inﬁnite-dimensional dynamical system.
+    entropy generalized. Phys. D: Nonlinear Phenom. 241, 789–793 (2012).                     Phys. D: Nonlinear Phenom. 4, 366–393 (1982).
+45. Baillie, R. T., Cecen, A. A. & Erkal, C. Normal heartbeat series are nonchaotic,     79. Haken, H. Analogy between higher instabilities in ﬂuids and lasers. Phys. Lett.
+    nonlinear, and multifractal: New evidence from semiparametric and                        A 53, 77–78 (1975).
+    parametric tests. Chaos: An Interdisciplinary. J. Nonlinear Sci. 19, 028503          80. Poland, D. Cooperative catalysis and chemical chaos: a chemical model for the
+    (2009).                                                                                  Lorenz equations. Phys. D: Nonlinear Phenom. 65, 86–99 (1993).
+46. Zhang, J., Holden, A., Monfredi, O., Boyett, M. R. & Zhang, H. Stochastic            81. Ramasubramanian, K. & Sriram, M. A comparative study of computation of
+    vagal modulation of cardiac pacemaking may lead to erroneous identiﬁcation               Lyapunov spectra with different algorithms. Phys. D: Nonlinear Phenom. 139,
+    of cardiac “chaos”. Chaos 19, 028509 (2009).                                             72–86 (2000).
+47. Ovchinnikov, I. Introduction to supersymmetric theory of stochastics. Entropy        82. Poon, C. S., & Barahona, M. Titration of chaos with added noise. Proceedings
+    18, 108 (2016).                                                                          of the national academy of sciences, 98, 7107–7112. (2001).
+48. Letellier, C. & Aguirre, L. A. Investigating nonlinear dynamics from time            83. Patterson, K. Unit Root Tests in Time Series Volume 2: Extensions and
+    series: The inﬂuence of symmetries and the choice of observables. Chaos 12,              Developments, vol. 2 (Palgrave Macmillan, 2012).
+    549–558 (2002).                                                                      84. Patterson, K. Unit Root Tests in Time Series Volume 1: Key Concepts and
+49. Izhikevich, E. M. Simple model of spiking neurons. IEEE Trans. Neural Netw.              Problems (Springer, 2011).
+    14, 1569–1572 (2003).                                                                85. Ikeda, K., Daido, H. & Akimoto, O. Optical turbulence: chaotic behavior of
+50. Venkatesan, A. & Lakshmanan, M. Interruption of torus doubling bifurcation               transmitted light from a ring cavity. Phys. Rev. Lett. 45, 709 (1980).
+    and genesis of strange nonchaotic attractors in a quasiperiodically forced           86. Galias, Z. Rigorous investigation of the Ikeda map by means of interval
+    map: Mechanisms and their characterizations. Phys. Rev. E 63, 026219                     arithmetic. Nonlinearity 15, 1759 (2002).
+    (2001).                                                                              87. Ivancevic, V. G. & Ivancevic, T. T. Computational mind: a complex dynamics
+51. Grebogi, C., Ott, E., Pelikan, S. & Yorke, J. A. Strange attractors that are not         perspective, vol. 60 (Springer, 2007).
+    chaotic. Phys. D: Nonlinear Phenom. 13, 261–268 (1984).                              88. Glass, L. in Nonlinear dynamics in physiology and medicine, 123–148
+52. May, R. M. Simple mathematical models with very complicated dynamics.                    (Springer, 2003).
+    Nature 261, 459 (1976).                                                              89. Barnett, L. & Seth, A. K. The MVGC multivariate Granger causality toolbox: a
+53. Lorenz, E. N. Deterministic nonperiodic ﬂow. J. Atmos. Sci. 20, 130–141                  new approach to Granger-causal inference. J. Neurosci. methods 223, 50–68
+    (1963).                                                                                  (2014).
+
+
+12                                COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio
+COMMUNICATIONS BIOLOGY | https://doi.org/10.1038/s42003-019-0715-9                                                                                              ARTICLE
+
+90. Aihara, K., Takabe, T. & Toyoda, M. Chaotic neural networks. Phys. Lett. A            Competing interests
+    144, 333–340 (1990).                                                                  The authors declare no competing interests.
+91. Fernández, I., Hernández, C. N. & Pacheco, J. M. Is the North Atlantic Oscillation
+    just a pink noise? Phys. A: Stat. Mech. its Appl. 323, 705–714 (2003).
+92. Stephenson, D. B., Pavan, V. & Bojariu, R. Is the North Atlantic Oscillation a
+                                                                                          Additional information
+                                                                                          Supplementary information is available for this paper at https://doi.org/10.1038/s42003-
+    random walk? Int. J. Climatol. 20, 1–18 (2000).
+                                                                                          019-0715-9.
+93. Collette, C. & Ausloos, M. Scaling analysis and evolution equation of the
+    North Atlantic Oscillation index ﬂuctuations. Int. J. Mod. Phys. C. 15,
+                                                                                          Correspondence and requests for materials should be addressed to D.T.
+    1353–1366 (2004).
+94. Lind, P. G., Mora, A., Haase, M. & Gallas, J. A. Minimizing stochasticity in the
+                                                                                          Reprints and permission information is available at http://www.nature.com/reprints
+    NAO index. Int. J. Bifurc. Chaos 17, 3461–3466 (2007).
+95. Martínez Santafé, M. D., Lana Pons, F. J., Burgueño, A. & Serra de Larrocha,
+                                                                                          Publisher’s note Springer Nature remains neutral with regard to jurisdictional claims in
+    C. Predictability of the monthly North Atlantic Oscillation index based on
+                                                                                          published maps and institutional afﬁliations.
+    fractal analyses and dynamic system theory. Nonlinear Proc. Geophys. 17,
+    93–101 (2010).
+96. Fernández, I., Pacheco, J. M. & Quintana, M. P. Pinkness of the North Atlantic
+    Oscillation signal revisited. Phys. A: Stat. Mech. its Appl. 389, 5801–5807 (2010).
+97. Lynch, S. Dynamical systems with applications using Matlab® (Springer, 2014).                           Open Access This article is licensed under a Creative Commons
+                                                                                                            Attribution 4.0 International License, which permits use, sharing,
+                                                                                          adaptation, distribution and reproduction in any medium or format, as long as you give
+Acknowledgements                                                                          appropriate credit to the original author(s) and the source, provide a link to the Creative
+We thank Seiji Uenohara and colleagues for kindly sending us data recorded from their     Commons license, and indicate if changes were made. The images or other third party
+chaotic neuron integrated circuit, and we thank John F. Lindner for sending us data on    material in this article are included in the article’s Creative Commons license, unless
+the stellar ﬂux of KIC 5520878. We also thank Michael Jansson for his feedback on         indicated otherwise in a credit line to the material. If material is not included in the
+stationarity testing.                                                                     article’s Creative Commons license and your intended use is not permitted by statutory
+                                                                                          regulation or exceeds the permitted use, you will need to obtain permission directly from
+                                                                                          the copyright holder. To view a copy of this license, visit http://creativecommons.org/
+Author contributions                                                                      licenses/by/4.0/.
+D.T. conceived of the project, wrote the code for the Chaos Decision Tree Algorithm,
+analyzed results, and wrote the manuscript. F.T.S. and M.D. contributed to discussing,
+editing, and revising the paper.                                                          © The Author(s) 2020
+
+
+
+
+COMMUNICATIONS BIOLOGY | (2020)3:11 | https://doi.org/10.1038/s42003-019-0715-9 | www.nature.com/commsbio                                                                        13
+
