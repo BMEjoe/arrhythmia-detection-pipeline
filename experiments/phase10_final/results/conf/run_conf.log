@@ -685,3 +685,14 @@ spike: 1328 tasks to run (0 done)
   spike 1325/1328 384.7 min; eta 0.9 min
   spike 1328/1328 384.8 min; eta 0.0 min
 robust: 331 tasks to run (0 done)
+  robust 25/331 14.1 min; eta 172.1 min
+/home/user/arrhythmia-detection-pipeline/final_pipeline.py:904: RuntimeWarning: divide by zero encountered in divide
+  E2 = Estar[1:] / Estar[:-1]
+  robust 50/331 25.4 min; eta 142.8 min
+  robust 75/331 36.8 min; eta 125.7 min
+  robust 100/331 48.6 min; eta 112.2 min
+/home/user/arrhythmia-detection-pipeline/final_pipeline.py:1006: RuntimeWarning: Mean of empty slice
+  y = np.nanmean(log_div, axis=0)
+  robust 125/331 60.4 min; eta 99.5 min
+/home/user/arrhythmia-detection-pipeline/final_pipeline.py:904: RuntimeWarning: divide by zero encountered in divide
+  E2 = Estar[1:] / Estar[:-1]
