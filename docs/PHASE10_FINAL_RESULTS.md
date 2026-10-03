@@ -13,7 +13,8 @@ figures.
 
 **Final-refinement errata.** Eleven text corrections (E2–E12) were made after independent verification
 (`experiments/final_refinement/VERIFICATION.md`, `ERRATA.md`). Each corrected passage is marked
-`[Erratum En]`. No table, analysis output or conclusion changed.
+`[Erratum En]`. No table, analysis output or conclusion changed. One further finding, E14 (Conclusion 8 is
+broader than its evidence), is recorded in `ERRATA.md` and left unchanged here for the author's decision.
 
 ## 1. Summary
 

@@ -54,6 +54,23 @@ titration ORs in PHASE10 Section 7 use different working correlations (`ERRATA.m
 
 No raw PhysioNet file is committed (checked over the full git history: no `.dat`, `.hea`, `.atr`, `.ecg`, `.q1c`
 file was ever added). Results, manifests and checksums are committed; the data are downloaded with
-`experiments/final_refinement/download_data.py` (SHA-256 verified). Committed derived files from MIT-BIH are
+`experiments/final_refinement/download_data.py` (SHA-256 verified against PhysioNet and the pinned manifests in
+`data_manifests/`). Committed derived files from MIT-BIH are
 detected R-peak sample indices (`phase7_mitbih/results/qc/detected_peaks.npz`), window boundaries
 (`results/qc/*.csv`) and detector timing offsets (`results/spike_in/v_offsets_samples.npy`).
+
+## 7. Phase 2E tables and plots regenerate with formatting differences
+
+`python -m experiments.phase2e.analysis` reproduces every Phase 2E value, but in this environment three tables
+differ in formatting only (Markdown column alignment of an integer column in `table_E_map_modes.md`; the last
+digit of one standard-deviation column in `table_H_lle.csv` and `table_coverage_vs_count.csv`, ~1e-17) and the 14
+plots differ in bytes. Phase 2E was produced in an environment whose pandas and matplotlib versions were not
+recorded. `reproduce.sh fast` lists these 17 files as known differences; every other regenerated file is
+byte-identical to the committed version (run of 2026-10-03, 781 s).
+
+## 8. neurokit2 0.2.13 declares pandas < 3
+
+The project runs pandas 3.0.6 with neurokit2 0.2.13 (pinned since Phase 9;
+`experiments/phase9_waveform/requirements-phase9.txt`). neurokit2 is used only for the Phase 9 delineator check,
+which ran unchanged with pandas 3.0.6. A resolver therefore reports the pinned set as inconsistent; install
+`requirements-lock.txt` with `--no-deps` (it lists every package).

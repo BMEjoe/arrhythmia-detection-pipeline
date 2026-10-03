@@ -6,7 +6,9 @@ preregistered analysis (or the analysis output) exactly; only the affected compu
 deterministically; every report and table that used the wrong number is updated; and a fix that would change a
 conclusion is not made without the author's decision.
 
-**Outcome: 13 errata. None changes any conclusion, decision, winner, or preregistered outcome.**
+**Outcome: 14 findings. E1-E13 are corrected; none of them changes any result, conclusion, decision, winner or
+preregistered outcome. E14 (the wording of Phase 10 Conclusion 8) is NOT corrected: correcting it would change a
+conclusion, so it is left for the author's decision.**
 - E1 is a tabulation deviation from a preregistered decision rule (Phase 9). Corrected by a deterministic
   re-tabulation; the decision is unchanged.
 - E2–E12 are report-text errors in `docs/PHASE10_FINAL_RESULTS.md`: a miscount, a rounding slip, and summary
@@ -30,6 +32,7 @@ conclusion is not made without the author's decision.
 | E11 | PHASE10 8.2 | "Three subjects recur from the 512-interval detections" | five of the six subjects recur (nsr029, nsr049, chf211, chf216, chf218) | T-8 | no |
 | E12 | PHASE10 6 | development nsrdb "lost only 2–6 % of positives" | 4–6 % (3.5–6.1 % over the masked, edited and Wu arms) | T-9 | no |
 | E13 | `phase10_final/results/dev/analysis/{analysis.json, tables.md}` | Q4 development robustness computed on 3 windows | 36 windows (the committed `dev/robust.jsonl`) | reproduce check (rerun of `analysis10 --phase dev`) | no |
+| E14 (**not corrected**) | PHASE10 12 #8 (Conclusion 8) | "None of the project's detectors sees continuous-flow chaos sampled as RR intervals at realistic lengths" | holds for flows sampled at fixed time steps; Mackey-Glass chaos as maxima intervals was detected (K1 26/70, K3 81/140) | X-21 | **would change Conclusion 8**: author's decision |
 
 ## E1 — Phase 9 TEST decision tabulated over 81 instead of the 101 preregistered conditions
 
@@ -158,6 +161,30 @@ robustness run only as "36 of 132 tasks", which is correct; no development Q4 nu
 
 **Fix.** `analysis10 --phase dev` and `tables10 --phase dev` were rerun (deterministic; same frozen code) and the
 regenerated files committed. **Conclusion changed?** No.
+
+## E14 — Conclusion 8 is broader than its evidence (NOT corrected; author's decision required)
+
+**What the report says (PHASE10 Section 12, Conclusion 8).** "None of the project's detectors sees
+continuous-flow chaos sampled as RR intervals at realistic lengths. Rössler and Mackey–Glass were 0 % for K1 at
+every m (Phases 5, 8). K3 needs strong low-dimensional predictability that decays within 5 beats (Phase 9)."
+
+**Evidence.** The cited results are flows sampled at fixed time steps (Phase 5 G2 Rössler, G3 Mackey-Glass
+τ = 17 sampled every 6.0; the same flows in Phase 8): K1-type AND 0/200 at m = 2, 3, 4 (checks 5-6, 8-5). But
+Phases 8 and 9 also report Mackey-Glass chaos represented as intervals between successive maxima (the Phase 8
+model's predeclared beat definition; development regimes τ = 16.5-30 evaluated at TEST seeds), and there the
+detectors did detect it (check X-21, recomputed from the raw files):
+- Phase 8, K1 (C1, 512 intervals): 26/70 at the input variant, 23/70 with isolated ectopy, 18/70 with couplets,
+  0/70 with bigeminy (`docs/PHASE8_CARDIAC_CHAOS.md` 7.3);
+- Phase 9, realistic level: K3 81/140 and K1 42/140 with isolated ectopy or couplets, 0/70 with bigeminy
+  (`docs/PHASE9_WAVEFORM_NOISE_ROBUST.md` 6); by regime, K3 20/20 at τ = 18 and τ = 20, 0-1/20 at τ = 16.5-17.
+
+**What is affected.** Only the wording of Conclusion 8 (and its mention in `docs/CONCLUSIONS_CHECKLIST.md`). No
+number, table or other conclusion depends on it. These Mackey-Glass results were secondary (development regimes,
+not out-of-sample for Phase 8, see the Phase 8 report), which may be why the conclusion did not cite them.
+
+**Why it is not corrected.** A correction (for example restricting the statement to flows sampled at fixed time
+steps and to weak, near-threshold Mackey-Glass chaos) changes what the conclusion claims. Under the error policy
+of this phase such a fix is not made without the author's decision. The report text is unchanged.
 
 ## Observations that are not errors
 
