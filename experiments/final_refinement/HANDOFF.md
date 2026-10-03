@@ -55,13 +55,16 @@ to "Open items" in `docs/FINAL_SUMMARY.md`.
 | Part 3 make_figures.py: F1-F6, S1-S8 (PDF + 300-dpi PNG), tables T1-T9 + S tables, FIGURE_NOTES.md; byte-stable on rerun | done | a7351e3 |
 | groundrule_check.sh complete: 462+1 / 463 / replicate 44/44 / replicability.json identical | done | (recorded) |
 | E13: Phase 10 dev analysis.json/tables.md regenerated (were stale vs committed dev robust.jsonl) | done | a4c56bc |
-| Part 4: reproduce.sh (fast verified: 781 s, all byte-identical except 17 known Phase 2E formatting files), download_data.py + data_manifests (licences ODC-By 1.0 checked on PhysioNet), requirements-lock.txt (--no-deps), CITATION.cff (validated), README | done | 0b3c338 + (this commit) |
-| E14 (Conclusion 8 wording vs MG maxima-interval detections, check X-21): documented, NOT corrected | done | (this commit) |
-| Part 5: docs/RESULTS_INDEX.md, CONCLUSIONS_CHECKLIST.md, AI_USE_RECORD.md, SOURCES_USED.md | done | (this commit) |
+| Part 4: reproduce.sh (fast verified: 781 s, all byte-identical except 17 known Phase 2E formatting files), download_data.py + data_manifests (licences ODC-By 1.0 checked on PhysioNet), requirements-lock.txt (--no-deps), CITATION.cff (validated), README | done | 0b3c338 + 3015a21 |
+| E14 (Conclusion 8 wording vs MG maxima-interval detections, check X-21): documented, NOT corrected | done | 3015a21 |
+| Part 5: docs/RESULTS_INDEX.md, CONCLUSIONS_CHECKLIST.md, AI_USE_RECORD.md, SOURCES_USED.md | done | 3015a21 |
+| Provenance: pinned mitdb manifest = Phase 7 DATA_MANIFEST hashes (144/144) | done | (recorded) |
+| FINISH: docs/FINAL_SUMMARY.md (340 checks: 327 MATCH, 13 MISMATCH; E1-E13 corrected, E14 for the author; figures, tables, reproduction, open items); tag `paper-v1` | done | (this commit, tagged) |
 
 ## Resume
 - Environment: see above (statsmodels 0.15.0 installed after the pytest baseline, as in Phase 10).
-- Next: docs/FINAL_SUMMARY.md, then tag `paper-v1` and push the tag.
+- Final refinement complete; tag `paper-v1` on this branch. Waiting on the author: E14 (Conclusion 8 wording),
+  licence choice, open items in docs/FINAL_SUMMARY.md 5. Not merged into main; no pull request.
 - `bash reproduce.sh fast` rewrites Phase 2E tables/plots with formatting-only differences; restore them with
   `git checkout -- experiments/phase2e` before committing.
 - Re-run everything from stored results: `python -m experiments.final_refinement.verify_all`,
