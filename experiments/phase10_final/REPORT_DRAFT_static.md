@@ -209,3 +209,45 @@ subjects show more titration positives at night, but the effect is weaker than i
   failure mode at coarse quantization and low variability. Phase 9 tested K3 only at 1/360 s.
 - **Clustering.** Three detections come from one healthy subject (nsr049).
 - **Close calls.** 34 windows passed the determinism threshold (z ≥ 9.45). The growth gate removed 26.
+
+## 6. Question 2c–2d: noise titration on the confirmatory databases (P2)
+
+12-min segments (Wu et al. 2009 segmentation), 9,536 segments, of which 8,993 were analysable
+(intervals outside [0.25, 3.0] s cover < 10 % and ≥ 400 intervals remain); 54 NSR and 29 CHF
+subjects. DR = per-subject fraction of titration-positive (NL > 0) segments; group values are means of
+subject DRs with subject-cluster bootstrap 95 % CIs.
+
+| arm | NSR DR [95 % CI] | CHF DR [95 % CI] | CHF − NSR [95 % CI] | permutation p |
+|---|---|---|---|---|
+| **raw RR (P2)** | **51.7 % [46.0, 57.7]** | **74.2 % [66.5, 81.4]** | **+22.4 % [+12.8, +31.7]** | 0.0001 |
+| masked, K3 rule (analysable segments) | 25.7 % [20.9, 30.9] | 20.8 % [13.8, 28.5] | −4.9 % [−13.7, +4.3] | 0.29 |
+| edited, Phase 7 (eligible segments) | 28.9 % [23.9, 34.2] | 34.3 % [26.6, 42.4] | +5.4 % [−3.9, +14.7] | 0.24 |
+| Wu preprocessing (ectopy eliminated, NN concatenated) | 28.2 % [23.3, 33.4] | 31.1 % [24.5, 38.1] | +2.9 % [−5.3, +11.4] | 0.50 |
+
+| change from raw (same segments) | group | segments | raw DR → arm DR | mean change [95 % CI] | raw positives removed |
+|---|---|---|---|---|---|
+| **masked (P2)** | NSR | 5,671 | 51.8 % → 25.7 % | **−26.1 % [−32.4, −20.1]** | 49 % |
+| **masked (P2)** | CHF | 1,865 | 67.7 % → 20.8 % | **−46.8 % [−59.1, −34.5]** | 66 % |
+| masked, non-analysable counted negative | NSR / CHF | 5,964 / 3,029 | | −27.5 % / −59.6 % | 53 % / 81 % |
+| edited | NSR / CHF | 5,910 / 2,763 | | −23.0 % [−28.9, −17.4] / −36.7 % [−46.7, −26.9] | 44 % / 55 % |
+| Wu preprocessing | NSR / CHF | 5,946 / 3,017 | | −23.6 % [−29.6, −17.9] / −43.1 % [−52.7, −33.4] | 46 % / 60 % |
+
+- **On raw RR, titration finds *more* "chaos" in CHF than in healthy subjects.** This is the opposite of
+  the "decreased cardiac chaos in CHF" claim. Wu et al. reported the same direction for noise limits
+  ("transient chaos" in CHF) and tied it to ectopic beats.
+- **Masking ectopy-related intervals removes the excess.** It lowers the CHF rate by 47 points and the
+  NSR rate by 26 points, and the group difference disappears (−4.9 %, CI includes 0). Editing and
+  Wu's elimination give the same result. As predicted, masking changes CHF more than NSR.
+- **About half of the healthy subjects' raw positives are also ectopy-related.** The nsr2db subjects are
+  58–76 y and carry atrial and ventricular ectopic beats. In development, nsrdb (20–50 y, almost no ectopy)
+  lost only 2–6 % of positives.
+- **About a quarter to a third of segments stay titration-positive after ectopy is removed, in both
+  groups.** By the method's own logic this is "chaos". Phases 5–9 and Q2e show the indicator is also
+  positive for static nonlinearity and some non-chaotic forced rhythms, so these remaining positives are
+  not evidence of chaos.
+- **Noise limits.** Mean NL among positive segments: raw NSR 0.37 vs CHF 0.59; Wu arm 0.19 vs 0.33.
+- **Analysability and model fallback.** The masked arm was analysable in 95 % of NSR but only 62 % of
+  CHF segments (dense ectopy). The edited arm was eligible in 99 % / 91 %. The segment GEE (positive ~
+  burden + CHF) needed the Amendment 2 fallback: burden OR 1.99 [1.51, 2.62] per doubling, CHF OR 0.87
+  [0.55, 1.36].
+- **Night vs day** (approximate clock): NSR 55.8 % vs 50.4 %; CHF 72.0 % vs 75.1 %.
