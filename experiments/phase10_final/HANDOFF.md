@@ -69,9 +69,13 @@ Answer only Questions 1-4; new ideas go to "Future work".
 | PREREGISTRATION.md pushed BEFORE download | done | 8fc7bd9 |
 | conf download (guarded): nsr2db 54, chf2db 29, SHA OK; 128 Hz; no header start times | done | |
 | overlap10: original rule flagged 13 chance pairs -> Amendment 1 (time-consistent rule, validated) -> no exclusion | done | 4795cf6 |
-| CONF run `run10 --phase conf --part all` (real 988, seg, synth, spike, robust), log results/conf/run_conf.log | running (started 03:43 UTC) | |
+| CONF run complete (real 988, seg, synth, spike, robust) | done | f979faa |
+| conf analysis + sensitivity (flagged excluded) + tables + figures; Amendment 2 (GEE independence fallback) | done | 965a586 |
+| docs/PHASE10_FINAL_RESULTS.md assembled (sections 1-14) | done | (this commit) |
+| DEV spike (96/528) + robust (21/132) resumed with 3 workers, background; partial, reported as such in report 9.1 | partial | |
 
 ## Resume
+- Phase 10 is COMPLETE except the optional dev spike/robust completion. To finish it: rerun the dev command below, then `analysis10 --phase dev`, `tables10 --phase dev`, `figures10 --phase dev`, and update report 9.1.
 - CONF run is resumable (same command; finished ids skipped):
   `cd /home/user/arrhythmia-detection-pipeline && nohup env OMP_NUM_THREADS=1 PYTHONPATH=. /root/venv313/bin/python -m experiments.phase10_final.run10 --phase conf --part all --workers 4 >> experiments/phase10_final/results/conf/run_conf.log 2>&1 &`
   (conf data: `run10 --phase conf --download` (guarded); exclusions.json already written by `overlap10 --amended`).
