@@ -1,0 +1,31 @@
+system,variant,abnormal_beats,k,n,rate_pct,ci_lo_pct,ci_hi_pct
+henon,Chaotic RR only,Normal (< 10 %),210,211,99.5261,97.3647,99.9163
+henon,Chaotic RR only,10-20 %,37,37,100,90.5942,100
+henon,Chaotic RR only,20-30 %,28,28,100,87.9357,100
+henon,Chaotic RR only,30-50 %,21,21,100,84.5361,100
+henon,Chaotic RR only,> 50 %,8,8,100,67.5592,100
+henon,+ real ectopy,Normal (< 10 %),205,211,97.1564,93.9361,98.6904
+henon,+ real ectopy,10-20 %,26,37,70.2703,54.2169,82.5105
+henon,+ real ectopy,20-30 %,16,28,57.1429,39.0708,73.4915
+henon,+ real ectopy,30-50 %,8,21,38.0952,20.751,59.1213
+henon,+ real ectopy,> 50 %,2,8,25,7.14792,59.0725
+henon,+ real ectopy + R-peak jitter,Normal (< 10 %),208,211,98.5782,95.9039,99.5153
+henon,+ real ectopy + R-peak jitter,10-20 %,26,37,70.2703,54.2169,82.5105
+henon,+ real ectopy + R-peak jitter,20-30 %,18,28,64.2857,45.8303,79.2942
+henon,+ real ectopy + R-peak jitter,30-50 %,7,21,33.3333,17.1948,54.6265
+henon,+ real ectopy + R-peak jitter,> 50 %,2,8,25,7.14792,59.0725
+logistic,Chaotic RR only,Normal (< 10 %),208,211,98.5782,95.9039,99.5153
+logistic,Chaotic RR only,10-20 %,37,37,100,90.5942,100
+logistic,Chaotic RR only,20-30 %,28,28,100,87.9357,100
+logistic,Chaotic RR only,30-50 %,21,21,100,84.5361,100
+logistic,Chaotic RR only,> 50 %,8,8,100,67.5592,100
+logistic,+ real ectopy,Normal (< 10 %),204,211,96.6825,93.3117,98.3839
+logistic,+ real ectopy,10-20 %,35,37,94.5946,82.2953,98.5049
+logistic,+ real ectopy,20-30 %,25,28,89.2857,72.8041,96.2882
+logistic,+ real ectopy,30-50 %,9,21,42.8571,24.47,63.4534
+logistic,+ real ectopy,> 50 %,5,8,62.5,30.5742,86.3156
+logistic,+ real ectopy + R-peak jitter,Normal (< 10 %),201,211,95.2607,91.4972,97.4056
+logistic,+ real ectopy + R-peak jitter,10-20 %,34,37,91.8919,78.6993,97.2039
+logistic,+ real ectopy + R-peak jitter,20-30 %,27,28,96.4286,82.2878,99.3667
+logistic,+ real ectopy + R-peak jitter,30-50 %,12,21,57.1429,36.5466,75.53
+logistic,+ real ectopy + R-peak jitter,> 50 %,6,8,75,40.9275,92.8521

@@ -1,0 +1,61 @@
+panel,rhythm,condition,detector,source,k,n,rate_pct,ci_lo_pct,ci_hi_pct
+a,linear-Gaussian RR,No ectopy (reference),LLE,"Phase 9 TEST, input level, 512",6,100,6,2.77861,12.4768
+a,linear-Gaussian RR,No ectopy (reference),K1,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,No ectopy (reference),K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,No ectopy (reference),TIT,"Phase 10 Q2e, raw, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Isolated, 5 %",LLE,"Phase 9 TEST, input level, 512",100,100,100,96.3007,100
+a,linear-Gaussian RR,"Isolated, 5 %",K1,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Isolated, 5 %",K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Isolated, 5 %",TIT,"Phase 10 Q2e, raw, 512",5,100,5,2.15437,11.175
+a,linear-Gaussian RR,"Isolated, 10 %",LLE,"Phase 9 TEST, input level, 512",100,100,100,96.3007,100
+a,linear-Gaussian RR,"Isolated, 10 %",K1,"Phase 9 TEST, input level, 512",4,100,4,1.56633,9.83707
+a,linear-Gaussian RR,"Isolated, 10 %",K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Isolated, 10 %",TIT,"Phase 10 Q2e, raw, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Atrial-type, 5 %",LLE,"Phase 9 TEST, input level, 512",97,100,97,91.5481,98.9745
+a,linear-Gaussian RR,"Atrial-type, 5 %",K1,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Atrial-type, 5 %",K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Atrial-type, 5 %",TIT,"Phase 10 Q2e, raw, 512",2,100,2,0.550197,7.00118
+a,linear-Gaussian RR,"Atrial-type, 10 %",LLE,"Phase 9 TEST, input level, 512",90,100,90,82.5634,94.4771
+a,linear-Gaussian RR,"Atrial-type, 10 %",K1,"Phase 9 TEST, input level, 512",2,100,2,0.550197,7.00118
+a,linear-Gaussian RR,"Atrial-type, 10 %",K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Atrial-type, 10 %",TIT,"Phase 10 Q2e, raw, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Couplets, 5 %",LLE,"Phase 9 TEST, input level, 512",100,100,100,96.3007,100
+a,linear-Gaussian RR,"Couplets, 5 %",K1,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Couplets, 5 %",K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Couplets, 5 %",TIT,"Phase 10 Q2e, raw, 512",100,100,100,96.3007,100
+a,linear-Gaussian RR,"Couplets, 10 %",LLE,"Phase 9 TEST, input level, 512",100,100,100,96.3007,100
+a,linear-Gaussian RR,"Couplets, 10 %",K1,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Couplets, 10 %",K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,"Couplets, 10 %",TIT,"Phase 10 Q2e, raw, 512",100,100,100,96.3007,100
+a,linear-Gaussian RR,Runs (VT),LLE,"Phase 9 TEST, input level, 512",91,100,91,83.7738,95.1927
+a,linear-Gaussian RR,Runs (VT),K1,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,Runs (VT),K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,Runs (VT),TIT,"Phase 10 Q2e, raw, 512",96,100,96,90.1629,98.4337
+a,linear-Gaussian RR,Bigeminy,LLE,"Phase 9 TEST, input level, 512",20,100,20,13.3367,28.8829
+a,linear-Gaussian RR,Bigeminy,K1,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,Bigeminy,K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,Bigeminy,TIT,"Phase 10 Q2e, raw, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,Trigeminy,LLE,"Phase 9 TEST, input level, 512",56,100,56,46.2281,65.328
+a,linear-Gaussian RR,Trigeminy,K1,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,Trigeminy,K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,Trigeminy,TIT,"Phase 10 Q2e, raw, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,Isolated 10 % + trend,LLE,"Phase 9 TEST, input level, 512",100,100,100,96.3007,100
+a,linear-Gaussian RR,Isolated 10 % + trend,K1,"Phase 9 TEST, input level, 512",3,100,3,1.02545,8.45194
+a,linear-Gaussian RR,Isolated 10 % + trend,K3,"Phase 9 TEST, input level, 512",0,100,0,3.46945e-16,3.69935
+a,linear-Gaussian RR,Isolated 10 % + trend,TIT,"Phase 10 Q2e, raw, 512",0,100,0,3.46945e-16,3.69935
+b,non-chaotic coupled vdP,No ectopy,LLE,"Phase 9 TEST, realistic level, 512",28,150,18.6667,13.2424,25.6557
+b,non-chaotic coupled vdP,No ectopy,K1,"Phase 9 TEST, realistic level, 512",0,150,0,1.73472e-16,2.49702
+b,non-chaotic coupled vdP,No ectopy,K3,"Phase 9 TEST, realistic level, 512",0,150,0,1.73472e-16,2.49702
+b,non-chaotic coupled vdP,No ectopy,TIT,"Phase 10 Q2e, raw, input level, 512",100,600,16.6667,13.8987,19.8588
+b,non-chaotic coupled vdP,"Isolated, 5 %",LLE,"Phase 9 TEST, realistic level, 512",118,150,78.6667,71.4379,84.4638
+b,non-chaotic coupled vdP,"Isolated, 5 %",K1,"Phase 9 TEST, realistic level, 512",11,150,7.33333,4.14388,12.6536
+b,non-chaotic coupled vdP,"Isolated, 5 %",K3,"Phase 9 TEST, realistic level, 512",0,150,0,1.73472e-16,2.49702
+b,non-chaotic coupled vdP,"Isolated, 5 %",TIT,"Phase 10 Q2e, raw, input level, 512",2,600,0.333333,0.0914597,1.20714
+b,non-chaotic coupled vdP,"Couplets, 10 %",LLE,"Phase 9 TEST, realistic level, 512",146,150,97.3333,93.3446,98.9582
+b,non-chaotic coupled vdP,"Couplets, 10 %",K1,"Phase 9 TEST, realistic level, 512",24,150,16,10.994,22.704
+b,non-chaotic coupled vdP,"Couplets, 10 %",K3,"Phase 9 TEST, realistic level, 512",0,150,0,1.73472e-16,2.49702
+b,non-chaotic coupled vdP,"Couplets, 10 %",TIT,"Phase 10 Q2e, raw, input level, 512",403,600,67.1667,63.3103,70.8046
+b,non-chaotic coupled vdP,Bigeminy,LLE,"Phase 9 TEST, realistic level, 512",134,150,89.3333,83.3754,93.327
+b,non-chaotic coupled vdP,Bigeminy,K1,"Phase 9 TEST, realistic level, 512",43,150,28.6667,22.0338,36.3649
+b,non-chaotic coupled vdP,Bigeminy,K3,"Phase 9 TEST, realistic level, 512",0,150,0,1.73472e-16,2.49702
+b,non-chaotic coupled vdP,Bigeminy,TIT,"Phase 10 Q2e, raw, input level, 512",32,600,5.33333,3.80291,7.43207

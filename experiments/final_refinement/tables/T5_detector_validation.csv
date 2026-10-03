@@ -1,0 +1,33 @@
+panel,test_set,condition,detector,k,n,rate_pct,ci_lo_pct,ci_hi_pct
+a,"Phase 6, 256",Linear nulls N1-N6,K1,2,2400,0.0833333,0.022856,0.303349
+a,"Phase 6, 256",SETAR (S1),K1,0,300,0,8.67362e-17,1.2643
+a,"Phase 6, 256",Isolated ectopy 2-10 % (S2),K1,13,900,1.44444,0.846058,2.45557
+a,"Phase 6, 256",Ectopy patterns E1-E6,K1,29,2400,1.20833,0.842634,1.72998
+a,"Phase 6, 256",Edited ectopy,K1,16,1500,1.06667,0.657631,1.7257
+a,"Phase 9, 512","17 nulls, input level",K1,11,1700,0.647059,0.361691,1.15497
+a,"Phase 9, 512","17 nulls, input level",K3,0,1700,0,0,0.225459
+a,"Phase 9, 512","17 nulls, realistic level",K1,4,1700,0.235294,0.0915382,0.603448
+a,"Phase 9, 512","17 nulls, realistic level",K3,0,1700,0,0,0.225459
+a,"Phase 9, 512","Non-chaotic models, input",K1,0,1800,0,2.1684e-17,0.21296
+a,"Phase 9, 512","Non-chaotic models, input",K3,0,1800,0,2.1684e-17,0.21296
+a,"Phase 9, 512","Non-chaotic models, realistic",K1,82,4900,1.67347,1.35031,2.07234
+a,"Phase 9, 512","Non-chaotic models, realistic",K3,0,4900,0,0,0.0783357
+b,"Phase 6, 256",Hénon map (P1),K1,300,300,100,98.7357,100
+b,"Phase 6, 256",Logistic map (P2),K1,294,300,98,95.706,99.0802
+b,"Phase 6, 256",Maps + trend (P3),K1,571,600,95.1667,93.1447,96.6139
+b,"Phase 6, 256",Maps + noise 30/20 dB (P4),K1,1179,1200,98.25,97.3395,98.8526
+b,"Phase 6, 256",Lorenz maxima (G1),K1,291,300,97,94.3977,98.4138
+b,"Phase 6, 256",Rössler flow (G2),K1,0,300,0,8.67362e-17,1.2643
+b,"Phase 6, 256",Mackey-Glass flow (G3),K1,0,300,0,8.67362e-17,1.2643
+b,"Phase 9, 512",Coupled vdP + ectopy,K1,41,360,11.3889,8.50699,15.0861
+b,"Phase 9, 512",Coupled vdP + ectopy,K3,73,360,20.2778,16.4483,24.7348
+b,"Phase 9, 512",Phase-reset + ectopy,K1,33,630,5.2381,3.75384,7.26491
+b,"Phase 9, 512",Phase-reset + ectopy,K3,17,630,2.69841,1.69147,4.27871
+b,"Phase 9, 512",KTz (T-wave chaos),K1,0,330,0,0,1.15068
+b,"Phase 9, 512",KTz (T-wave chaos),K3,0,330,0,0,1.15068
+b,"Phase 9, 512","Coupled vdP, input level",K1,7,120,5.83333,2.8541,11.5526
+b,"Phase 9, 512","Coupled vdP, input level",K3,34,120,28.3333,21.0406,36.9702
+b,"Phase 9, 512","Phase-reset, input level",K1,20,210,9.52381,6.24994,14.2519
+b,"Phase 9, 512","Phase-reset, input level",K3,13,210,6.19048,3.65309,10.3019
+b,"Phase 9, 512",Mackey-Glass + ectopy (DEV),K1,42,210,20,15.1507,25.9271
+b,"Phase 9, 512",Mackey-Glass + ectopy (DEV),K3,81,210,38.5714,32.2494,45.3041

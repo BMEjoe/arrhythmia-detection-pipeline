@@ -1,0 +1,13 @@
+arm,windows,decision,k,n,rate_pct,ci_lo_pct,ci_hi_pct
+Detected R peaks (primary),Abnormal windows,LLE alone,47,94,50,40.0927,59.9073
+Detected R peaks (primary),Abnormal windows,UPO alone,3,94,3.19149,1.09126,8.96731
+Detected R peaks (primary),Abnormal windows,AND,0,94,0,0,3.92621
+Detected R peaks (primary),Normal windows,LLE alone,27,211,12.7962,8.94536,17.9775
+Detected R peaks (primary),Normal windows,UPO alone,4,211,1.89573,0.739623,4.7721
+Detected R peaks (primary),Normal windows,AND,0,211,0,0,1.78804
+Annotation beat times (sensitivity),Abnormal windows,LLE alone,56,120,46.6667,37.9829,55.5572
+Annotation beat times (sensitivity),Abnormal windows,UPO alone,10,120,8.33333,4.58937,14.6622
+Annotation beat times (sensitivity),Abnormal windows,AND,6,120,5,2.31144,10.4803
+Annotation beat times (sensitivity),Normal windows,LLE alone,34,248,13.7097,9.97937,18.5471
+Annotation beat times (sensitivity),Normal windows,UPO alone,3,248,1.20968,0.412237,3.49556
+Annotation beat times (sensitivity),Normal windows,AND,0,248,0,0,1.52535

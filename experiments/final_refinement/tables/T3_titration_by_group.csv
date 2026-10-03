@@ -1,0 +1,13 @@
+arm,group,subjects,segments,rate_pct,ci_lo_pct,ci_hi_pct,perm_p
+Raw RR,Healthy (nsr2db),54,5964,51.7321,45.9614,57.7128,
+Raw RR,Heart failure (chf2db),29,3029,74.1674,66.5045,81.3822,
+Raw RR,CHF minus healthy,,,22.4353,12.7761,31.6762,9.999e-05
+Ectopy masked,Healthy (nsr2db),54,5671,25.6852,20.8692,30.8738,
+Ectopy masked,Heart failure (chf2db),27,1865,20.8336,13.8126,28.4984,
+Ectopy masked,CHF minus healthy,,,-4.85168,-13.7449,4.25152,0.289171
+Ectopy edited,Healthy (nsr2db),54,5910,28.881,23.8533,34.171,
+Ectopy edited,Heart failure (chf2db),29,2763,34.3101,26.5556,42.4071,
+Ectopy edited,CHF minus healthy,,,5.42902,-3.91308,14.6792,0.243576
+Wu-style elimination,Healthy (nsr2db),54,5946,28.2056,23.342,33.353,
+Wu-style elimination,Heart failure (chf2db),29,3017,31.1464,24.505,38.0662,
+Wu-style elimination,CHF minus healthy,,,2.94078,-5.3181,11.3809,0.49955

@@ -1,0 +1,9 @@
+subject,window,burden,masked_intervals,z_max,G,SDNN_ms,K1,LLE,UPO,TIT
+nsr2db:nsr029,9,0,1,2e+11,0.4,15.2549,False,True,False,False
+nsr2db:nsr049,3,0,1,14.8678,0.533333,112.074,False,True,False,True
+nsr2db:nsr049,5,0,1,11.076,0.4,102.251,False,True,False,False
+nsr2db:nsr049,6,0,3,13.8009,0.3,202.298,False,True,False,False
+nsr2db:nsr052,6,0,1,11.0988,0.333333,79.1228,False,True,False,False
+chf2db:chf211,7,0,1,9.99725,0.3,95.8925,True,True,True,True
+chf2db:chf216,2,0,0,10.5973,0.4,39.0918,False,True,False,False
+chf2db:chf218,12,5,11,16.1466,0.266667,118.902,False,True,False,False

@@ -1,0 +1,6 @@
+outcome,positives,windows,working_correlation,OR_per_doubling,OR_lo,OR_hi,p_burden,OR_CHF_adj,OR_CHF_lo,OR_CHF_hi,p_CHF,OR_unadjusted,unadjusted_working_correlation
+TIT,455,988,independence (exchangeable fit diverged; Amendment 2),2.30744,1.66713,3.1937,4.60749e-07,0.766379,0.460034,1.27672,0.306863,3.85261,exchangeable
+LLE,401,988,exchangeable,1.51492,1.31172,1.74959,1.57887e-08,0.79185,0.488419,1.28379,0.343803,1.47556,exchangeable
+UPO,31,988,exchangeable,1.16814,0.997909,1.36741,0.0531197,2.13446,1.00148,4.54922,0.0495509,1.27668,exchangeable
+K1,16,988,exchangeable,1.44101,1.09273,1.90029,0.00964785,2.32585,0.574898,9.40961,0.236529,1.55818,exchangeable
+K3,8,988,not estimated (< 10 positives),,,,,,,,,,
