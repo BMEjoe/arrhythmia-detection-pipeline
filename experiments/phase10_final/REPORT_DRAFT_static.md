@@ -114,3 +114,55 @@ read from the published figure.
   confirmatory databases: 12-min segments, elimination of ectopy-involved intervals without interpolation,
   and the routine defaults κ = 6, d = 3. Manual removal of beats is not reproducible: the RR databases have
   no ECG.
+
+## 7. Question 3: ectopy dose-response (confirmatory, 988 windows of 512 intervals, 83 subjects)
+
+Ectopy burden = annotated non-normal beats among the window's 513 beats. Model (preregistered): GEE,
+logit P(positive) = b0 + b1 log2(1 + burden) + b2 CHF, exchangeable working correlation, robust SE. For
+titration the exchangeable fit diverged and the independence working correlation was used (Amendment 2).
+
+| outcome | positive windows | OR per doubling of (1 + burden) [95 % CI] | p | CHF OR adjusted for burden |
+|---|---|---|---|---|
+| **titration (P3)** | 455 / 988 | **2.31 [1.67, 3.19]** | 5 × 10⁻⁷ | 0.77 [0.46, 1.28], p = 0.31 |
+| **K3 (P3)** | 8 / 988 | **not estimable** (< 10 positives) | | |
+| LLE alone | 401 | 1.51 [1.31, 1.75] | 2 × 10⁻⁸ | 0.79 [0.49, 1.28] |
+| UPO alone | 31 | 1.17 [1.00, 1.37] | 0.053 | 2.13 [1.00, 4.55] |
+| K1 | 16 | 1.44 [1.09, 1.90] | 0.010 | 2.33 [0.57, 9.41] |
+
+| burden (beats) | windows | subjects | titration | LLE alone | UPO alone | K1 | K3 |
+|---|---|---|---|---|---|---|---|
+| 0 | 562 | 72 | 123 (22 %) | 145 (26 %) | 15 (3 %) | 5 (1 %) | 7 (1.2 %) |
+| 1 | 116 | 55 | 73 (63 %) | 63 (54 %) | 2 (2 %) | 0 | 0 |
+| 2–4 | 116 | 39 | 93 (80 %) | 71 (61 %) | 3 (3 %) | 2 (2 %) | 0 |
+| 5–15 | 83 | 26 | 71 (86 %) | 42 (51 %) | 0 | 0 | 1 (1.2 %) |
+| ≥ 16 | 111 | 20 | 95 (86 %) | 80 (72 %) | 11 (10 %) | 9 (8 %) | 0 |
+
+**3a (P3).**
+- **Titration positives track ectopy**, as predicted. A single annotated ectopic beat in 512 intervals
+  nearly triples the positive rate (22 % → 63 %).
+- **K3: prediction not contradicted.** K3 positives are too rare for a dose-response (8 windows). Seven
+  of the eight are in ectopy-free windows. The rate difference burden ≥ 1 minus burden 0 is −0.7 %
+  [−1.6, +0.03].
+- **Secondary.** LLE alone also tracks ectopy, as Phases 5–7 predicted. So does K1 (16 positives;
+  9 of them in windows with ≥ 16 ectopic beats).
+- Unadjusted burden ORs: titration 3.85 [2.30, 6.46], LLE 1.48, UPO 1.28, K1 1.56.
+
+**3b (paired, same windows).**
+
+| comparison | windows (with ≥ 1 masked interval) | raw positive | positive after | raw positives removed | mean subject-level change [95 % CI] |
+|---|---|---|---|---|---|
+| titration raw → masked (K3 rule) | 281 analysable | 134 | 62 | 57.5 % | −31.5 % [−40.8, −22.4] |
+| titration raw → edited (Phase 7) | 504 eligible | 318 | 114 | 66.0 % | −36.8 % [−44.5, −29.3] |
+| LLE raw → edited | 504 | 263 | 168 | 47.1 % | −19.5 % [−25.8, −13.3] |
+| K1 raw → edited | 504 | 7 | 4 | 71.4 % | −0.5 % [−1.4, 0.2] |
+| UPO raw → edited | 504 | 14 | 18 | 64.3 % | +0.6 % [−0.9, 2.3] |
+
+Masking or editing removes most titration and LLE positives in windows that contain ectopy. Editing also
+*creates* some positives: 6 new titration-positive and 29 new LLE-positive windows (raw-negative windows
+that became positive). This matches the Phase 6 finding that interpolated stretches look structured.
+The masked titration arm is not analysable when ectopy is dense: it needs ~84 clean consecutive
+intervals per regression row. Only 281 of the windows with masked intervals were analysable.
+
+**3c.** The titration group difference (CHF more often positive) is OR 2.60 [1.64, 4.13] unadjusted
+and **0.77 [0.46, 1.28] after adjusting for ectopy burden**. At the 512-window level, the group
+difference in titration positives is fully accounted for by ectopy.
